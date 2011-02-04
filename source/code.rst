@@ -2,6 +2,18 @@
 Code layout
 ===========
 
+There are two code layouts:
+
+- the minimal layout: simple Python application.
+- the complete layout  Web application.
+
+
+Minimal layout
+==============
+
+The minimal layout is an empty application that includes all the boiler-plate
+code all our application should have.
+
 A minimal Services' project usually contains:
 
 - **Makefile** and **build.py**: used to build the environment, run tests, 
@@ -14,8 +26,7 @@ A minimal Services' project usually contains:
 
 
 Paster Template
-===============
-
+---------------
 
 You can create a new application layout by using the *services_base* Paster 
 template provided by *MoPyTools*, which will ask you a few questions::
@@ -62,7 +73,7 @@ directory and running::
 
 
 Makefile
-========
+--------
 
 Every project should have a Makefile with these targets:
 
@@ -87,16 +98,35 @@ project.
 
 
 RPM Spec file
-=============
+-------------
 
-XXX
+The spec file that gets generated is used by "make build_rpm" to generate a 
+RPM for your application. It contains all the require dependencies for a stack
+Services application, but will require that you add any new dependency your 
+code could need.
 
 setup.py and MANIFEST.in
-========================
+------------------------
 
 XXX
 
 
+
+
+Complete layout
+===============
+
+The complete layout contains all the things the minimal layout has, plus
+everything needed to make it a Web application:
+
+- etc/ : all default config files.
+- package/wsgiapp.py: the web application itself.
+- package/controller.py: the web controller to start adding features.
+- package/run.py: the bootstrap file used by Gunicorn to run the app.
+- package/tests/functional/: a minimal functiunal test using WebTest.
+
+
+XXX
 
 All Projects repositories are located in http://hg.mozilla.com/services
 
