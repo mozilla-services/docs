@@ -19,8 +19,7 @@ those packages:
 - python26-profiler under Ubuntu
 - Mercurial (*mercurial* in most distros).
 - `Distribute <http://pypi.python.org/pypi/distribute>`_
-- `Virtualenv <http://pypi.python.org/pypi/virtualenv>`_
-- `Flake8 <http://pypi.python.org/pypi/flake8>`_
+- `MoPyTools <http://pypi.python.org/pypi/mopytools>`_
 
 
 Once you have all these tools installed, working on a project consists
