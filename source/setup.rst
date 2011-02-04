@@ -19,7 +19,7 @@ those packages:
 - python26-profiler under Ubuntu
 - Mercurial (*mercurial* in most distros).
 - `Distribute <http://pypi.python.org/pypi/distribute>`_
-- `MoPyTools <http://pypi.python.org/pypi/mopytools>`_
+- `MoPyTools <http://pypi.python.org/pypi/MoPyTools>`_
 
 
 Once you have all these tools installed, working on a project consists
