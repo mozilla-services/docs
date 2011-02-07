@@ -32,7 +32,7 @@ so you should not have to do it manually.
 For example, to create an environment for the Sync project, you can 
 run::
 
-    $ hg clone http://hg.mozilla.com/services/server-full
+    $ hg clone http://hg.mozilla.org/services/server-full
     $ cd server-full
     $ make build
 

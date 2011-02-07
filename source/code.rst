@@ -128,5 +128,5 @@ everything needed to make it a Web application:
 
 XXX
 
-All Projects repositories are located in http://hg.mozilla.com/services
+All Projects repositories are located in http://hg.mozilla.org/services
 
