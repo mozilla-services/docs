@@ -14,19 +14,26 @@ those packages:
 1. make (installed by default on most Linuces)
 2. the latest gcc
 3. Python 2.6 (installed by default under Debuntu, *python26* under CentOS)
-4. Python 2.6 headers (*python2.6-dev* under Debuntu, 
+4. Python 2.6 headers (*python2.6-dev* under Debuntu,
    *python26-devel* under CentOS)
 5. python26-profiler under Ubuntu
 6. Mercurial (*mercurial* in most distros).
 7. `Distribute <http://pypi.python.org/pypi/distribute>`_
-8. `MoPyTools <http://pypi.python.org/pypi/MoPyTools>`_
+8. `virtualenv <http://pypi.python.org/pypi/virtualenv>`_
+9. `Flake8 <http://pypi.python.org/pypi/Flake8>`_
+10. `Paste <http://pypi.python.org/pypi/Paste>`_
+11. `PasteDeploy <http://pypi.python.org/pypi/PasteDeploy>`_
+12. `MoPyTools <http://pypi.python.org/pypi/MoPyTools>`_
 
-One way to install 7. and 8. in your environment is to run the Distribute 
-bootstrap script, then install MoPyTools::
+One simple way to install all tools from 7. to 12. in your environment is to
+run the Distribute bootstrap script, then install MoPyTools::
 
     $ curl -O http://python-distribute.org/distribute_setup.py
     $ python distribute_setup.py
     $ easy_install MoPyTools
+
+
+This will pull all other tools for you and install them.
 
 .. note:
 
@@ -40,7 +47,7 @@ develop in it.
 Although, each project provides a *Makefile* that bootstraps this step,
 so you should not have to do it manually.
 
-For example, to create an environment for the Sync project, you can 
+For example, to create an environment for the Sync project, you can
 run::
 
     $ hg clone http://hg.mozilla.org/services/server-full
@@ -55,8 +62,8 @@ Once this is done, you can do a sanity check by running all tests::
 Paster
 ------
 
-All Services projects provide a built-in web server that may be used to 
-run a local instance. 
+All Services projects provide a built-in web server that may be used to
+run a local instance.
 
 For example in server-full, once the project is built, you can run it::
 
