@@ -14,3 +14,10 @@ Glossary
     Basic Authentication
        The client authenticates by sending an *Authorization* header of the
        form: "Basic base64(username + ':' + password) 
+
+    services-builds
+        The Service Build mailing list at services-builds@mozilla.org, that 
+        receives all Hudson failures.
+
+        You can register to it at: https://mail.mozilla.org/listinfo/services-builds
+

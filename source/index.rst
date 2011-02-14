@@ -19,6 +19,7 @@ Contents of the documentation:
    setup
    code
    working
+   tests
    configuration
    guidelines
    profiling
