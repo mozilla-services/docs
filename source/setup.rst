@@ -59,6 +59,52 @@ Once this is done, you can do a sanity check by running all tests::
     $ make test
 
 
+Configuring Flake8
+------------------
+
+Flake8 can be used from the command-line, by simply running it over one or 
+several files::
+
+    $ flake8 syncreg/controllers/
+    syncreg/controllers/user.py:44: 'urlunparse' imported but unused
+    syncreg/controllers/user.py:44: 'urlparse' imported but unused
+    syncreg/controllers/user.py:49: 'Response' imported but unused
+    syncreg/controllers/user.py:55: 'get_url' imported but unused
+    syncreg/controllers/user.py:276: undefined name 'environ'
+    syncreg/controllers/user.py:276: undefined name 'config'
+    syncreg/controllers/user.py:180:8: E111 indentation is not a multiple of four
+    syncreg/controllers/user.py:240:1: 'UserController.change_password' is too complex (10)
+    syncreg/controllers/user.py:318:1: 'UserController.do_password_reset' is too complex (11) 
+
+
+A more simpler way to use it without having to think about it, is to configure 
+Mercurial to call it every time you commit a change.
+
+To use the Mercurial hook on any *commit* or *qrefresh*, change your *.hgrc* file 
+like this::
+
+    [hooks]
+    commit = python:flake8.hg_hook
+    qrefresh = python:flake8.hg_hook
+
+    [flake8]
+    strict = 0
+
+If strict option is set to 1, any warning will block the commit. When strict 
+is set to 0, warnings are just displayed in the standard output.
+
+Using a non-strict mode is good enough: it will show you the issues without
+blocking your commits, so you can decide what should be done.
+
+In some case, you might need to simply silent the warnings. You can
+do this with *NOQA* markers:
+
+- all modules that starts with a *# flake8: noqa* comment line
+  are skipped.
+
+- all lines that ends with a "# NOQA" comment are skipped as well.
+
+
 Paster
 ------
 
