@@ -1,7 +1,16 @@
-Welcome to Python Services's developer documentation!
-=====================================================
+=====================================
+Mozilla Services Python documentation
+=====================================
 
-Contents:
+
+This documentation is aimed at developers that want to work with an existing
+Mozilla Services server project, or want to create a new one that follow
+the same conventions.
+
+.. warning:: This document is currently under heavy development.
+
+
+Contents of the documentation:
 
 .. toctree::
    :maxdepth: 1
@@ -10,7 +19,6 @@ Contents:
    setup
    code
    working
-   paster
    configuration
    guidelines
    profiling
@@ -19,10 +27,13 @@ Contents:
    glossary
 
 
+Feedback is welcome at tarek@mozilla.com or at the 
+`services-dev mailing list <https://mail.mozilla.org/listinfo/services-dev>`_.
+
+
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 

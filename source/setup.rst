@@ -2,7 +2,7 @@
 Setting up a development environment
 ====================================
 
-    This section make the assumption that you are under Mac OS X or Linux.
+    This section makes the assumption that you are under Mac OS X or Linux.
     A section for Windows might be added later.
 
 Prerequisites
@@ -103,17 +103,4 @@ do this with *NOQA* markers:
   are skipped.
 
 - all lines that ends with a "# NOQA" comment are skipped as well.
-
-
-Paster
-------
-
-All Services projects provide a built-in web server that may be used to
-run a local instance.
-
-For example in server-full, once the project is built, you can run it::
-
-    $ bin/paster serve development.ini
-
-This will run a server on port 5000.
 

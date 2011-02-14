@@ -2,20 +2,170 @@
 Configuring the application
 ===========================
 
-The server uses a global configuration :file:`sync.conf` file. Depending on
-how your launch the application, the file can be located at:
+The application is configured via two files:
 
-- :file:`/etc/sync/sync.conf` if you use the :file:`run` module with gunicorn
-  or a similar wsgi server.
+- the Paster ini-like file, located in etc/
+- the Services configuration file.
 
-- :file:`etc/sync.conf` within the directory of the application if you run the
-  server using *bin/paster serve development.ini*.
+
+XXX more on file ocation
+
+
+Paster ini file
+===============
+
+All Services projects provide a built-in web server that may be used to
+run a local instance.
+
+For example in *server-full*, once the project is built, you can run it::
+
+    $ bin/paster serve development.ini
+
+This will run a server on port 5000.
+
+
+Paster reads an ini-like file that defines among other things:
+
+- where the wsgi application is located
+- where the application configuration is located
+- the logging configuration
+- etc.
+
+The main sections we want to configure in this file are:
+
+- DEFAULT
+- server:main
+- app:main
+- logging
+
+
+DEFAULT
+-------
+
+The default section defines four optional values (all are set to False by 
+default):
+
+1. **debug**: if set to True, will activate the debug mode.
+2. **client_debug**: if set to True, will return in the body of the response 
+   any traceback when a 500 occurs.
+3. **translogger**: will display in the stdout all requests made on the server.
+4. **profile**: will activate a profiler and generate cachegrind infos.
+
+Example::
+
+    [DEFAULT]
+    debug = True
+    translogger = False
+    profile = False
+
+
+server:main
+-----------
+
+
+Defines the web server to use to run the app with Paster. See Paster 
+documentation for more info.
+
+Example::
+
+    [server:main]
+    use = egg:Paste#http
+    host = 0.0.0.0
+    port = 5000
+    use_threadpool = True
+    threadpool_workers = 60
+
+.. _config-app-main:
+
+app:main
+--------
+
+Defines the server entry point. See Paster documentation for more info.
+
+**configuration** can point to a configuration file for the server. 
+It uses a *file:* prefix. 
+
+
+Example::
+
+    [app:main]
+    use = egg:SyncServer
+    configuration = file:%(here)s/etc/sync.conf
+
+
+logging
+-------
+
+Logging is done using the logging configuration. See Python's logging 
+documentation for more details.
+
+The Sync server uses the **syncserver** logger everywhere.
+
+In the following example, all Sync errors are logged in a specific file 
+as long as **DEFAULT:debug** is activated. Other logs are in 
+a separate file.::
+
+    [loggers]
+    keys = root,syncserver
+
+    [handlers]
+    keys = global,errors
+
+    [formatters]
+    keys = generic
+
+    [logger_root]
+    level = WARNING
+    handlers = global
+
+    [logger_syncserver]
+    qualname = syncserver
+    level = INFO
+    handlers = global, errors
+    propagate = 0
+
+    [handler_global]
+    class = handlers.RotatingFileHandler
+    args = ('/var/log/sync.log',)
+    level = DEBUG
+    formatter = generic
+
+    [handler_errors]
+    class = handlers.RotatingFileHandler
+    args = ('/var/log/sync-error.log',)
+    level = ERROR
+    formatter = generic
+
+    [formatter_generic]
+    format = %(asctime)s,%(msecs)03d %(levelname)-5.5s [%(name)s] %(message)s
+    datefmt = %Y-%m-%d %H:%M:%S
+
+
+.. _profile-config:
+
+Configuring the profiler
+------------------------
+
+Activates the **repoze.profile** middleware.
+
+XXX
+
+
+.. _config-file:
+
+Configuration file
+==================
+
+The server uses a global configuration :file:`sync.conf` file.
+The file location is configured in the Paster ini file and loaded when
+the application starts. See :ref:`config-app-main`.
 
 The configuration file has one section for each service provided by the
 application.
 
+
 Global
-======
+------
 
 Global settings for the applications, under the **global** section.
 
@@ -50,7 +200,8 @@ Example::
 
 
 Storage
-=======
+-------
+
 
 The storage section is **storage**. It contains everything neeed by the
 storage server to read and write data.
@@ -89,9 +240,11 @@ Example::
 
 
 Authentication
-==============
+--------------
 
-The authentication section is **auth**. It contains everything needed for authentication and registration.
+
+The authentication section is **auth**. It contains everything needed for 
+authentication and registration.
 
 Available options (o: optional, m: multi-line, d: default):
 
@@ -143,7 +296,7 @@ Example::
 
 
 Captcha
-=======
+-------
 
 The **captcha** section enables the re-captcha feature during user
 registration.
@@ -165,7 +318,7 @@ Example::
 
 
 SMTP
-====
+----
 
 The **smtp** section configures the SMTP connection used by the application to
 send e-mails.
@@ -185,9 +338,10 @@ Example::
     port = 25
     sender = weave@mozilla.com
 
+.. _config-cef:
 
 CEF
-===
+---
 
 The **cef** section configues how CEF security alerts are emited.
 
@@ -222,4 +376,6 @@ Example::
     version = 0
     device_version = 1.3
     product = weave
+
+ 
 

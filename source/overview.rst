@@ -55,6 +55,8 @@ Example of usage::
 Note that :class:`SyncServerApp` will automatically create a Config instance
 over a central configuration file when it's used to create a web application.
 
+See :ref:`config-file` for more info on this.
+
 
 CEF Logging
 ,,,,,,,,,,,
@@ -88,6 +90,8 @@ Example::
 
 
 With *environ* and *config* provided by the web environment.
+
+See :ref:`config-cef` for more info on this.
 
 
 SyncServerApp
