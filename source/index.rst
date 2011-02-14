@@ -4,7 +4,7 @@ Welcome to Python Services's developer documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    overview
    setup
@@ -12,10 +12,10 @@ Contents:
    working
    paster
    configuration
-   server
    guidelines
    profiling
    benching
+   release
    glossary
 
 

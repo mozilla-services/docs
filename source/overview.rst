@@ -63,7 +63,7 @@ Most Services applications need to generate CEF logs. A CEF Log is a
 formatted log that can be used by ArcSight, a central application used
 by the infrasec team to manage application security.
 
-The :module:`services.cef` module provide a :func:`log_cef` function tha
+The *services.cef* module provide a :func:`log_cef` function tha
 can be used to emit CEF logs:
 
     log_cef(message, severity, environ, config, [username,

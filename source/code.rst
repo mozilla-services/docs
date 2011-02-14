@@ -92,10 +92,13 @@ and its **ServerCore** dependency with the tag "rpm-0.1-15", one may call::
 The option name is the repository named in upper case, with the dashes ("-")
 replaced by underlines ("_"). So "server-core" becomes "SERVER_CORE".
 
+For more info on building and releasing, see :ref:`releasing`.
+
 The **test** target runs the Nose test runner, and can be used to 
 work on the code. It's also used by Hudson to continuously test your
 project.
 
+XXX
 
 RPM Spec file
 -------------
