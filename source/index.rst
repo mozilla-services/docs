@@ -27,8 +27,7 @@ Contents of the documentation:
    glossary
 
 
-Feedback is welcome at tarek@mozilla.com or at the 
-`services-dev mailing list <https://mail.mozilla.org/listinfo/services-dev>`_.
+Feedback is welcome at tarek@mozilla.com or at :term:`services-dev`.
 
 
 Indices and tables

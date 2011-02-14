@@ -16,8 +16,14 @@ Glossary
        form: "Basic base64(username + ':' + password) 
 
     services-builds
-        The Service Build mailing list at services-builds@mozilla.org, that 
-        receives all Hudson failures.
+        The *Build* mailing list at services-builds@mozilla.org receives
+        all Hudson failures.
 
         You can register to it at: https://mail.mozilla.org/listinfo/services-builds
+
+    services-dev
+        The *Dev* mailing list at services-dev@mozilla.org is the place where 
+        we discuss the development of Mozilla Services applications.
+
+        You can register to it at: https://mail.mozilla.org/listinfo/services-dev
 
