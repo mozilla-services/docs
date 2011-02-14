@@ -1,6 +1,6 @@
-=========================
-Profiling the application
-=========================
+====================
+Benching & Profiling
+====================
 
 
     "We should forget about small efficiencies, say about 97% of the time:
@@ -8,6 +8,9 @@ Profiling the application
 
      -- D. Knuth
 
+
+Profiling
+=========
 
 The base application provides a Profiler that knows how to generate profiling
 data that you'll be able to vizualize in *KCacheGrind*.
@@ -32,4 +35,10 @@ Once your have finished testing the application, stop it and you should find
 at the root of your application a :file:`cachegrind.out` file you can open.
 
 .. image:: images/kcachegrind.png
+
+Benching
+========
+
+
+XXX
 

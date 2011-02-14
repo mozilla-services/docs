@@ -22,7 +22,6 @@ Contents of the documentation:
    configuration
    guidelines
    profiling
-   benching
    release
    glossary
 
