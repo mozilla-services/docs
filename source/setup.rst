@@ -84,8 +84,8 @@ To use the Mercurial hook on any *commit* or *qrefresh*, change your *.hgrc* fil
 like this::
 
     [hooks]
-    commit = python:flake8.hg_hook
-    qrefresh = python:flake8.hg_hook
+    commit = python:flake8.run.hg_hook
+    qrefresh = python:flake8.run.hg_hook
 
     [flake8]
     strict = 0
