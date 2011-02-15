@@ -98,7 +98,8 @@ The **test** target runs the Nose test runner, and can be used to
 work on the code. It's also used by Hudson to continuously test your
 project.
 
-XXX
+See :ref:`rpm-building` for more info on the building process.
+
 
 RPM Spec file
 -------------

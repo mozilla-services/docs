@@ -22,6 +22,8 @@ Our tags are following this scheme: "rpm-MAJOR-MINOR-RELEASE" where
 in the :file:`ProjectName.spec` file.
 
 
+.. _rpm-building:
+
 Building the RPMs
 =================
 
