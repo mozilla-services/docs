@@ -316,6 +316,16 @@ Example::
     private_key = 6Le8OLwSAAAAAEKoqfc-DmoF4HNswD7RNdGwxRij
     use_ssl = false
 
+.. warning::
+
+    The keys provided in this example work, as they were generated to provide
+    a realistic example. But do not use them in your applications.
+
+    Instead, you should generate a new set of key for you own domain.
+
+    See: https://www.google.com/recaptcha/admin/create
+
+
 
 SMTP
 ----
