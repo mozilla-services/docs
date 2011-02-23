@@ -42,11 +42,11 @@ The main sections we want to configure in this file are:
 DEFAULT
 -------
 
-The default section defines four optional values (all are set to False by 
+The default section defines four optional values (all are set to False by
 default):
 
 1. **debug**: if set to True, will activate the debug mode.
-2. **client_debug**: if set to True, will return in the body of the response 
+2. **client_debug**: if set to True, will return in the body of the response
    any traceback when a 500 occurs.
 3. **translogger**: will display in the stdout all requests made on the server.
 4. **profile**: will activate a profiler and generate cachegrind infos.
@@ -63,7 +63,7 @@ server:main
 -----------
 
 
-Defines the web server to use to run the app with Paster. See Paster 
+Defines the web server to use to run the app with Paster. See Paster
 documentation for more info.
 
 Example::
@@ -82,8 +82,8 @@ app:main
 
 Defines the server entry point. See Paster documentation for more info.
 
-**configuration** can point to a configuration file for the server. 
-It uses a *file:* prefix. 
+**configuration** can point to a configuration file for the server.
+It uses a *file:* prefix.
 
 
 Example::
@@ -96,13 +96,13 @@ Example::
 logging
 -------
 
-Logging is done using the logging configuration. See Python's logging 
+Logging is done using the logging configuration. See Python's logging
 documentation for more details.
 
 The Sync server uses the **syncserver** logger everywhere.
 
-In the following example, all Sync errors are logged in a specific file 
-as long as **DEFAULT:debug** is activated. Other logs are in 
+In the following example, all Sync errors are logged in a specific file
+as long as **DEFAULT:debug** is activated. Other logs are in
 a separate file.::
 
     [loggers]
@@ -174,18 +174,18 @@ Available options (o: optional, m: multi-line, d: default):
 - **retry_after** [o, default:1800]: Value in seconds of the Retry-After
   header sent back when a 503 occurs in the application.
 
-- **heartbeat_page** [o, default:__heartbeat__]: defines the path of 
+- **heartbeat_page** [o, default:__heartbeat__]: defines the path of
   the heartbeat page. The heartbeat page is used by an HTTP Monitor to
-  check that the server is still running properly. It returns a 200 if 
-  everything works, and a 503 if there's an issue. A Typical issue is 
-  the inability for the application to reach a backend server, like 
+  check that the server is still running properly. It returns a 200 if
+  everything works, and a 503 if there's an issue. A Typical issue is
+  the inability for the application to reach a backend server, like
   MySQL or OpenLDAP.
 
 - **debug_page** [o, default:None]: defines the path of the debug page.
-  The debug page displays environ information. 
+  The debug page displays environ information.
 
   **Warning**: This page may expose private data. Once activated,
-  it is not password-protected. If you use it, make sure the web server 
+  it is not password-protected. If you use it, make sure the web server
   (Apache, Nginx) protects it from anonymous access.
 
   This feature is disabled by default to avoid any security issue.
@@ -243,7 +243,7 @@ Authentication
 --------------
 
 
-The authentication section is **auth**. It contains everything needed for 
+The authentication section is **auth**. It contains everything needed for
 authentication and registration.
 
 Available options (o: optional, m: multi-line, d: default):
@@ -251,8 +251,8 @@ Available options (o: optional, m: multi-line, d: default):
 - **backend**: backend used for the storage. Existing backends :
   **sql**, **ldap**, **dummy**.
 - **ldapuri** [o]: uri for the LDAP server when the ldap backend is used.
-- **ldaptimeout** [o, default:-1]: maximum time in secondes allowed for a
-  LDAP query. -1 means no timeout.
+- **ldap_use_pool** [o, default:False]: If True, a pool of connectors is used.
+- **ldap_pool_size** [o, default:10]: Size of the ldap pool when used.
 - **use_tls** [o, default:false]: If set to true, activates TLS when using
   LDAP.
 - **bind_user** [o, default:none]: user for common LDAP queries.
@@ -276,7 +276,11 @@ Example::
     [auth]
     backend = ldap
     ldapuri = ldap://localhost:390
+
     ldap_timeout =  -1
+    ldap_use_pool = true
+    ldap_pool_size = 100
+
     use_tls = false
 
     bind_user = "cn=admin,dc=mozilla"
@@ -387,5 +391,5 @@ Example::
     device_version = 1.3
     product = weave
 
- 
+
 
