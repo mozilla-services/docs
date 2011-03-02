@@ -97,10 +97,6 @@ over a central configuration file when it's used to create a web application.
 See :ref:`config-file` for more info on this.
 
 
-CEF Logging
-,,,,,,,,,,,
-
-
 SyncServerApp
 ,,,,,,,,,,,,,
 
