@@ -18,13 +18,52 @@ stack of tools::
   with a simple interface.
 
 
+cef
+---
+
+The *cef* library implements a CEF logger.
+
+Most Services applications need to generate CEF logs. A CEF Log is a
+formatted log that can be used by ArcSight, a central application used
+by the infrasec team to manage application security.
+
+The *cef* module provides a :func:`log_cef` function that can be 
+used to emit CEF logs:
+
+    log_cef(message, severity, environ, config, [username,
+            [signature]], \*\*kw)
+
+    Creates a CEF record, and emit it in syslog or another file.
+
+    Args:
+        - message: message to log
+        - severity: integer from 0 to 10
+        - environ: the WSGI environ object
+        - config: configuration dict
+        - signature: CEF signature code, defaults to 'AuthFail'
+        - username: user name, defaults to 'none'
+        - extra keywords: extra keys used in the CEF extension
+
+Example::
+
+    >>> from cef import log_cef
+    >>> log_cef('SecurityAlert!', 5, environ, config,
+    ...         msg='Someone has stolen my chocolate')
+
+
+With *environ* and *config* provided by the web environment.
+
+Note that the CEF library is published at PyPI.
+
+See :ref:`config-cef` for more info on this.
+
+
 server-core
 -----------
 
 The *server-core* library provides helpers to build Services applications:
 
 - a configuration reader.
-- a CEF logger,
 - a base WSGI application, `SyncServerApp`.
 - various utilities for web applications but also for lower level needs.
 
@@ -44,8 +83,8 @@ Example of usage::
     ['keyexchange', 'filtering', 'cef']
 
     >>> cfg.items('keyexchange')
-    [('max_gets', 10), ('root_redirect', 'https://services.mozilla.com'), 
-     ('use_memory', False), ('ttl', 300), 
+    [('max_gets', 10), ('root_redirect', 'https://services.mozilla.com'),
+     ('use_memory', False), ('ttl', 300),
      ('cache_servers', ['127.0.0.1:11211']), ('cid_len', 4)]
 
     >>> cfg.get('keyexchange', 'cid_len')
@@ -60,38 +99,6 @@ See :ref:`config-file` for more info on this.
 
 CEF Logging
 ,,,,,,,,,,,
-
-Most Services applications need to generate CEF logs. A CEF Log is a
-formatted log that can be used by ArcSight, a central application used
-by the infrasec team to manage application security.
-
-The *services.cef* module provide a :func:`log_cef` function tha
-can be used to emit CEF logs:
-
-    log_cef(message, severity, environ, config, [username,
-            [signature]], \*\*kw)
-
-    Creates a CEF record, and emit it in syslog or another file.
-
-    Args:
-        - message: message to log
-        - severity: integer from 0 to 10
-        - environ: the WSGI environ object
-        - config: configuration dict
-        - signature: CEF signature code, defaults to 'AuthFail'
-        - username: user name, defaults to 'none'
-        - extra keywords: extra keys used in the CEF extension
-
-Example::
-
-    >>> from services.cef import log_cef
-    >>> log_cef('SecurityAlert!', 5, environ, config, 
-    ...         msg='Someone has stolen my chocolate')
-
-
-With *environ* and *config* provided by the web environment.
-
-See :ref:`config-cef` for more info on this.
 
 
 SyncServerApp
