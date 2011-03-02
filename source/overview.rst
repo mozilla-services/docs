@@ -18,10 +18,14 @@ stack of tools::
   with a simple interface.
 
 
+Services provides two base libraries to build WSGI applications:
+
+- **cef**: implements a CEF logger for ArcSight.
+- **server-core**: provides helpers to build Services applications.
+
+
 cef
 ---
-
-The *cef* library implements a CEF logger.
 
 Most Services applications need to generate CEF logs. A CEF Log is a
 formatted log that can be used by ArcSight, a central application used
@@ -30,8 +34,7 @@ by the infrasec team to manage application security.
 The *cef* module provides a :func:`log_cef` function that can be 
 used to emit CEF logs:
 
-    log_cef(message, severity, environ, config, [username,
-            [signature]], \*\*kw)
+    log_cef(message, severity, environ, config, [username, [signature]], \*\*kw)
 
     Creates a CEF record, and emit it in syslog or another file.
 
@@ -53,7 +56,7 @@ Example::
 
 With *environ* and *config* provided by the web environment.
 
-Note that the CEF library is published at PyPI.
+Note that the CEF library is published at PyPI: http://pypi.python.org/pypi/cef
 
 See :ref:`config-cef` for more info on this.
 
@@ -61,11 +64,18 @@ See :ref:`config-cef` for more info on this.
 server-core
 -----------
 
-The *server-core* library provides helpers to build Services applications:
+The *server-core* library provides helpers to build Services applications.
 
-- a configuration reader.
-- a base WSGI application, `SyncServerApp`.
-- various utilities for web applications but also for lower level needs.
+In *server-core*'s philosophy, a WSGI application is a :class:`SyncServerApp` 
+instance which will contain a **config** attribute that's a mapper containing
+all the configuration needed by the code. This configuration 
+is loaded from a unique ini-like file.
+
+When a request comes in, *Routes* is used to dispatch it to a controller 
+method.
+
+Controllers are simple classes whose methodes receives the request and
+need to return a response.
 
 
 Configuration files
@@ -75,7 +85,7 @@ The configuration files we use in Services applications are based on an
 extended version of Ini files. You can find a description of the file
 at https://wiki.mozilla.org/Services/Sync/Server/GlobalConfFile.
 
-Example of usage::
+*server-core* provides a simple reader::
 
     >>> from services.config import Config
     >>> cfg = Config('/etc/keyexchange/keyexchange.conf')
@@ -113,16 +123,11 @@ It provides:
   :term:`Basic Authentication`.
 - a basic URL dispatcher based on Routes.
 - an error handler that ensures backend errors are logged
-  and a 503s is raised.
+  and a 500 error is raised.
 - a heartbeat page useful for monitoring the server
+- a debug page to display useful information on the server
 - a few middlewares integrated: a profiler, an error catcher
   and a console logger.
 
-XXX
-
-Misc
-,,,,
-
-XXX
-
+To create an application using :class:`SyncServerApp`, see :ref:`complete-layout`.
 

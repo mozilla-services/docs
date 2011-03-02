@@ -116,6 +116,7 @@ XXX
 
 
 
+.. _complete-layout:
 
 Complete layout
 ===============
