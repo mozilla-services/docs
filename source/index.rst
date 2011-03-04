@@ -1,38 +1,13 @@
-=====================================
-Mozilla Services Python documentation
-=====================================
+==============================
+Mozilla Services Documentation
+==============================
+
+Welcome to the Mozilla Services Documentation front page.
+
+You can move on to the :ref:`devguide` or visit one of 
+the useful links below
 
 
-This documentation is aimed at developers that want to work with an existing
-Mozilla Services server project, or want to create a new one that follow
-the same conventions.
-
-.. warning:: This document is currently under heavy development.
-
-
-Contents of the documentation:
-
-.. toctree::
-   :maxdepth: 1
-
-   overview
-   setup
-   code
-   working
-   tests
-   configuration
-   guidelines
-   profiling
-   release
-   glossary
-
-
-Feedback is welcome at tarek@mozilla.com or at :term:`services-dev`.
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
+- `Sync in the Mozilla Developer Network <https://developer.mozilla.org/en/Firefox_Sync>`_
+- XXX
 
