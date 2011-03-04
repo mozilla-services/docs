@@ -68,7 +68,7 @@ Each release has a section with the date, containing three parts:
 - Dependencies: list internal dependencies and their versions.
 - Relevant changes: lists relevant changes with bugzilla numbers.
 
-Notice that the version is noted with it's RPM release appended, like *-1*.
+Notice that the version is noted with its RPM release appended, like *-1*.
 
 Example::
 
