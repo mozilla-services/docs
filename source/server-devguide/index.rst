@@ -1,8 +1,8 @@
 .. _devguide:
 
-=====================================
-Mozilla Services Python documentation
-=====================================
+===============================
+Python Server Development Guide
+===============================
 
 
 This documentation is aimed at developers that want to work with an existing
