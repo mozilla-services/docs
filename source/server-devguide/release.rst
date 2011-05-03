@@ -7,13 +7,13 @@ Releasing an application
 Versioning
 ==========
 
-Projects are versionned using the *MAJOR.MICRO* scheme. Examples:
+Projects are versionned using the *MAJOR.MINOR* scheme. Examples:
 
 - 1.0
 - 1.1
 - 2.1
 
-The *MICRO* part is incremented in the day-to-day work and the *MAJOR*
+The *MINOR* part is incremented in the day-to-day work and the *MAJOR*
 part is incremented on important updates. The definition of *Important*
 is left to the judgment of the releaser.
 
