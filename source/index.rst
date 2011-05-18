@@ -17,6 +17,8 @@ Services
 .. toctree::
    :maxdepth: 2
 
+   respcodes
+   reg/index
    sreg/index
    keyexchange/index
 

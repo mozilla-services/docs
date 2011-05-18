@@ -9,8 +9,7 @@ The URL for a SReg request is structured as follows::
 
     http://<server name>/<username>/<further instruction>
 
-The Sync User API has a set of  
-`Sync Response Codes <https://wiki.mozilla.org/Labs/Weave/1.0/ResponseCodes>` 
+The Sync User API has a set of :ref:`respcodes`
 to cover errors in the request or on the server side. The format of a
 successful response is defined in the appropriate request method section.
 
@@ -22,21 +21,21 @@ APIs
 
     Gets the user a weave node. In general, if the sreg version is called, it
     is expected that a new node will be assigned (client should already have
-    failed to get the node out of ldap), but this is not necessarily the case, 
+    failed to get the node out of ldap), but this is not necessarily the case,
     and it can return an currently assigned node.
 
     The plan is to abstract this call into a separate api that handles node
-    assignment, but it is noted here to make sure we remain backwards 
+    assignment, but it is noted here to make sure we remain backwards
     compatible until that work is complete.
 
     Return value: <node>
 
-    node may be 'null' if no node can be assigned at this time. Note that 
+    node may be 'null' if no node can be assigned at this time. Note that
     the returned value is a json-encoded value, so strings are quoted.
 
     Possible errors:
 
-    - 503: there was an error getting a node | empty body 
+    - 503: there was an error getting a node | empty body
     - 404: user not found | empty body
 
 
@@ -74,13 +73,13 @@ APIs
     Possible errors:
 
     - 503: there was an error creating the reset code
-    - 400: WEAVE_INVALID_WRITE (user already exists)
-    - 400: WEAVE_MALFORMED_JSON
+    - 400: 4 (user already exists)
+    - 400: 6 (Json parse failure)
 
 
 **PUT** **https://server/username/password**
 
-    Changes the password associated with the account to the value specified 
+    Changes the password associated with the account to the value specified
     in the PUT body.
 
     The PUT body is a JSON mapping containing:
@@ -88,17 +87,17 @@ APIs
     - reset_code: the reset code
     - password: the new password
 
-    Note that the server does not check if the password is valid. 
+    Note that the server does not check if the password is valid.
     This should be done by the client.
 
     Return values:
 
     - 0: The operation was successful
-    - 400: WEAVE_ERROR_MISSING_PASSWORD
-    - 400: WEAVE_INVALID_RESET_CODE
-    - 400: WEAVE_MALFORMED_JSON
+    - 400: 7 (Missing password field)
+    - 400: 10 (Invalid ormissing password reset code)
+    - 400: 6 (Json parse failure)
     - 404: the user does not exists in the database
-    - 503: there was an error updating the password 
+    - 503: there was an error updating the password
       (including a potentially bad reset code)
 
 
@@ -127,7 +126,7 @@ APIs
     Return Value:
 
     - 0 on success
-    - 400: WEAVE_MISSING_PASSWORD 
-    - 400: WEAVE_MALFORMED_JSON
+    - 400: 7 (Missing password field)
+    - 400: 6 (Json parse failure)
     - 404: the user does not exist in the database
     - 503: there was an error removing the user (including a potential bad password)
