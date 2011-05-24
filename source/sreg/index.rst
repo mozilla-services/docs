@@ -1,6 +1,6 @@
-===============
-Secure-Registry
-===============
+===================
+Secure-Registration
+===================
 
 .. warning:: The SReg service is used internally in the Mozilla infrastructure
    for security reasons and it is most likely that you will never

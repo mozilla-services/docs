@@ -1,6 +1,6 @@
-========
-Registry
-========
+============
+Registration
+============
 
 
 Goal of the Service
