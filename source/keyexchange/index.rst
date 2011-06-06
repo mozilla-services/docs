@@ -1,6 +1,6 @@
-===========
-KeyExchange
-===========
+==========
+Easy Setup
+==========
 
 Goal of the Service
 ===================
