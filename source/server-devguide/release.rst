@@ -216,3 +216,35 @@ Examples::
     $ make build build_rpms
 
 
+PyPI Mirrors
+============
+
+To avoid any dependency on an external resource such as python.org during the
+creation of the release, there are a few options that can be used when
+running the **build** command:
+
+- **PYPI**: a PyPI mirror index location
+- **PYPIEXTRAS**: The URL of an extra location where some archives are stored
+  This is useful
+- **PYPISTRICT**: if this flag is set, will block any attempt to fetch from
+  another host than **PYPI** or **PYPIEXTRAS**
+
+We maintain a private mirror for PyPI at : http://pypi.build.mtv1.svc.mozilla.com/simple
+
+Example of usage::
+
+    $ make build PYPI=http://pypi.build.mtv1.svc.mozilla.com/simple PYPISTRICT=1
+    ...
+    Link to http://virtualenv.openplans.org ***BLOCKED*** by --allow-hosts
+    ...
+
+
+By using the **PYPISTRICT** option we can see that any call to an external
+resource is blocked.
+
+Extra packages
+::::::::::::::
+
+XXX Explain here how to upload an archive to the extras location once we have it
+and how to use PYPIEXTRAS
+
