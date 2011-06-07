@@ -225,26 +225,36 @@ running the **build** command:
 
 - **PYPI**: a PyPI mirror index location
 - **PYPIEXTRAS**: The URL of an extra location where some archives are stored
-  This is useful
+  This is useful when your application needs a package that is not published
+  at PyPI.
 - **PYPISTRICT**: if this flag is set, will block any attempt to fetch from
   another host than **PYPI** or **PYPIEXTRAS**
 
-We maintain a private mirror for PyPI at : http://pypi.build.mtv1.svc.mozilla.com/simple
+We maintain two repositories :
+
+1. a private mirror for PyPI at http://pypi.build.mtv1.svc.mozilla.com/simple
+2. a directory that can contain extra packages at http://pypi.build.mtv1.svc.mozilla.com/extras
+
 
 Example of usage::
 
-    $ make build PYPI=http://pypi.build.mtv1.svc.mozilla.com/simple PYPISTRICT=1
+    $ make build PYPI=http://pypi.build.mtv1.svc.mozilla.com/simple PYPIEXTRAS=http://pypi.build.mtv1.svc.mozilla.com/extras PYPISTRICT=1
     ...
     Link to http://virtualenv.openplans.org ***BLOCKED*** by --allow-hosts
     ...
 
+In this example, packages are fetched from our PyPI mirror and our extra
+repository, and the strict flag will block any attempt to get the archives in
+other places. This example is a good set-up when you are working from inside
+the Mozilla intranet: your application will get built with no external
+resources.
 
-By using the **PYPISTRICT** option we can see that any call to an external
-resource is blocked.
+If you need to upload an extra archive that does not exists at PyPI (thus is
+not mirrored), make sure you have the rights to access the build box with
+your SSH key and do a scp::
 
-Extra packages
-::::::::::::::
+    $ scp archive.tgz pypi.build.mtv1.svc.mozilla.com:/var/lib/pypi/mirror/web/extras
 
-XXX Explain here how to upload an archive to the extras location once we have it
-and how to use PYPIEXTRAS
+By uploading your package to this location, make build will find it as long
+as **PYPIEXTRAS** is used.
 
