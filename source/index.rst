@@ -17,6 +17,7 @@ Services
 .. toctree::
    :maxdepth: 2
 
+   tos
    respcodes
    reg/index
    sreg/index
