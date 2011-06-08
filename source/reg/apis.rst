@@ -97,8 +97,10 @@ APIs
     - e-mail: Email address associated with the account.
     - captcha-challenge: The challenge string from the captcha.
     - captcha-response: The response to the captcha.
-    - secret: If set, the shared secret, which will override the captcha
-      (for testing and automation)
+
+    An **X-Weave-Secret** can be provided containing a secret string known
+    by the server. When provided, it will override the captcha. This is
+    useful for testing and automation.
 
     The server will return the lowercase username on success.
 
