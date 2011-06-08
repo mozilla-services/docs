@@ -190,6 +190,10 @@ Available options (o: optional, m: multi-line, d: default):
 
   This feature is disabled by default to avoid any security issue.
 
+- **shared_secret** [o, default: None]: defins a secret string that
+  can be used by the client when creating users, to bypass the
+  captcha challenge.
+
 
 Example::
 
