@@ -7,6 +7,15 @@ Welcome to the Mozilla Services Documentation front page.
 This documentation lists information about the various Services
 provided by Mozilla Services.
 
+How To
+======
+
+.. toctree::
+   :maxdepth: 1
+
+   howtos/run-sync
+
+
 Services
 ========
 
