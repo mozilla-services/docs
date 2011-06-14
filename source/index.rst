@@ -5,7 +5,8 @@ Mozilla Services Documentation
 Welcome to the Mozilla Services Documentation front page.
 
 This documentation lists information about the various Services
-provided by Mozilla Services.
+provided by Mozilla Services. (You can even contribute, see :ref:`about`.)
+
 
 How To
 ======

@@ -1,8 +1,10 @@
+.. _about:
+
 About this Website
 ==================
 
 This website is created using the Sphinx tool and all its content is 
-versioned in a Mecurial repository.
+versioned in a Mercurial repository.
 
 
 If you want to change its content you can:
