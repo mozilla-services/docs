@@ -136,6 +136,16 @@ html_static_path = ['_static']
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
 #html_additional_pages = {}
+CURDIR = os.path.dirname(__file__)
+sidebars = []
+for f in os.listdir(CURDIR):
+    name, ext = os.path.splitext(f)
+    if ext != '.rst':
+        continue
+    sidebars.append((name, 'indexsidebar.html'))
+
+html_sidebars = dict(sidebars)
+
 
 # If false, no module index is generated.
 #html_domain_indices = True
