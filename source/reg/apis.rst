@@ -56,7 +56,7 @@ APIs
     Returns the Weave (aka Sync) Node that the client is located on.
     Sync-specific calls should be directed to that node.
 
-    Return value: <node>
+    Return value: the node URL, an unadorned (not JSON) string.
 
     node may be 'null' if no node can be assigned at this time,
     probably due to sign up throttling.
