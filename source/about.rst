@@ -21,7 +21,7 @@ Structure Description
 
 The source is located in the :file:`source` directory and contains:
 
-- **howtows**: a directory with How Tos
+- **howtos**: a directory with How Tos
 - **serverdevguide**: server development guide, guidelines, how to release a 
   server app etc.
 - one directory per Server application (**reg**, **sreg**, etc.)
