@@ -89,7 +89,7 @@ For example, to run everything in MySQL:
 For #3, see :ref:`configuration`.
 
 
-Running behing a Web Server
+Running behind a Web Server
 ===========================
 
 The built-in server should not be used in production, as it does not really
@@ -101,6 +101,17 @@ that are compatible with the WSGI protocol. For example:
 - *Apache* combined with *mod_wsgi*
 - *NGinx* with *Gunicorn* or *uWSGI*
 - *lighttpd* with *flup*, using the *fcgi* or *scgi* protocol
+
+
+.. warning:: If you run behind a server, you need to set up the
+   **fallback_node** option in the **[auth]** section accordingly.
+
+   For example, if your server is located at http://example.com, the
+   fallback node should be set to this value::
+
+       [auth]
+       ...
+       fallback_node = http://example.com
 
 
 Apache + mod_wsgi
