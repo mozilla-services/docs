@@ -209,3 +209,62 @@ Tested under Gentoo.
 9. Restart your lighttpd::
 
         /etc/init.d/lighttpd restart
+
+
+Troubleshooting
+===============
+
+Most issues with the server are a bad configuration. If your server does not 
+work properly, the first thing to do is to enable client-side logs by visiting
+**about:config** in Firefox and enabling the 
+**services.sync.log.logger.engine.bookmarks**.
+
+Once this is enabled, restart Firefox and force a sync, then visit 
+**about:sync-log**
+
+You will see a lot of logs, and if the sync failed, and probably an error
+
+Misconfigured storage node
+::::::::::::::::::::::::::
+
+If the last successfull call is finishing like this::
+
+    2011-02-24 11:17:57 Net.Resource         DEBUG  GET success 200 http://server/user/1.0/.../node/weave
+
+But is not followed by::
+
+    2011-02-24 11:17:57 Service.Main         DEBUG  cluster value = http://server/
+    2011-02-24 11:17:57 Service.Main         DEBUG  Caching URLs under storage user base: http://server/.../
+    2011-02-24 11:17:57 Net.Resource         DEBUG  GET success 200 http://server/.../info/collections
+
+It probably means that your server **fallback_node** option is not properly 
+configured. See the previous section.
+
+Getting a lot of 404
+::::::::::::::::::::
+
+Check your server logs and make sure your VirtualHost is properly configured.
+Looking at the server log might help.
+
+
+Getting some 500 errors
+:::::::::::::::::::::::
+
+Check your server logs and look for some tracebacks. Also, make sure your 
+server-full code is up-to-date by running **make build**
+
+Some common errors:
+
+- `KeyError: "Unknown fully qualified name for the backend: 'sql'"`
+
+  This error means that your backend configuration is outdated. Use the 
+  fully qualified names described in the previous sections.
+
+
+Can't get it to work
+::::::::::::::::::::
+
+Ask for help:
+
+- in our Mailing List: https://mail.mozilla.org/listinfo/services-dev
+- on IRC (irc.mozilla.org) in the #sync channel 
