@@ -10,7 +10,7 @@ The application is configured via two files:
 - the Services configuration file.
 
 
-XXX more on file ocation
+XXX more on file location
 
 
 Paster ini file
@@ -214,8 +214,14 @@ storage server to read and write data.
 
 Available options (o: optional, m: multi-line, d: default):
 
-- **backend**: backend used for the storage. Existing backends :
-  **sql**, **memcached**.
+- **backend**: backend used for the storage. Takes the fully qualified
+  name of the class. 
+  
+  Existing backends :
+
+  - **syncstorage.storage.sql.SQLStorage**
+  - **syncstorage.storage.memcached.MemcachedSQLStorage**.
+
 - **cache_servers** [o, m]: list of memcached servers (host:port)
 - **sqluri**: uri for the DB. see RFC-1738 for the format.
   *driver://username:password@host:port/database*. Supported drivers are: sqlite,
@@ -254,8 +260,14 @@ authentication and registration.
 
 Available options (o: optional, m: multi-line, d: default):
 
-- **backend**: backend used for the storage. Existing backends :
-  **sql**, **ldap**, **dummy**.
+- **backend**: backend used for the storage. 
+  
+  Existing backends :
+
+  - **services.auth.sql.SQLAuth**
+  - **services.auth.ldap.LDAPAuth**
+  - **services.auth.dummy.DummyAuth**
+
 - **ldapuri** [o]: uri for the LDAP server when the ldap backend is used.
 - **ldap_use_pool** [o, default:False]: If True, a pool of connectors is used.
 - **ldap_pool_size** [o, default:10]: Size of the ldap pool when used.
