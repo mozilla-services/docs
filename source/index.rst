@@ -32,8 +32,8 @@ like their API specifications*
 
    storage/index  
    reg/index
-   sreg/index
    keyexchange/index
+   sreg/index
 
 .. warning:: The list of Services documented here is still incomplete complete.
    This is a work in progress.
