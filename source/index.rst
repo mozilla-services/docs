@@ -35,10 +35,6 @@ like their API specifications*
    keyexchange/index
    sreg/index
 
-.. warning:: The list of Services documented here is still incomplete complete.
-   This is a work in progress.
-
-
 Server-side development guide
 =============================
 
