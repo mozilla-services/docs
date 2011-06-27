@@ -12,6 +12,10 @@ Secondary request, not a hard requirement, is that if the user
 has a mobile device, and is setting up a desktop device, that the flow is
 similar and still involves entering the key on the desktop 
 
+If you are using our hosted services with your own client code, 
+please read the :ref:`tos`.
+
+
 Documentation content
 =====================
 
