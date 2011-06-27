@@ -215,12 +215,8 @@ Troubleshooting
 ===============
 
 Most issues with the server are a bad configuration. If your server does not 
-work properly, the first thing to do is to enable client-side logs by visiting
-**about:config** in Firefox and enabling the 
-**services.sync.log.logger.engine.bookmarks**.
-
-Once this is enabled, restart Firefox and force a sync, then visit 
-**about:sync-log**
+work properly, the first thing to do is to visit **about:sync-log** in 
+Firefox to see if there's any error.
 
 You will see a lot of logs, and if the sync failed, and probably an error
 
