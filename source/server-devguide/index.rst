@@ -26,6 +26,7 @@ Contents of the documentation:
    guidelines
    profiling
    release
+   confspec
    glossary
 
 
