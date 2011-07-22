@@ -196,6 +196,17 @@ Available options (o: optional, m: multi-line, d: default):
   can be used by the client when creating users, to bypass the
   captcha challenge.
 
+- **graceful_shutdown_interval** [o, default: 1]: Number of seconds before the
+  app starts to shutdown. New requests are still accepted but the heartbeat
+  page start to return 503.
+
+- **hard_shutdown_interval** [o, default: 1]: Number of seconds before the app
+  is shut down. Any new call returns a 503, and pending requests have that time
+  to finish up the work before the app dies.
+
+  Notice that an event is triggered when the process ends, giving a chance for
+  apps to cleanup things.
+
 
 Example::
 
@@ -215,8 +226,8 @@ storage server to read and write data.
 Available options (o: optional, m: multi-line, d: default):
 
 - **backend**: backend used for the storage. Takes the fully qualified
-  name of the class. 
-  
+  name of the class.
+
   Existing backends :
 
   - **syncstorage.storage.sql.SQLStorage**
@@ -260,8 +271,8 @@ authentication and registration.
 
 Available options (o: optional, m: multi-line, d: default):
 
-- **backend**: backend used for the storage. 
-  
+- **backend**: backend used for the storage.
+
   Existing backends :
 
   - **services.auth.sql.SQLAuth**
