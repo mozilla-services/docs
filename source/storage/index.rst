@@ -30,7 +30,6 @@ Resources
 - Original wiki pages:
 
  - https://wiki.mozilla.org/Services/Sync/Server/API/Storage/1.0
- - https://wiki.mozilla.org/Services/Sync/Server/API/Storage/1.1
 
 - Server: https://hg.mozilla.org/services/server-storage
 - Client: Firefox 4, Firefox Home
