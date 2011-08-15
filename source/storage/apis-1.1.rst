@@ -1,3 +1,5 @@
+.. _server_storage_api_11:
+
 ================
 Storage API v1.1
 ================
