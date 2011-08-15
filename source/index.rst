@@ -25,16 +25,16 @@ Services
 ========
 
 *This section contains documentation about the services we operate,
-like their API specifications* 
+like their API specifications*
 
-If you want to see the big picture, check :ref:`overview`. Or 
+If you want to see the big picture, check :ref:`overview`. Or
 jump to the detailed documentation for each service:
 
 .. toctree::
    :maxdepth: 1
 
-   storage/index 
-   reg/index 
+   storage/index
+   reg/index
    keyexchange/index
    sreg/index
 
@@ -47,6 +47,14 @@ Server-side development guide
 
    server-devguide/index
 
+
+Client Development
+==================
+
+.. toctree::
+   :maxdepth: 2
+
+   sync/fxclient/index
 
 Miscellaneous
 =============

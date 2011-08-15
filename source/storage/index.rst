@@ -1,8 +1,8 @@
-.. _storage:
+.. _server_storage:
 
-=======
-Storage
-=======
+===============
+Storage Service
+===============
 
 
 Goal of the Service
