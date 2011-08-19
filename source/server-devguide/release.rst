@@ -4,134 +4,89 @@
 Releasing an application
 ========================
 
-Versioning
-==========
-
-Projects are versionned using the *MAJOR.MINOR* scheme. Examples:
-
-- 1.0
-- 1.1
-- 2.1
-
-The *MINOR* part is incremented in the day-to-day work and the *MAJOR*
-part is incremented on important updates. The definition of *Important*
-is left to the judgment of the releaser.
-
-We don't really have any strategy here, like incrementing *MAJOR* only
-on backward incompatible changes: all Python packages we use are part of a
-Server application and the only public API is documented web services that
-have their own versionning scheme.
-
-That said, if a library is published at PyPI, it has supposedly reached
-a stable state, and incrementing the *MAJOR* version should occur on backward
-incompatible changes.
-
-Exceptionnaly, Ops may use a *MAJOR.MINOR.MICRO* scheme if they need to.
-
-Our RPM releases have an extra number in the spec file, the *release* number.
-This number should be left to *1*. Exceptionally, Ops may raise it if they
-need to patch the code without having it merged upstream.
-
-
-The Makefile
-============
-
-Releases are driven by the :file:`Makefile` file contained in the project.
-
-It should contain these targets:
-
-- *build*: builds the project in-place
-- *tests*: run the tests.
-- *build_rpms*: build the RPM collection. The collection must include the 
-  project RPM but also all direct and indirect dependencies.
-
-Creating a RPM release is done via this command::
-
-    $ make build test build_rpms
-
-
-The *build_rpms* target can use the *pypi2rpm* tool in order to create RPMs.
-
-Here's an extract of a Makefile::
-
-    APPNAME = server-key-exchange
-    DEPS = server-core
-    VIRTUALENV = virtualenv
-    NOSE = bin/nosetests -s --with-xunit
-    TESTS = keyexchange/tests
-    PYTHON = bin/python
-    EZ = bin/easy_install
-    PYPI2RPM = bin/pypi2rpm.py
-
-    .PHONY: build test build_rpms 
-
-    build:
-        $(VIRTUALENV) --no-site-packages --distribute .
-        $(PYTHON) build.py $(APPNAME) $(DEPS)
-        $(EZ) nose
-        $(EZ) pypi2rpm
-
-    test:
-        $(NOSE) $(TESTS)
-
-    build_rpms:
-        rm -rf build
-        $(PYTHON) setup.py --command-packages=pypi2rpm.command bdist_rpm2 --spec-file=KeyExchange.spec --dist-dir=$(CURDIR)/rpms --binary-only
-        cd deps/server-core; rm -rf build; ../../$(PYTHON) setup.py --command-packages=pypi2rpm.command bdist_rpm2 --spec-file=Services.spec --dist-dir=$(CURDIR)/rpms --binary-only
-        $(PYPI2RPM) --dist-dir=$(CURDIR)/rpms webob --version=1.0
-        $(PYPI2RPM) --dist-dir=$(CURDIR)/rpms paste --version=1.7.5.1
-        $(PYPI2RPM) --dist-dir=$(CURDIR)/rpms pastedeploy --version=1.3.4
-        $(PYPI2RPM) --dist-dir=$(CURDIR)/rpms pastescript --version=1.7.3
-
-
-In this example, the **build_rpms** target generates RPMs for two Mozilla 
-packages and four third-party dependencies.
-
-
 Preparing a release
 ===================
 
+This section is a summary of the release process. The rest of the chapter
+explains everything in detail.
+
 To cut a new release the process is:
 
-1. pin the dependencies versions
-2. increment the app version
+1. start a release branch
+2. pin the external dependencies versions
 3. update RELEASE.txt
-4. tag
+4. tag a release candidate
+5. build a release and all rpms
+6. fix your release !
+7. backport your changes
 
 
-1. Pin the dependencies versions
+1. Start a release branch
+:::::::::::::::::::::::::
+
+The first thing to do is to start a branch to do the releasing work.
+
+Let's say you want to release **1.2**, create a *1.2-release* branch::
+
+    $ hg branch 1.2-release
+
+Go back to the default branch, then change the release to **1.3.dev1**, 
+so any further change will be in the 1.3 train.
+
+The version is located in the *.spec* file under the **version** field.
+Extract of a spec file::
+
+    %define version 1.3.dev1
+
+
+::
+
+    $ hg up default
+    ... edit the spec file so version=1.3.dev1...
+    $ hg ci -m 'starting the 1.3 developement'
+    $ hg push -f    (-f is used to create the new branch in the central repo)
+
+Once everything is commited, go back to the release branch::
+
+     $ hg up 1.2-release
+
+Change the .spec file version to 1.2 (it's propably 1.2.devX right now)
+
+
+2. Pin the dependencies versions
 ::::::::::::::::::::::::::::::::
 
 When you release an application, you must make sure that all the dependencies 
 are pinned. If you don't do this, you can't be sure the application will be
-run in staging or production with the same versions that the ones you've
+run in stage or production with the same versions that the ones you've
 tested.
 
-This can be done in the **build_rpms** target of the Makefile with the 
-**--version** option of the pypi2rpm script::
+This can be done in the **prod-reqs.txt** and **stage-reqs.txt** files. They
+contain all externals dependencies the project should be using.
 
-    build_rpms:
-        ...
-        $(PYPI2RPM) --dist-dir=$(CURDIR)/rpms pastescript --version=1.7
-        ...
+They usually have the same versions unless stage needs something specific.
+
+Example::
+
+    cef == 0.2
+    WebOb == 1.0.7
+    Paste == 1.7.5.1
+    PasteDeploy == 1.3.4
+    PasteScript == 1.7.3
+    Mako == 0.4.1
+    MarkupSafe == 0.12
+    Beaker == 1.5.4
+    python-memcached == 1.47
+    simplejson == 2.1.6
+    Routes == 1.12.3
+    SQLAlchemy == 0.6.6
+    MySQL-python == 1.2.3
+    WSGIProxy == 0.2.2
+    recaptcha-client == 1.0.6
 
 
 On every release, you can decide to raise the versions to the latest
 stables versions, after you've tried them.
-
-
-2. Increment the app version
-::::::::::::::::::::::::::::
-
-There are two files to update:
-
-- setup.py: the *version* options.
-- Project.spec: the *version* and *unmangled_version* fields.
-
-Extract of a spec file::
-
-    %define version 1.0
-    %define unmangled_version 1.0
 
 
 3. Update RELEASE.txt
@@ -146,13 +101,11 @@ Each release has a section with the date, containing three parts:
 - Dependencies: list internal dependencies and their versions.
 - Relevant changes: lists relevant changes with bugzilla numbers.
 
-Notice that the version is noted with its RPM release appended, like *-1*.
-
 Example::
 
 
-    0.2-1 - 2011-02-28
-    ==================
+    1.2 - 2011-02-28
+    ================
 
     Impacts:
 
@@ -168,56 +121,314 @@ Example::
     - now using the standalone cef lib
 
 
-4. Tagging
-::::::::::
 
-Our tags are following this scheme: "rpm-MAJOR-MINOR-RELEASE" where
-*MAJOR.MINOR* is the version of the Python package, as defined in the
-:file:`setup.py` file, and *RELEASE* is the RPM release version as defined
-in the :file:`ProjectName.spec` file.
+4. Tag the release
+::::::::::::::::::
 
-Example::
+Our tags are following this scheme: "rpm-MAJOR.MINOR.[MICRO]" where
+*MAJOR.MINOR[.MICRO]* is the version of the Python package.
 
-    $ hg tag "rpm-2.1-1"
+Examples::
 
+    $ hg tag "rpm-1.2"
+    $ hg tag "rpm-1.2.1"
+
+
+.. Note::
+
+    The *rpm-* prefix is a legacy prefix we're keeping to avoid any conflict
+    with the old PHP version tags.
 
 
 .. _rpm-building:
 
-Building the RPMs
-=================
+5. Build the app and all RPMS
+:::::::::::::::::::::::::::::
 
-Once everything is tagged, you can run a build on the selected tags. The
-*build* target accepts two variables:
+Building the app can now be done, by providing the tag value for your
+app, and if needed a tag value for internals dependencies.
 
-- **LATEST_TAGS=1**: When used, will look for the latest release tags for
-  all projects and use them.
+For example for account-portal (uses server-core), a call can look like 
+this::
 
-- **PROJECT_NAME=rpm-X.X-X**: When used, will checkout the given project at
-  the mentioned tag. The tag can be a release tag, or *tip*.
+    $ make build_rpms SERVER_CORE=rpm-2.0 ACCOUNT_PORTAL=rpm-1.2 RPM_CHANNEL=stage
 
-  *PROJECT_NAME* refers to the name of the repository, after it has been
-  upper-cased and all the dashes ("-") replaced by underscores ("_").
+The syntax for the options is :**PROJECT_NAME=rpm-X.X**. When used, 
+will checkout the given project at the mentioned tag. 
+The tag can be a release tag, or *tip*.
 
-  For example, *server-core* becomes *SERVER_CORE*.
+*PROJECT_NAME* refers to the name of the repository, after it has been
+upper-cased and all the dashes ("-") replaced by underscores ("_").
+
+For example, *server-core* becomes *SERVER_CORE*.
+
+6. Fix your release
+:::::::::::::::::::
+
+Sorry but your **1.2** release is a brown bag ! You need to fix the spec file
+and maybe a few python bugs.
+
+We will use the **MICRO** version to do this.
+
+- Increment the release to **1.2.1**
+- Do you fixes
+- tag **1.2.1**
+- repeat and increment the MICRO version until the release works
+
+7. Backport your changes
+::::::::::::::::::::::::
+
+If you did a few micro releases, check if you need to backport them in 
+the default branch.
 
 
-The *build_rpms* will the create the collection of RPMs.
+More details
+============
 
-Examples::
 
-    # building the Sync Server at the latest version
-    $ make build build_rpms LATEST_TAGS=1
+Naming convention
+:::::::::::::::::
 
-    # building the KeyEchange Server at specific tags
-    $ make build build_rpms SERVER_KEY_EXCHANGE=rpm-0.2-1 SERVER_CORE=0.2-3
+To avoid any conflict with another Python project -- even if the project
+will not be released to PyPI, let's use these conventions:
 
-    # building everything on tip
-    $ make build build_rpms
+- The project name should start with *MozSvc*
+- Ideally a project contains a single package with a *mozsvc* prefix as well
+
+.. Note::
+
+    *MozSvc* is pronounced **Mozz-Vikk**, which is an ancient Irish Gaelic
+    word that literaly means **"Viking Mice"**.
+
+
+Versioning scheme
+:::::::::::::::::
+
+
+Final Releases
+--------------
+
+For *final* releases, projects are versionned using the *MAJOR.MINOR* scheme.
+
+Examples:
+
+- 1.0
+- 1.1
+- 2.1
+
+The *MINOR* part is incremented in the day-to-day work and the *MAJOR*
+part is incremented on important updates. The definition of *Important*
+is left to the judgment of the releaser.
+
+We don't really have any strategy here, like incrementing *MAJOR* only
+on backward incompatible changes: all Python packages we use are part of a
+Server application and the only public facing API is documented web services 
+that have their own versionning scheme.
+
+That said, if a library is published at PyPI, it has supposedly reached
+a stable state, and incrementing the *MAJOR* version should occur on backward
+incompatible changes.
+
+When a release fails in stage or prod, we can use a *MAJOR.MINOR.MICRO* 
+scheme to fix it.
+
+
+Developement Releases
+---------------------
+
+The tip should always have a version with a *.devN* suffix. That is, the next 
+version to be released, with N being an integer. Examples:
+
+- 1.5.dev1
+- 1.4.dev23
+
+
+Full example
+------------
+
+Here's a full scenario of versionning usage:
+
+- 1.2 is in production, tagged as "rpm-1.2"
+- we want to push a 1.3
+- we change the default branch version to 1.4.dev1
+- we branch "1.3-release"
+- a 1.3  is tagged there as "rpm-1.3"
+- 1.3 is pushed on stage
+- it's not working
+- devs fix and tag 1.3.1 in the branch
+- 1.3.1 is pushed on stage, it's working
+- 1.3.1 is pushed in production
+- it breaks !!!
+- production is rollbacked to 1.2
+- devs fix the problems and tag 1.3.2
+- 1.3.2 is pushed on stage, it's working
+- 1.3.2 is pushed in production
+- it works, congrats. Now working on 1.4.dev1 in tip
+
+
+The Makefile
+::::::::::::
+
+Releases are driven by the :file:`Makefile` file contained in the project.
+
+It should contain these targets:
+
+- *build*: builds the project in-place
+- *tests*: runs the tests.
+- *build_rpms*: build the RPM collection. The collection must include the 
+  project RPM but also all direct and indirect dependencies.
+- *mock*: builds the RPMs, install them in a chroot, then make sure the
+  app can be imported in Python
+
+In more details:
+
+The **build** target does the following:
+
+1. install a local virtualenv
+2. install MoPyTools in it
+3. set the project to a specific channel (prod, dev or stage)
+4. build the application and pull internal and external dependencies
+
+The **test** target runs Nose against the project.
+
+The **build_rpms** target generates the RPM for the project and for
+all its internal and external dependencies, using **pypi2rpm**
+
+The **mock** target calls **build_rpms** then installs everything
+in a chroot usig **Mock**, then runs an import. That ensures
+the spec file dependencies are error free, and the Python app
+main module is importable. Notice that this target is run only
+under Centos5.
+
+
+Here's an extract of a typical Makefile::
+
+    APPNAME = server-key-exchange
+    DEPS = server-core
+    BUILDAPP = bin/buildapp
+    BUILDRPMS = bin/buildrpms
+    CHANNEL = dev
+    RPM_CHANNEL = prod
+    VIRTUALENV = virtualenv
+    NOSE = bin/nosetests -s --with-xunit
+    TESTS = keyexchange/tests
+    INSTALL = bin/pip install
+
+    build:
+        $(VIRTUALENV) --no-site-packages --distribute .
+        $(INSTALL) MoPyTools
+        $(BUILDAPP) $(PYPIOPTIONS) -c $(CHANNEL) $(DEPS)
+
+    test:
+        $(NOSE) $(TESTS)
+
+    build_rpms:
+        $(BUILDRPMS) -c $(RPM_CHANNEL) $(DEPS)
+
+    mock: build build_rpms
+        mock init
+        mock --install python26 python26-setuptools
+        cd rpms; wget http://mrepo.mozilla.org/mrepo/5-x86_64/RPMS.mozilla-services/gunicorn-0.11.2-1moz.x86_64.rpm
+        cd rpms; wget http://mrepo.mozilla.org/mrepo/5-x86_64/RPMS.mozilla/nginx-0.7.65-4.x86_64.rpm
+        mock --install rpms/*
+        mock --chroot "python2.6 -m keyexchange.run"
+
+
+Channels
+::::::::
+
+We define three channels:
+
+- **dev**: development channel, most dependencies are unpinned, so the latest 
+  PyPI release is taken
+- **prod**: all dependencies should be pinned **default one**
+- **stage**: all dependencies should be pinned -- might vary from production 
+  versions. This channel is most of the time the same than production but can be
+  useful in case the staging environment need to be different.
+
+
+Requirement files
+:::::::::::::::::
+
+All dependencies are listed in requirement files. A requirement file is a text 
+file with a list of dependencies. One per line. Each dependency can have a 
+version information. The file follows Pip's standard. 
+See http://www.pip-installer.org/en/latest/requirement-format.html
+
+Example::
+
+    cef
+    WebOb == 1.0.7
+    Paste
+    PasteDeploy
+    PasteScript
+    Mako
+    MarkupSafe
+    Beaker
+    python-memcached
+    simplejson
+    Routes
+    SQLAlchemy <= 0.6.99
+    MySQL-python
+    WSGIProxy
+    recaptcha-client
+
+
+There should be three requirement files located at the root 
+of the project, one for each channel:
+
+1. dev-reqs.txt: requirements for the **dev channel**
+2. stage-reqs.txt: requirements for the **stage channel**
+3. prod-reqs.txt: requirements for the **prod channel**
+
+stage and prod files should have *pinned* versions, since those
+files will be used to build applications to be released in production.
+
+Example::
+
+    cef == 0.2
+    WebOb == 1.0.7
+    Paste == 1.7.5.1
+    PasteDeploy == 1.3.4
+    PasteScript == 1.7.3
+    Mako == 0.4.1
+    MarkupSafe == 0.12
+    Beaker == 1.5.4
+    python-memcached == 1.47
+    simplejson == 2.1.6
+    Routes == 1.12.3
+    SQLAlchemy == 0.6.6
+    MySQL-python == 1.2.3
+    WSGIProxy == 0.2.2
+    recaptcha-client == 1.0.6
+
+
+When a *build* or a *build_rpms* is invoked, it receives a channel option and
+pick the corresponding requirement files to decide which version to pick.
+Unpinned versions will make the build process pick the latest release at PyPI.
+(Even if it's not stable!)
+
+For the *build* target the default value is *dev* and for the *build_rpms* 
+option it's *prod*.
+
+You can also force a specific channel for *build* with the **CHANNEL** variable::
+
+    $ make build CHANNEL=prod
+
+And for **build_rpms**, **RPM_CHANNEL**:
+
+    $ make build RPM_CHANNEL=stage
+
+
+
+When the channel option is provided, the Makefile will use the dependencies
+list from the *CHANNEL-reqs.txt* file.
+
+
 
 
 PyPI Mirrors
-============
+::::::::::::
 
 To avoid any dependency on an external resource such as python.org during the
 creation of the release, there are a few options that can be used when
@@ -257,4 +468,3 @@ your SSH key and do a scp::
 
 By uploading your package to this location, make build will find it as long
 as **PYPIEXTRAS** is used.
-
