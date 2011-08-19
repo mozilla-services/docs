@@ -415,7 +415,7 @@ You can also force a specific channel for *build* with the **CHANNEL** variable:
 
     $ make build CHANNEL=prod
 
-And for **build_rpms**, **RPM_CHANNEL**:
+And for **build_rpms**, **RPM_CHANNEL**::
 
     $ make build RPM_CHANNEL=stage
 
