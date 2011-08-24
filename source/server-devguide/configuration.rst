@@ -158,12 +158,118 @@ XXX
 Configuration file
 ==================
 
-The server uses a global configuration :file:`sync.conf` file.
-The file location is configured in the Paster ini file and loaded when
-the application starts. See :ref:`config-app-main`.
+The server uses a global configuration file.  The file location is configured
+in the Paster ini file (as the `configuration` setting in the `[app:main]`
+section), and it is loaded when the application starts. See
+:ref:`config-app-main`.
 
-The configuration file has one section for each service provided by the
-application.
+The configuration file has one section for each module loaded by the
+application.  The configuration data will be available on the application
+object as a dictionary-like object stored in the `config` attribute.  The
+settings from the `[global]` section will be stored as the simple key name,
+while the settings from the other sctions will be keyed as
+`<section_name>.<key>`.
+
+So::
+
+    [global]
+    foo = bar
+    baz = bawlp
+
+    [storage]
+    bing = boom
+
+    [auth]
+    snaf = foo
+
+Would produce the following `app.config`::
+
+    {'foo': 'bar',
+     'baz': 'bawlp',
+     'storage.bing': 'boom',
+     'auth.snaf': 'foo'}
+
+Additionally, `config.get_section` will return a dictionary containing
+only the settings from the specified section, without the prefix.  So
+continuing the example above...
+
+`app.config.get_section('global')` would return::
+
+    {'foo': 'bar',
+     'baz': 'bawlp'}
+
+`app.config.get_section('storage') would return::
+
+    {'bing': 'boom}
+
+
+
+Multi-Config Sections
+---------------------
+
+In addition to supporting standard "INI" file conventions, Server-Core based
+applications provide an ability to use namespaced section headers to allow for
+multiple, similar variations of a config section to be registered
+simultaneously.
+
+The storage service used by the sync server is an example of where this is
+useful.  Each storage server instance is associated with a specific set of back
+end storage nodes, usually all of the nodes that are located in the same
+location as the storage server itself.  The storage server loads a separate
+configuration for each storage node, all similar save for the database
+connection URL.
+
+Example::
+
+    [storage]
+    backend = memcached
+    cache_servers = 127.0.0.1:11211
+                    192.168.1.13:11211
+    standard_collections = false
+    use_quota = true
+    quota_size = 5120
+    pool_size = 100
+    pool_recycle = 3600
+
+    [storage:node0]
+    sqluri = mysql://sync:sync@db1.example.com/sync
+
+    [storage:node1]
+    sqluri = mysql://sync:sync@db1.example.com/sync
+
+    [storage:node2]
+    sqluri = mysql://sync:sync@db2.example.com/sync
+
+    [storage:node3]
+    sqluri = mysql://sync:sync@db2.example.com/sync
+
+The generated config object would then have sections named `storage`,
+`storage:node0`, `storage:node1`, etc., as you might expect.  Instead
+of containing a single entry, however, the `storage:nodeN` sections
+would contain all of the settings from `storage` merged with the settings
+from `storage:nodeN`, with the `nodeN` entry winning any conflicts.
+
+So, `app.config.get_section('storage')` would produce::
+
+    {'backend': 'memcached',
+     'cache_servers': ['127.0.0.1:11211', '192.168.1.13:11211'],
+     'standard_collections': False,
+     'use_quota': True,
+     'quota_size': 5120,
+     'pool_size': 100,
+     'pool_recycle': 3600}
+
+while `app.config.get_section('storage:node0') would give::
+
+    {'backend': 'memcached',
+     'cache_servers': ['127.0.0.1:11211', '192.168.1.13:11211'],
+     'standard_collections': False,
+     'use_quota': True,
+     'quota_size': 5120,
+     'pool_size': 100,
+     'pool_recycle': 3600,
+     'sqluri': 'mysql://sync:sync@db1.example.com/sync'}
+
 
 
 Global
@@ -419,6 +525,4 @@ Example::
     version = 0
     device_version = 1.3
     product = weave
-
-
 
