@@ -290,11 +290,18 @@ APIs
 Headers
 =======
 
+**Retry-After**
+
+    When sent together with an HTTP 503 status code, it signifies that the
+    server is undergoing maintenance. The client should not attempt another
+    sync for the number of seconds specified in the header value.
+
+
 **X-Weave-Backoff**
 
-    Indicates that the server is under heavy load or has suffered a failure 
-    and the client should not try again for the specified number of 
-    seconds (usually 1800)
+    Indicates that the server is under heavy load  and the client should not
+    trigger another sync for the number of seconds specified in the header
+    value (usually 1800).
 
 
 **X-If-Unmodified-Since**
