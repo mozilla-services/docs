@@ -329,3 +329,41 @@ Headers
 
     If supported by the DB, this header will return the number of records 
     total in the request body of any multiple-record GET request. 
+
+HTTP status codes
+=================
+
+**200**
+
+    The request was processed successfully.
+
+
+**400**
+
+    The request itself or the data supplied along with the request is invalid.
+    The response contains a numeric code indicating the reason for why the
+    request was rejected. See :ref:`respcodes` for a list of valid response
+    codes.
+
+
+**401**
+
+    The username and password are invalid on this node. This may either be
+    caused by a node reassignment or by a password change. The client should
+    check with the auth server whether the user's node has changed. If it has
+    changed, the current sync is to be aborted and should be retried against
+    the new node. If the node hasn't changed, the user's password was changed.
+
+
+**404**
+
+    The requested resource could not be found. This may be return for **GET**
+    and **DELETE** requests for non-existent records and empty collections.
+
+
+**503**
+
+    Indicates, in conjuction with the **Retry-After** header, that the server
+    is undergoing maintenance. The client should not attempt another sync for
+    the number of seconds specified in the header value. The response body
+    may contain JSON string describing the server's status or error.
