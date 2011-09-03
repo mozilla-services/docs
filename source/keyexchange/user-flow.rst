@@ -66,7 +66,7 @@ Overview
 Detailed Flow
 =============
 
-1. Mobile asks server for new channel ID (3 characters a-z0-9)
+1. Mobile asks server for new channel ID (4 characters a-z0-9)
 
    ::
     
@@ -77,8 +77,8 @@ Detailed Flow
 2. Mobile generates PIN from random weak secret (4 characters a-z0-9) 
    and the channel ID, computes and uploads J-PAKE msg 1.
 
-   **New for v2** To prevent double uploads in case of retries, the 
-   If-None-Match: * header is specified. This makes sure that the message 
+   **New in v2:** To prevent double uploads in case of retries, the 
+   ``If-None-Match: *`` header may be specified. This ensures that the message
    is only uploaded if the channel is empty. If it is not then the request 
    will fail with a 412 Precondition Failed which should be considered the 
    same as 200 OK. The 412 will also contain the Etag of the data was the 
@@ -112,8 +112,8 @@ Detailed Flow
     S: HTTP/1.1 200 OK
     S: ETag: "etag-of-receiver1-message"
 
-   Response that will be returned on retries if the Desktop already replaced 
-   the message::
+   **New in v2:** Response that will be returned on retries if the Desktop
+   already replaced the message::
 
     S: HTTP/1.1 412 Precondition Failed
     S: ETag: "etag-of-receiver1-message"
@@ -131,7 +131,7 @@ Detailed Flow
 
 4. Desktop computes and uploads msg 1.
 
-   **New in version 2** The If-Match header is set so that we only upload this 
+   **New in v2:** The ``If-Match`` header may be set so that we only upload this
    message if the other side's previous message is still in the channel. This 
    is to prevent double PUTs during retries. If a 412 is received then it 
    means that our first PUT was actually correctly received by the server and 
@@ -166,11 +166,14 @@ Detailed Flow
     S: HTTP/1.1 200 OK
     S: Etag: "etag-of-sender1-message"
 
+   **New in v2:** Response that will be returned on retries if Mobile
+   already replaced the message::
+
     S: HTTP/1.1 412 Precondition Failed
     S: Etag: "etag-of-sender1-message"
 
 
-5. Mobile polls for Desktop's msg 1::
+5. Mobile polls for Desktop's msg 1 once per second for at least 300 seconds::
 
     C: GET /a7id HTTP/1.1
     C: If-None-Match: "etag-of-receiver1-message"
@@ -186,7 +189,7 @@ Detailed Flow
 
    Mobile computes and uploads msg 2.
 
-   **New in version 2** The If-Match header is set so that we only upload this 
+   **New in v2:** The ``If-Match`` header may be set so that we only upload this
    message if the other side's previous message is still in the channel. This 
    is to prevent double PUTs during retries. If a 412 is received then it means 
    that our first PUT was actually correctly received by the server and that 
@@ -211,26 +214,27 @@ Detailed Flow
     S: HTTP/1.1 200 OK
     S: ETag: "etag-of-receiver2-message"
 
+   **New in v2:** Response that will be returned on retries if Desktop
+   already replaced the message::
+
     S: HTTP/1.1 412 Precondition Failed
     S: ETag: "etag-of-receiver2-message"
 
-6. Desktop polls for and eventually retrieves Mobile's msg 2
-
-   ::
+6. Desktop polls for Mobile's msg 2 once per second for at least 10 seconds::
 
     C: GET /a7id HTTP/1.1
     C: If-None-Match: "etag-of-sender1-message"
 
+    S: HTTP/1.1 304 Not Modified
+
+   and eventually retrieves it::
+
     S: HTTP/1.1 200 OK
     S: Etag: "etag-of-receiver2-message"
 
-    S: HTTP/1.1 412 Precondition Failed
-    S: Etag: "etag-of-receiver2-message"
-
-
    Desktop computes key, computes and uploads msg 2.
 
-   **New in version 2** The If-Match header is set so that we only upload this 
+   **New in v2:** The ``If-Match`` header may be set so that we only upload this
    message if the other side's previous message is still in the channel. This 
    is to prevent double PUTs during retries. If a 412 is received then it 
    means that our first PUT was actually correctly received by the server and 
@@ -257,11 +261,15 @@ Detailed Flow
     S: HTTP/1.1 200 OK
     S: ETag: "etag-of-sender2-message"
 
+   **New in v2:** Response that will be returned on retries if Mobile
+   already replaced the message::
+
     S: HTTP/1.1 412 Precondition Failed
     S: ETag: "etag-of-sender2-message"
 
 
-7. Mobile retrieves Desktop's msg 2::
+7. Mobile polls for Desktop's msg 2 once per second for at least 10
+   seconds and eventually retrieves it::
 
     C: GET /a7id HTTP/1.1
     C: If-No-Match: "etag-of-receiver2-message"
@@ -270,14 +278,12 @@ Detailed Flow
     S: Etag: "etag-of-sender2-message"
     { 'type': 'sender2', ... }
 
-    S: HTTP/1.1 412 Precondition failed
-    S: Etag: "etag-of-sender2-message"
-
+    S: HTTP/1.1 304 Not Modified
 
    Mobile computes key, uploads encrypted known message "0123456789ABCDEF" to 
    prove its knowledge (msg 3).
 
-   **New in version 2** The If-Match header is set so that we only upload 
+   **New in v2:** The ``If-Match`` header may be set so that we only upload 
    this message if the other side's previous message is still in the channel. 
    This is to prevent double PUTs during retries. If a 412 is received then it 
    means that our first PUT was actually correctly received by the server and 
@@ -300,25 +306,27 @@ Detailed Flow
         S: HTTP/1.1 200 OK
         S: Etag: "etag-of-receiver3-message"
 
+   **New in v2:** Response that will be returned on retries if Desktop
+   already replaced the message::
+
         S: HTTP/1.1 412 Precondition failed
         S: Etag: "etag-of-receiver3-message"
 
 
-8. Desktop retrieves Mobile's msg 3 to confirm key
-
-   ::
+8. Desktop retrieves Mobile's msg 3 to confirm the key. It polls once
+   per second for at least 10 seconds::
 
     C: GET /a7id HTTP/1.1
-    C: If-No-Match: ""
+    C: If-No-Match: "etag-of-sender2-message"
 
     S: HTTP/1.1 200 OK
     C: ETag: "etag-of-receiver3-message"
     ...
 
-   Desktop verifies it against its own version. 
-   If the hash matches, it encrypts and uploads Sync credentials.
+   Desktop verifies it against its own version.  If the encrypted values
+   match, it encrypts and uploads Sync credentials.
 
-   **New in version 2** The If-Match header is set so that we only upload 
+   **New in v2:** The ``If-Match`` header may be set so that we only upload 
    this message if the other side's previous message is still in the channel. 
    This is to prevent double PUTs during retries. If a 412 is received then 
    it means that our first PUT was actually correctly received by the server 
@@ -343,6 +351,9 @@ Detailed Flow
         S: HTTP/1.1 200 OK
         S: Etag: "etag-of-sender3-message"
 
+   **New in v2:** Response that will be returned on retries if Mobile
+   already replaced the message::
+
         S: HTTP/1.1 412 Precondition failed
         S: Etag: "etag-of-sender3-message"
 
@@ -358,7 +369,8 @@ Detailed Flow
    the encrypted credentials.
 
 
-9. Mobile retrieves encrypted credentials::
+9. Mobile polls for the encrypted credentials once per second for at
+   least 10 seconds::
 
     C: GET /a7id HTTP/1.1
     C: If-None-Match: "etag-of-receiver3-message"
@@ -377,7 +389,4 @@ Detailed Flow
 
      S: HTTP/1.1 200 OK
      ... 
-
-
-
 
