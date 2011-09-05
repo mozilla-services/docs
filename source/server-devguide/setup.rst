@@ -18,8 +18,8 @@ those packages:
    *python26-devel* under CentOS)
 5. python26-profiler under Ubuntu
 6. Mercurial (*mercurial* in most distros).
-7. `Distribute <http://pypi.python.org/pypi/distribute>`_
-8. `virtualenv <http://pypi.python.org/pypi/virtualenv>`_
+7. `virtualenv <http://pypi.python.org/pypi/virtualenv>`_
+8. `Distribute <http://pypi.python.org/pypi/distribute>`_
 9. `Flake8 <http://pypi.python.org/pypi/Flake8>`_
 10. `Paste <http://pypi.python.org/pypi/Paste>`_
 11. `PasteDeploy <http://pypi.python.org/pypi/PasteDeploy>`_
@@ -40,11 +40,23 @@ This will pull all other tools for you and install them.
    These steps require Admin privileges since they install files
    in the global Python distribution.
 
-Once you have all these tools installed, working on a project consists
+Although, each project provides a *Makefile* that bootstraps this step and
+installs tools 8. to 12. automatically.  So if you prefer, it should suffice
+to have only virtualenv and distribute installed system-wide::
+
+    $ curl -O http://python-distribute.org/distribute_setup.py
+    $ python distribute_setup.py
+    $ easy_install virtualenv
+
+
+Setting up the Project Environment
+----------------------------------
+
+Once you have all the above tools installed, working on a project consists
 of creating an isolated Python environment using Virtualenv and
 develop in it.
 
-Although, each project provides a *Makefile* that bootstraps this step,
+Each project provides a *Makefile* that bootstraps this step,
 so you should not have to do it manually.
 
 For example, to create an environment for the Sync project, you can
@@ -54,9 +66,23 @@ run::
     $ cd server-full
     $ make build
 
-Once this is done, you can do a sanity check by running all tests::
+The code is currently developed and tested using python2.6, and it most
+likely **will not work** with other versions of python.
+
+The project *Makefile* uses the default python interpreter found on your
+`$PATH`.  If your system default python version is not 2.6, you will need to
+create a python2.6 virtualenv to run ``make build``.  For example::
+
+    $ virtualenv --python=python2.6 ~/venvs/py26
+    $ source ~/venvs/py26/bin/activate
+    $ make build
+
+
+Once the environment has been created, you can do a sanity check by running
+all tests::
 
     $ make test
+
 
 
 Configuring Flake8
