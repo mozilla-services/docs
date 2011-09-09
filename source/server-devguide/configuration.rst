@@ -225,51 +225,62 @@ Example::
     backend = memcached
     cache_servers = 127.0.0.1:11211
                     192.168.1.13:11211
+    sqluri = mysql://localhost/sync
     standard_collections = false
     use_quota = true
     quota_size = 5120
     pool_size = 100
     pool_recycle = 3600
 
-    [storage:node0]
-    sqluri = mysql://sync:sync@db1.example.com/sync
+    [host:node0]
+    storage.sqluri = mysql://sync:sync@db1.example.com/sync
 
-    [storage:node1]
-    sqluri = mysql://sync:sync@db1.example.com/sync
+    [host:node1]
+    storage.sqluri = mysql://sync:sync@db1.example.com/sync
 
-    [storage:node2]
-    sqluri = mysql://sync:sync@db2.example.com/sync
+    [host:node2]
+    storage.sqluri = mysql://sync:sync@db2.example.com/sync
 
-    [storage:node3]
-    sqluri = mysql://sync:sync@db2.example.com/sync
+    [host:node3]
+    storage.sqluri = mysql://sync:sync@db2.example.com/sync
 
 The generated config object would then have sections named `storage`,
-`storage:node0`, `storage:node1`, etc., as you might expect.  Instead
-of containing a single entry, however, the `storage:nodeN` sections
-would contain all of the settings from `storage` merged with the settings
-from `storage:nodeN`, with the `nodeN` entry winning any conflicts.
+`host:node0`, `host:node1`, etc., as you might expect.  In addition to being
+available as separate sections, however, these configurations can be merged
+with the sections they refer to to generate "override" configs.  These are made
+avaialable via the `merge(*sections)` method on the config object.
 
-So, `app.config.get_section('storage')` would produce::
+So, `app.config` would produce::
 
-    {'backend': 'memcached',
-     'cache_servers': ['127.0.0.1:11211', '192.168.1.13:11211'],
-     'standard_collections': False,
-     'use_quota': True,
-     'quota_size': 5120,
-     'pool_size': 100,
-     'pool_recycle': 3600}
+    {'storage.backend': 'memcached',
+     'storage.cache_servers': ['127.0.0.1:11211', '192.168.1.13:11211'],
+     'storage.sqluri': 'mysql://localhost/sync',
+     'storage.standard_collections': False,
+     'storage.use_quota': True,
+     'storage.quota_size': 5120,
+     'storage.pool_size': 100,
+     'storage.pool_recycle': 3600,
+     'host:node0.storage.sqluri': 'mysql://sync:sync@db1.example.com/sync',
+     'host:node1.storage.sqluri': 'mysql://sync:sync@db1.example.com/sync',
+     'host:node2.storage.sqluri': 'mysql://sync:sync@db2.example.com/sync',
+     'host:node3.storage.sqluri': 'mysql://sync:sync@db2.example.com/sync',
+     }
 
-while `app.config.get_section('storage:node0') would give::
+while `app.config.merge('host:node0')` would give::
 
-    {'backend': 'memcached',
-     'cache_servers': ['127.0.0.1:11211', '192.168.1.13:11211'],
-     'standard_collections': False,
-     'use_quota': True,
-     'quota_size': 5120,
-     'pool_size': 100,
-     'pool_recycle': 3600,
-     'sqluri': 'mysql://sync:sync@db1.example.com/sync'}
-
+    {'storage.backend': 'memcached',
+     'storage.cache_servers': ['127.0.0.1:11211', '192.168.1.13:11211'],
+     'storage.standard_collections': False,
+     'storage.use_quota': True,
+     'storage.quota_size': 5120,
+     'storage.pool_size': 100,
+     'storage.pool_recycle': 3600,
+     'storage.sqluri': 'mysql://sync:sync@db1.example.com/sync',
+     'host:node0.storage.sqluri': 'mysql://sync:sync@db1.example.com/sync',
+     'host:node1.storage.sqluri': 'mysql://sync:sync@db1.example.com/sync',
+     'host:node2.storage.sqluri': 'mysql://sync:sync@db2.example.com/sync',
+     'host:node3.storage.sqluri': 'mysql://sync:sync@db2.example.com/sync',
+     }
 
 
 Global
