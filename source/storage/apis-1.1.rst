@@ -268,7 +268,6 @@ APIs
      - 'oldest' - Orders by modification date (oldest first)
      - 'newest' - Orders by modification date (newest first)
      - 'index' - Orders by the sortindex (ordered lists)
-     - 'depthindex' - Orders by depth, then by sortindex (ordered trees)
 
 
 **DELETE** **https://server/pathname/version/username/storage/collection/id**
