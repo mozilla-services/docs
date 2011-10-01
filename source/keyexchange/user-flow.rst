@@ -170,7 +170,7 @@ Detailed Flow
    message if the other side's previous message is still in the channel. This 
    is to prevent double PUTs during retries. If a 412 is received then it 
    means that our first PUT was actually correctly received by the server and 
-   that the other side has already uploaded it's next message. 
+   that the other side has already uploaded its next message. 
    So just consider the 412 to be a 200.
 
    ::
