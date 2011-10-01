@@ -8,49 +8,49 @@ Desired User Flow
 There are two possible scenarios when pairing two devices. In the simplest
 case, one of the devices is already connected to Sync. This is the only
 scenario considered in **v1/v2**. In other other scenario, none of the devices
-are connected to Sync and the user has to connect to or create a Sync account
+are connected to Sync and the user must connect to or create a Sync account
 on one of them after the pairing. This scenario is new in **v3**.
 
-For the sake of this document, "Mobile" refers to the a mobile device
-or a desktop computer and "Desktop" refers to a desktop computer.
+For the sake of this document, "Mobile" refers to a mobile device
+or a desktop computer, and "Desktop" refers to a desktop computer.
 
 1. User chooses "Pair Device" on Mobile.
 2. Mobile displays a setup key that contains both the initial secret
    and a channel ID.
 3. On Desktop, user chooses "Pair Device" according to the
-   instructions displayed on Device.
+   instructions displayed on the device.
 4. Mobile and Desktop exchange messages to build the secure channel
 5. Once the channel has been established and Mobile and Desktop are
    "paired", the user creates a Sync account on Desktop and Desktop
    uploads its data to the server during the first sync. This step is
    not present in v1/v2 of this flow. It can be omitted if the user
-   already has an account, of course.
+   already has an account.
 6. Desktop transmits the Sync account credentials (username, password,
-   Sync Key) to Mobiel via the channel.
+   Sync Key) to Mobile via the channel.
 7. Mobile completes setup and starts syncing.
 
 Overview
 ========
 
 - Mobile and Desktop complete the two roundtrips of J-PAKE messages to agree 
-  upon a strong secret K
-- A 256 bit key is derived from K using HMAC-SHA256 using a fixed extraction 
+  upon a strong secret K.
+- A 256-bit key is derived from K using HMAC-SHA256 using a fixed extraction 
   key.
-- The encryption and HMAC keys are derived from that 256 bit key using 
+- The encryption and HMAC keys are derived from that 256-bit key using 
   HMAC-SHA256.
 - To establish the pairing, Mobile encrypts the known message
   "0123456789ABCDEF" with the AES key and uploads it. Desktop verifies that it
-  has the same key by encrypting the known message with the key Desktop
+  has the same key by encrypting the known message with the key that Desktop
   derived.
 - To exchange credentials after a successful pairing and possibly account
-  creation on Desktop,
+  creation on Desktop:
 
   - Desktop encrypts the credentials with the encryption key and uploads the 
     encrypted credentials in turn, adding a HMAC-SHA256 hash of the ciphertext
     (using the HMAC key).
   - Mobile verifies the ciphertext against the HMAC-SHA256 hash.  If
     successful, Mobile decrypts ciphertext and applies credentials
-  - Mobile beings sync
+  - At this point, Mobile can begin synchronizing.
 
 
 ::
@@ -158,11 +158,11 @@ Detailed Flow
     S: ETag: "etag-of-receiver1-message"
 
   **New in v3:** Prior to v3, clients would only allow a 10 second timeout for
-  messages after the first. This means that if Desktop has no credentials yet,
-  a Mobile client that implements v2 or lower will not wait for the account
-  setup to finish. Desktop should therefore detect Mobile's API version at this
-  point and abort the pairing right away if there are no credentials present on
-  Desktop.
+  messages after the first. This means that if Desktop does not yet have
+  credentials, a Mobile client that implements v2 or lower will not wait for
+  the account setup to finish. Desktop should therefore detect Mobile's API
+  version at this point and abort the pairing right away if there are no
+  credentials present on Desktop.
 
 4. Desktop computes and uploads msg 1.
 
@@ -216,7 +216,7 @@ Detailed Flow
 
     S: HTTP/1.1 304 Not Modified
 
-   Mobile tries again after 1s::
+   Mobile tries again after 1 second::
 
     C: GET /a7id HTTP/1.1
 
@@ -229,8 +229,8 @@ Detailed Flow
    message if the other side's previous message is still in the channel. This 
    is to prevent double PUTs during retries. If a 412 is received then it means 
    that our first PUT was actually correctly received by the server and that 
-   the other side has already uploaded it's next message. So just consider the 
-   412 to be a 200.::
+   the other side has already uploaded its next message. In this instance, the
+   client can effectively consider the 412 to be a 200.::
 
     C: PUT /a7id HTTP/1.1
     C: If-Match: "etag-of-sender1-message"
@@ -275,8 +275,8 @@ Detailed Flow
    message if the other side's previous message is still in the channel. This 
    is to prevent double PUTs during retries. If a 412 is received then it 
    means that our first PUT was actually correctly received by the server and 
-   that the other side has already uploaded it's next message. So just 
-   consider the 412 to be a 200.
+   that the other side has already uploaded its next message. In this
+   instance, the client can effectively consider the 412 to be a 200.
 
    ::
 
@@ -325,8 +325,8 @@ Detailed Flow
    this message if the other side's previous message is still in the channel. 
    This is to prevent double PUTs during retries. If a 412 is received then it 
    means that our first PUT was actually correctly received by the server and 
-   that the other side has already uploaded it's next message. 
-   So just consider the 412 to be a 200.
+   that the other side has already uploaded its next message. 
+   In this instance, the client can effectively consider the 412 to be a 200.
 
    ::
 
@@ -372,12 +372,12 @@ Detailed Flow
    this message if the other side's previous message is still in the channel. 
    This is to prevent double PUTs during retries. If a 412 is received then 
    it means that our first PUT was actually correctly received by the server 
-   and that the other side has already uploaded it's next message. So just 
-   consider the 412 to be a 200.
+   and that the other side has already uploaded its next message.
+   In this instance, the client can effectively consider the 412 to be a 200.
 
    **New in v3:** Desktop must include the If-Match header to ensure the
-   session hasn't been deleted yet (e.g. due to a timeout) or tampered with
-   in the mean time.
+   session hasn't been deleted yet (e.g., due to a timeout) or tampered with
+   in the meantime.
 
    ::
 
