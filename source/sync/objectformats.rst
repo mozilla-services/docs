@@ -1,4 +1,4 @@
-.. _client_object_formats:
+.. _sync_objectformats:
 
 ==============================
 Firefox Object Storage Formats

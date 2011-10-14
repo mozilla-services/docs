@@ -4,8 +4,20 @@ Mozilla Services Documentation
 
 Welcome to the Mozilla Services Documentation front page.
 
-This documentation lists information about the various Services
-provided by Mozilla Services. (You can even contribute, see :ref:`about`.)
+This site contains technical information about the various services
+and products provided by the **Mozilla Services Team**. The documentation on
+this site is meant to be more declarative and static in nature.
+ 
+Other information surrounding the products and services detailed on this site
+can be found at:
+
+* `Mozilla Services Team Wiki <https://wiki.mozilla.org/Services>`_
+* `Mozilla Developer Network <https://developer.mozilla.org/>`_ (MDN)
+
+The `wiki <https://wiki.mozilla.org/Services>`_ contains team info and updates.
+MDN contains content specific for helping developers.
+
+To contribute to this site, see :ref:`about`.
 
 
 How To...
@@ -43,7 +55,7 @@ Server-side development guide
 =============================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    server-devguide/index
 
@@ -52,7 +64,7 @@ Client Development
 ==================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    sync/index
 
