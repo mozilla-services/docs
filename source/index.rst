@@ -54,7 +54,7 @@ Client Development
 .. toctree::
    :maxdepth: 2
 
-   sync/fxclient/index
+   sync/index
 
 Miscellaneous
 =============

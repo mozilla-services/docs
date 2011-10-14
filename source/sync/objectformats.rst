@@ -1,8 +1,8 @@
-.. _client_storage:
+.. _client_object_formats:
 
-=============================
-Firefox Client Storage Format
-=============================
+==============================
+Firefox Object Storage Formats
+==============================
 
 Decrypted data objects are cleartext JSON strings.
 
@@ -24,7 +24,7 @@ Weave Basic Object (WBO) level as well as *id*, *modified*, *sortindex* and
 Bookmarks
 =========
 
-Engine Version 1
+Engine version 1
 ----------------
 
 One bookmark record exists for each *bookmark item*, where an item may actually
@@ -129,8 +129,8 @@ Separators help split sections of a folder.
 * **predecessorid** *string*: GUID of the item before this (empty if it's first)
 * **type** *string*: "separator"
 
-Engine Version 2
-----------------------------
+Engine version 2
+----------------
 
 Same as engine version 1, except:
 
@@ -183,7 +183,7 @@ Saved passwords help users get back into websites that require a login such as H
 Preferences
 ===========
 
-Engine Version 1
+Engine version 1
 ----------------
 
 Some preferences used by Firefox will be synced to other clients. There is only one record for preferences with a GUID "preferences".
@@ -193,7 +193,7 @@ Some preferences used by Firefox will be synced to other clients. There is only 
 * **type** *string*: the type of preference (int, string, boolean)
 * **value** *depends on type*: value of the preference
 
-Engine Version 2
+Engine version 2
 ----------------
 
 There is only one record for preferences, using nsIXULAppInfo.ID as the GUID. Custom preferences can be synced by following `these instructions <https://developer.mozilla.org/en/Firefox_Sync/Syncing_custom_preferences>`_.
@@ -213,4 +213,3 @@ Tabs describe the opened tabs on a given client to provide functionality like ge
 * **urlHistory** *array of strings*: page urls in the tab's history
 * **icon** *string*: favicon uri of the tab
 * **lastUsed** *integer*: datetime in seconds the tab was last accessed
-
