@@ -15,6 +15,5 @@ deeper.
 
    overview
    lifeofasync
-   metaglobal
-   cryptocollections
+   storageformat5
    objectformats

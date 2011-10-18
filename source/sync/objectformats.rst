@@ -1,8 +1,8 @@
 .. _sync_objectformats:
 
-==============================
-Firefox Object Storage Formats
-==============================
+======================
+Firefox object formats
+======================
 
 Decrypted data objects are cleartext JSON strings.
 

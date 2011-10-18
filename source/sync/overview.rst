@@ -52,3 +52,12 @@ Cryptography
 ============
 
 XXX TODO WRITEME
+
+Special records
+===============
+
+XXX TODO WRITEME
+
+- meta/global
+- crypto/keys
+- the whole 'clients' collection

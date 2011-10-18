@@ -14,9 +14,11 @@ XXX TODO WRITEME
 
       And it goes like this:     o/`
 
+Verify set up
+=============
+
 ::
 
-    // - lock
     // - figure out whether we have everything to sync
     //   - do we have all credentials?
     //   - do we have a firstSync?
@@ -41,7 +43,13 @@ XXX TODO WRITEME
     //   - wipe server. all of it.
     //   - create + upload meta/global
     //   - generate + upload new keys
-    // - update engine last modified timestamps
+
+Perform sync
+============
+
+::
+
+    // - update engine last modified timestamps from info/collections record
     // - sync clients engine
     //   - clients engine always fetches all records
     // - process reset/wipe requests in 'firstSync' preference
@@ -50,4 +58,54 @@ XXX TODO WRITEME
     // - sync engines
     //   - only stop if 401 is encountered
     // - if meta/global has changed, reupload it
-    // - unlock
+
+Syncing an engine
+=================
+
+::
+
+    // TODO WRITEME
+
+    // - meta/global
+    //   - syncID
+    //   - engine storage format
+    // - fetch incoming records
+         - GET .../storage/<collection>?newer=<last_sync_server_timestamp>&full=1
+         - optional but recommended for streaming: Accept: application/newlines
+         - deserialize and apply each record:
+           - JSON parse WBO
+           - JSON parse payload
+           - verify HMAC
+           - decrypt ciphertext witH IV
+           - JSON parse cleartext
+           - apply to local storage
+             - TODO deduping
+        - fetch outgoing records (e.g. via last sync local timestamp,
+          or from list of tracked items, ...)
+          - serialize each record
+            - assemble cleartext record and JSON stringify
+            - assemble payload and JSON stringify
+              - generate random IV and encrypt cleartext to ciphertext
+              - compute HMAC
+            - assemble WBO and JSON stringify
+            - upload in batches of 100 or 1 MB, whichever comes first
+              - POST .../storage/<collection>
+                [{record}, {record}, ...]
+              - process repsonse body
+
+High-level implementation notes
+===============================
+
+::
+
+   // TODO WRITEME
+   // - Repository
+   //   - fetchSince()
+   //     - for batching: guidsSince() + fetch() (fetches by GUIDs)
+   //   - store()
+   //   - wipe()
+   // - Middleware
+   //   - wraps a repository e.g. to encrypt/decrypt records as they
+   //     pass through
+   // - Synchronizer
+   //   - synchronizes two repositories
