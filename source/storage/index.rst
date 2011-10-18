@@ -22,7 +22,6 @@ Documentation content
 
    apis-1.0
    apis-1.1
-   wbo
    history
 
 Resources

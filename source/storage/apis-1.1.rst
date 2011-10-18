@@ -11,10 +11,9 @@ retrieve **Weave Basic Objects** or **WBOs** organized into **collections**.
 Weave Basic Object
 ==================
 
-A **WBO** is the generic wrapper around all items passed into and out 
-of the storage server. 
-
-A **WBO** has the following fields:
+A **Weave Basic Object (WBO)** is the generic JSON wrapper around all
+items passed into and out of the storage server. Like all JSON, Weave
+Basic Objects need to UTF-8 encoded. WBOs have the following fields:
 
 +---------------+-----------+------------+---------------------------------------------------------------+
 | Parameter     | Default   | Type/Max   |  Description                                                  | 
@@ -22,14 +21,10 @@ A **WBO** has the following fields:
 | id            | required  |  string    | An identifying string. For a user, the id must be unique for  |
 |               |           |  64        | a WBO within a collection, though objects in different        |
 |               |           |            | collections may have the same ID.                             |
-|               |           |            | Ids should be ASCII and not contain commas.                   |
-+---------------+-----------+------------+---------------------------------------------------------------+
-| parentid      | none      | string     | The id of a parent object in the same collection. This allows |
-|               |           | 64         | for the creation of hierarchical structures (such as folders).|
-|               |           |            | [1]_                                                          |
-+---------------+-----------+------------+---------------------------------------------------------------+
-| predecessorid | none      | string     | The id of a predecessor in the same collection. This allows   |
-|               |           | 64         | for the creation of linked-list-esque structures. [1]_        |
+|               |           |            |                                                               |
+|               |           |            | This **should** be exactly 12 characters from the base64url   |
+|               |           |            | alphabet. While this isn't enforced by the server, the        |
+|               |           |            | Firefox client expects this in most cases.                    |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | modified      | time      | float      | The last-modified date, in seconds since 01/01/1970 [2]_ [3]_ |
 |               | submitted | 2 decimal  |                                                               |
@@ -44,10 +39,14 @@ A **WBO** has the following fields:
 |               |           |            | case the structure should also specify a record for           |
 |               |           |            | decryption.                                                   |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| payload_size  | none      | integer    | Size of the payload. [3]_                                     |
-+---------------+-----------+------------+---------------------------------------------------------------+
 | ttl           | none      | integer    | The number of seconds to keep this record. After that time,   |
 |               |           |            | this item will not be returned.                               |
++---------------+-----------+------------+---------------------------------------------------------------+
+| parentid [1]_ | none      | string     | The id of a parent object in the same collection. This allows |
+|               |           | 64         | for the creation of hierarchical structures (such as folders).|
++---------------+-----------+------------+---------------------------------------------------------------+
+| predecessorid | none      | string     | The id of a predecessor in the same collection. This allows   |
+| [1]_          |           | 64         | for the creation of linked-list-esque structures.             |
 +---------------+-----------+------------+---------------------------------------------------------------+
 
 
@@ -55,16 +54,13 @@ A **WBO** has the following fields:
 .. [2] See ecma-262: http://www.ecma-international.org/publications/standards/Ecma-262.htm
 .. [3] Set automatically by the server
 
-
-Weave Basic Objects and all data passed into the server should be utf-8 encoded.
-
 Sample::
 
     {
-    "id": "B1549145-55CB-4A6B-9526-70D370821BB5",
-    "parentid": "88C3865F-05A6-4E5C-8867-0FAC9AE264FC",
-    "modified": "2454725.98",
-    "payload": "{\"encryption\":\"http://server/prefix/version/user/crypto-meta/B1549145-55CB-4A6B-9526-70D370821BB5\", \"data\": \"a89sdmawo58aqlva.8vj2w9fmq2af8vamva98fgqamff...\"}"
+      "id":"-F_Szdjg3GzY",
+      "modified":1278109839.96,
+      "sortindex":140,
+      "payload":"{\"ciphertext\":\"e2zLWJYX\/iTw3WXQqffo00kuuut0Sk3G7erqXD8c65S5QfB85rqolFAU0r72GbbLkS7ZBpcpmAvX6LckEBBhQPyMt7lJzfwCUxIN\/uCTpwlf9MvioGX0d4uk3G8h1YZvrEs45hWngKKf7dTqOxaJ6kGp507A6AvCUVuT7jzG70fvTCIFyemV+Rn80rgzHHDlVy4FYti6tDkmhx8t6OMnH9o\/ax\/3B2cM+6J2Frj6Q83OEW\/QBC8Q6\/XHgtJJlFi6fKWrG+XtFxS2\/AazbkAMWgPfhZvIGVwkM2HeZtiuRLM=\",\"IV\":\"GluQHjEH65G0gPk\/d\/OGmg==\",\"hmac\":\"c550f20a784cab566f8b2223e546c3abbd52e2709e74e4e9902faad8611aa289\"}"
     }
 
 
