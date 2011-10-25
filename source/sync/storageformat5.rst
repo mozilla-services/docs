@@ -4,14 +4,14 @@
 Crypto/storage format v5
 ========================
 
+.. _sync_storageformat5_metaglobal:
+
 meta/global record
 ==================
 
-The meta/global record is a special record on the Sync Server that contains
-general metadata to describe the state of data on the Sync Server. This state includes things like the global storage version and the set of
-available engines/collections on the server.
+The ``meta/global`` record is a special record on the Sync Server that contains general metadata to describe the state of data on the Sync Server. This state includes things like the global storage version and the set of available engines/collections on the server.
 
-The meta/global record is different from other records in that it is not
+The ``meta/global`` record is different from other records in that it is not
 encrypted. Like all other records, it is a JSON string. It has the following fields:
 
 - **storageVersion**: Integer version of the storage format used. Clients
@@ -46,34 +46,101 @@ Example
     }
 
 
-Encrypted data records
-======================
+.. _sync_storageformat5_keybundles:
 
-TODO WRITEME
+Key bundles
+===========
 
+This section expands on the :ref:`Cryptography Overview
+<overview_crypto>`. We provides pseudo-code and sample output of what
+a Sync client implementation would do.
+
+Sync Key
+--------
+
+The *Sync Key* is a randomly generated 128 bit sequence. In the user
+interface it should be represented as 26 characters from the
+"friendly" base32 alphabet with dashes after the 1st, 6th, 11th, 16th,
+and 21st character. The friendly base32 alphabet uses lower case
+characters and ``8`` instead of ``l`` as well as ``9`` instead of
+``o``.
+
+In pseudo-code::
+
+  sync_key_ui = encodeBase32(sync_key).lowerCase().replace('l', '8').replace('o', '9')
+  sync_key_ui_dashes = sync_key_ui.replaceRegEx(/(.{1,5})/g, "-$1");
+
+Example::
+
+  sync_key = XXX
+  sync_key_ui = XXX
+  sync_key_ui_dashes = XXX
+
+
+Sync Key bundle
+---------------
+
+The *Sync Key bundle* is derived from the *Sync Key* via the SHA-256
+HMAC based HKDF (c.f. `RFC 5869 <http://tools.ietf.org/html/rfc5869>`_).
+
+In pseudo-code::
+
+    HMAC_INPUT = "Sync-AES_256_CBC-HMAC256"
+    encryption_key = HMAC-SHA256(sync_key, "" + HMAC_INPUT + username + "\x01")
+    hmac_key = HMAC-SHA256(sync_key, encryption_key + HMAC_INPUT + username + "\x02")
+
+Example::
+
+  username = XXX
+  sync_key = XXX
+  encryption_key = XXX
+  hmac_key = XXX
+
+Bulk key bundles
+-----------------
+
+The *Sync Key bundle* is used to verify and decrypt the
+special :ref:`crypto/keys record <sync_storageformat5_cryptokeys>`. It
+contains at least the default bulk key bundle (and optionally key
+bundles for specific collections). See the section on
+:ref:`encrypting/decrypting records <sync_storageformat5_crypto>`
+below for the actual mechanics of encrypting/decrypting records.
+
+All other records are encrypted/signed or verified/decrypted,
+respectively, using the appropriate bulk key bundle (typically the
+default one).
+
+To create a bulk key bundle, simply generate two 256 bit keys.
+
+
+.. _sync_storageformat5_crypto:
+
+Encrypting/decrypting records
+=============================
+
+XXX TODO
+
+Example::
+
+  cleartext: XXX
+  IV: XXX
+  encryption_key: XXX
+  hmac_key: XXX
+  ciphertext: XXX
+  HMAC: XXX
+
+
+.. _sync_storageformat5_cryptokeys:
 
 crypto/keys record
 ==================
 
 In storage Version 5, the public/private key layer has been dropped. All bulk keys are now stored in this one WBO. Encryption and HMAC keys are separate keys and kept in key pairs.
 
-
 Encrypting and decrypting
 -------------------------
 
-The ```crypto/keys``` WBO is encrypted and verified just like any other WBO, except a different key bundle is used. The key bundle for the '''keys''' WBO is derived from the Sync Key using an HKDF with HMAC-SHA256 as the HMAC function (see `RFC 5869 <http://tools.ietf.org/html/rfc5869>`_):
-
-Pseudo-code::
-
-  HMAC_INPUT = "Sync-AES_256_CBC-HMAC256"
-  encryption_key = HMAC-SHA256(sync_key, "" + HMAC_INPUT + username + "\x01")
-  hmac_key = HMAC-SHA256(sync_key, encryption_key + HMAC_INPUT + username + "\x02")
-
-Here ``sync_key`` is the 16 byte representation of the Sync Key. To translate between the byte and user-readable translation, base32 is used, although with a slightly different alphabet than what `RFC 4648 <http://tools.ietf.org/html/rfc4648>`_ uses. For readability reasons, 'l' has been replaced with '8' and 'o' with '9'::
-
-  sync_key = decodeBase32(sync_key_ui.replace('8', 'l').replace('9', 'o'))
-  sync_key_ui = encodeBase32(sync_key).replace('l', '8').replace('o', '8)
-
+The ```crypto/keys``` WBO is encrypted and verified just like any other WBO, except the Sync Key bundle is used instead of a bulk key bundle.
 
 Format
 ------
