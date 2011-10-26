@@ -26,7 +26,7 @@ To run the server, you will also need to have these packages installed:
 - mercurial
 - sqlite3 
 
-For example, under a fresh Unbuntu, you can run this command to meet all 
+For example, under a fresh Ubuntu, you can run this command to meet all 
 requirements::
 
     $ sudo apt-get install python-dev mercurial sqlite3 python-virtualenv
