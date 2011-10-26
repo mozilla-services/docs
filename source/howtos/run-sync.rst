@@ -7,7 +7,7 @@ and we don't provide any other packaging or publish official RPMs yet.
 
 The easiest way to install a Sync Server is to checkout our repository
 and run a build in-place. Once this is done, Sync can be run behind
-and Web Server that supports the :term:`WSGI` protocol.
+any Web Server that supports the :term:`WSGI` protocol.
 
 
 Prerequisites
