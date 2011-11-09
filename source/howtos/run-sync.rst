@@ -42,18 +42,23 @@ run the **build** command::
     $ cd server-full    
     $ make build
 
-
 This command will create an isolated Python environment and pull all the
 required dependencies in it. A **bin** directory is created and contains a
 **paster** command that can be used to run the server, using the built-in web
 server.
 
-Running options are kept in an ini-like file that is passed to the
-command::
+If you like, you can run the testsuite to make sure everything is working
+properly::
 
-  $ bin/paster serve development.ini 
-  Starting server in PID 29951. 
-  serving on 0.0.0.0:5000 view at http://127.0.0.1:5000
+    $ ./bin/pip install nose webtest
+    $ make test
+
+To start the server, you must specify an ini-like file containing various
+runtime options.  Use the file "development.ini" as a starting point::
+
+    $ bin/paster serve development.ini 
+    Starting server in PID 29951. 
+    serving on 0.0.0.0:5000 view at http://127.0.0.1:5000
 
 By default the server is configured to use a SQLite database for the storage
 and the user APIs. Once the server is launched, you can point run the 
