@@ -50,7 +50,6 @@ server.
 If you like, you can run the testsuite to make sure everything is working
 properly::
 
-    $ ./bin/pip install nose webtest
     $ make test
 
 To start the server, you must specify an ini-like file containing various
