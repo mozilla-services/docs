@@ -20,7 +20,7 @@ including the HTTP requests and other operations that the client and
 server perform, as well as the specific record formats.
 
 
-.. _overview_buildingblocks::
+.. _overview_buildingblocks:
 
 Building blocks
 ===============
@@ -37,7 +37,7 @@ that are available or can easily be built in most environments:
   - HMAC-based HKDF (`RFC 5869 <http://tools.ietf.org/html/rfc5869>`_)
 
 
-.. _overview_server::
+.. _overview_server:
 
 The Sync server
 ===============
@@ -47,7 +47,7 @@ The storage server implements a dumb shared whiteboard, performing the vital rol
 The Sync server infrastructure exposes a secure HTTP interface for :ref:`user management and node assignment <reg>` as well as :ref:`storage <server_storage>`. Authentication, where applicable, is currently Basic Auth; this is a reasonable decision given the transport- and payload-level encryption used, but `Bug 445757 <https://bugzilla.mozilla.org/show_bug.cgi?id=445757>`_ tracks work to move to an authentication mechanism that does not involve transmission of the user's password over the wire.
 
 
-.. _overview_account::
+.. _overview_account:
 
 User accounts
 =============
@@ -67,7 +67,7 @@ header -- will be
 This account is associated with a password. The password secures access to the Sync server, as well as other sites that use the same authentication method (e.g., for Mozilla's Sync infrastructure, the Account Portal at https://account.services.mozilla.com/).
 
 
-.. _overview_wbos::
+.. _overview_wbos:
 
 Collections and records
 =======================
@@ -77,14 +77,14 @@ The primary concept behind the Sync server's storage part is that of the 'collec
 An important observation is that the server has no notion of a "sync" as understood by the client. From the server's perspective, there is simply a series of HTTP requests arriving from various IP addresses, performing REST-ish operations on a stateful backing store. The client has a well-defined sequence of actions that take place within a notional session, which can succeed or fail as a whole; the server does not.
 
 
-.. _overview_crypto::
+.. _overview_crypto:
 
 Cryptography
 ============
 
 All records (WBOs) that clients store on the server are encrypted
-(with the exception of the special :ref:`meta/global
-<sync_storageformat5_metaglobal> record`). To encrypt or decrypt a
+(with the exception of the special :ref:`meta/global record
+<sync_storageformat5_metaglobal>`). To encrypt or decrypt a
 record, one needs the right *key bundle*. A key bundle consists of a
 256 bit symmetric encryption key and a 256 bit HMAC key.
 
@@ -115,7 +115,7 @@ the key bundle that's right for individual records:
 2. The *Sync Key* is used to derive the *Sync Key bundle* which
    consists of an encryption key and an HMAC key. They are derived via
    the SHA-256 HMAC based HKDF (cf. `RFC 5869
-   *<http://tools.ietf.org/html/rfc5869>`_).
+   <http://tools.ietf.org/html/rfc5869>`_).
 3. The *Sync Key bundle* is used to verify and decrypt
    the special :ref:`crypto/keys <sync_storageformat5_cryptokeys>`
    record which contains *bulk key bundles* for all other
@@ -124,7 +124,7 @@ the key bundle that's right for individual records:
    and signed with the *default bulk key bundle*.
 
 
-.. _overview_specialrecords::
+.. _overview_specialrecords:
 
 Special records
 ===============

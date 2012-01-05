@@ -7,6 +7,7 @@ Storage API v1.1
 The Storage server provides web services that can be used to store and 
 retrieve **Weave Basic Objects** or **WBOs** organized into **collections**.
 
+.. _storage_wbo:
 
 Weave Basic Object
 ==================

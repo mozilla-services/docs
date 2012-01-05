@@ -198,7 +198,7 @@ continuing the example above...
     {'foo': 'bar',
      'baz': 'bawlp'}
 
-`app.config.get_section('storage') would return::
+`app.config.get_section('storage')` would return::
 
     {'bing': 'boom}
 
