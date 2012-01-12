@@ -135,7 +135,7 @@ Example::
 crypto/keys record
 ==================
 
-In storage Version 5, the public/private key layer has been dropped. All bulk keys are now stored in this one WBO. Encryption and HMAC keys are separate keys and kept in key pairs.
+In storage version 5, the public/private key layer has been dropped. All bulk keys are now stored in this one WBO. Encryption and HMAC keys are separate keys and kept in key pairs.
 
 Encrypting and decrypting
 -------------------------

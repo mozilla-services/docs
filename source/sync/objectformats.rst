@@ -12,7 +12,7 @@ format of each collection.
 The object structure is versioned with the version metadata stored in the
 meta/global payload.
 
-The following sections, named by the corresponding collection name, describes
+The following sections, named by the corresponding collection name, describe
 the various object formats and how they're used. Note that object structures
 may change in the future and may not be backwards compatible.
 
@@ -142,7 +142,10 @@ Same as engine version 1, except:
 Clients
 =======
 
-Client records identify a user's one or multiple clients that are accessing the data. The existence of client records can change the behavior of the Firefox Weave Sync add-on -- multiple clients and/or mobile clients result in syncs to happen more frequently.
+Client records identify a user's one or multiple clients that are accessing the
+data. The existence of client records can change the behavior of the Firefox
+Sync client -- multiple clients and/or mobile clients result in syncs to happen
+more frequently.
 
 * **name** *string*: name of the client connecting
 * **type** *string*: type of the client: "desktop" or "mobile"

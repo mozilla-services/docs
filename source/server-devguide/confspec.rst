@@ -9,7 +9,7 @@ Syntax
 ======
 
 The configuration file is a ini-based file. (See
-http://en.wikipedia.org/wiki/INI_file for more details.) Variables name can be
+http://en.wikipedia.org/wiki/INI_file for more details.) Variable names can be
 assigned values, and grouped into sections. 
 
 A line that starts with "#" is commented out. Empty lines are also removed.
@@ -51,9 +51,9 @@ Here are a set of rules for converting values:
   of VAR if found in the environment. If the variable is not found, an error 
   must be raised.
 
-- A value can contains multiple lines. When read, lines are converted into a
+- A value can contain multiple lines. When read, lines are converted into a
   sequence of values. Each new line for a multiple lines value must start 
-  with a least one space or tab character.
+  with at least one space or tab character.
 
 
 Examples::
@@ -76,9 +76,9 @@ Extending a file
 
 An INI file can extend another file. For this, a "DEFAULT" section must contain
 an "extends" variable that can point to one or several INI files which will be
-merged to the current file by adding new sections and values. 
+merged into the current file by adding new sections and values. 
 
-If the file pointed in "extends" contains section/variable names that already
+If the file pointed to in "extends" contains section/variable names that already
 exist in the original file, they will not override existing ones.
 
 file_one.ini::
@@ -108,7 +108,7 @@ Result::
     bas = bar
 
 
-To point several files, the multi-line notation can be used::
+To point to several files, the multi-line notation can be used::
 
     [DEFAULT] 
     extends = file_one.ini 

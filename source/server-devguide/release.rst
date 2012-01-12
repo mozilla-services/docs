@@ -146,14 +146,14 @@ Examples::
 :::::::::::::::::::::::::::::
 
 Building the app can now be done, by providing the tag value for your
-app, and if needed a tag value for internals dependencies.
+app, and if needed a tag value for internal dependencies.
 
 For example for account-portal (uses server-core), a call can look like 
 this::
 
     $ make build_rpms SERVER_CORE=rpm-2.0 ACCOUNT_PORTAL=rpm-1.2 RPM_CHANNEL=stage
 
-The syntax for the options is :**PROJECT_NAME=rpm-X.X**. When used, 
+The syntax for the options is: **PROJECT_NAME=rpm-X.X**. When used,
 will checkout the given project at the mentioned tag. 
 The tag can be a release tag, or *tip*.
 
@@ -165,20 +165,20 @@ For example, *server-core* becomes *SERVER_CORE*.
 6. Fix your release
 :::::::::::::::::::
 
-Sorry but your **1.2** release is a brown bag ! You need to fix the spec file
-and maybe a few python bugs.
+Sorry but your **1.2** release is a brown bag! You need to fix the spec file
+and maybe a few Python bugs.
 
 We will use the **MICRO** version to do this.
 
 - Increment the release to **1.2.1**
-- Do you fixes
-- tag **1.2.1**
-- repeat and increment the MICRO version until the release works
+- Do your fixes
+- Tag **1.2.1**
+- Repeat and increment the MICRO version until the release works
 
 7. Backport your changes
 ::::::::::::::::::::::::
 
-If you did a few micro releases, check if you need to backport them in 
+If you did a few micro releases, check if you need to backport them to
 the default branch.
 
 
@@ -208,7 +208,7 @@ Versioning scheme
 Final Releases
 --------------
 
-For *final* releases, projects are versionned using the *MAJOR.MINOR* scheme.
+For *final* releases, projects are versioned using the *MAJOR.MINOR* scheme.
 
 Examples:
 
@@ -217,13 +217,13 @@ Examples:
 - 2.1
 
 The *MINOR* part is incremented in the day-to-day work and the *MAJOR*
-part is incremented on important updates. The definition of *Important*
+part is incremented on important updates. The definition of *important*
 is left to the judgment of the releaser.
 
 We don't really have any strategy here, like incrementing *MAJOR* only
 on backward incompatible changes: all Python packages we use are part of a
-Server application and the only public facing API is documented web services 
-that have their own versionning scheme.
+server application and the only public facing API is documented web services 
+that have their own versioning scheme.
 
 That said, if a library is published at PyPI, it has supposedly reached
 a stable state, and incrementing the *MAJOR* version should occur on backward
@@ -233,8 +233,8 @@ When a release fails in stage or prod, we can use a *MAJOR.MINOR.MICRO*
 scheme to fix it.
 
 
-Developement Releases
----------------------
+Development Releases
+--------------------
 
 The tip should always have a version with a *.devN* suffix. That is, the next 
 version to be released, with N being an integer. Examples:
@@ -246,20 +246,20 @@ version to be released, with N being an integer. Examples:
 Full example
 ------------
 
-Here's a full scenario of versionning usage:
+Here's a full scenario of versioning usage:
 
 - 1.2 is in production, tagged as "rpm-1.2"
 - we want to push a 1.3
 - we change the default branch version to 1.4.dev1
 - we branch "1.3-release"
-- a 1.3  is tagged there as "rpm-1.3"
+- a 1.3 is tagged there as "rpm-1.3"
 - 1.3 is pushed on stage
 - it's not working
 - devs fix and tag 1.3.1 in the branch
 - 1.3.1 is pushed on stage, it's working
 - 1.3.1 is pushed in production
 - it breaks !!!
-- production is rollbacked to 1.2
+- production is rolled back to 1.2
 - devs fix the problems and tag 1.3.2
 - 1.3.2 is pushed on stage, it's working
 - 1.3.2 is pushed in production
@@ -295,7 +295,7 @@ The **build_rpms** target generates the RPM for the project and for
 all its internal and external dependencies, using **pypi2rpm**
 
 The **mock** target calls **build_rpms** then installs everything
-in a chroot usig **Mock**, then runs an import. That ensures
+in a chroot using **Mock**, then runs an import. That ensures
 the spec file dependencies are error free, and the Python app
 main module is importable. Notice that this target is run only
 under Centos5.
@@ -343,8 +343,8 @@ We define three channels:
   PyPI release is taken
 - **prod**: all dependencies should be pinned **default one**
 - **stage**: all dependencies should be pinned -- might vary from production 
-  versions. This channel is most of the time the same than production but can be
-  useful in case the staging environment need to be different.
+  versions. This channel is most of the time the same as production but can be
+  useful in case the staging environment needs to be different.
 
 
 Requirement files
@@ -404,7 +404,7 @@ Example::
 
 
 When a *build* or a *build_rpms* is invoked, it receives a channel option and
-pick the corresponding requirement files to decide which version to pick.
+picks the corresponding requirement files to decide which version to pick.
 Unpinned versions will make the build process pick the latest release at PyPI.
 (Even if it's not stable!)
 
@@ -435,7 +435,7 @@ creation of the release, there are a few options that can be used when
 running the **build** command:
 
 - **PYPI**: a PyPI mirror index location
-- **PYPIEXTRAS**: The URL of an extra location where some archives are stored
+- **PYPIEXTRAS**: The URL of an extra location where some archives are stored.
   This is useful when your application needs a package that is not published
   at PyPI.
 - **PYPISTRICT**: if this flag is set, will block any attempt to fetch from
@@ -455,7 +455,7 @@ Example of usage::
     ...
 
 In this example, packages are fetched from our PyPI mirror and our extra
-repository, and the strict flag will block any attempt to get the archives in
+repository, and the strict flag will block any attempt to get the archives from
 other places. This example is a good set-up when you are working from inside
 the Mozilla intranet: your application will get built with no external
 resources.

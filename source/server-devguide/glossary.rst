@@ -19,11 +19,11 @@ Glossary
         The *Build* mailing list at services-builds@mozilla.org receives
         all Jenkins failures.
 
-        You can register to it at: https://mail.mozilla.org/listinfo/services-builds
+        You can subscribe to it at: https://mail.mozilla.org/listinfo/services-builds
 
     services-dev
         The *Dev* mailing list at services-dev@mozilla.org is the place where 
         we discuss the development of Mozilla Services applications.
 
-        You can register to it at: https://mail.mozilla.org/listinfo/services-dev
+        You can subscribe to it at: https://mail.mozilla.org/listinfo/services-dev
 
