@@ -95,7 +95,7 @@ replaced by underlines ("_"). So "server-core" becomes "SERVER_CORE".
 For more info on building and releasing, see :ref:`releasing`.
 
 The **test** target runs the Nose test runner, and can be used to 
-work on the code. It's also used by Hudson to continuously test your
+work on the code. It's also used by Jenkins to continuously test your
 project.
 
 See :ref:`rpm-building` for more info on the building process.

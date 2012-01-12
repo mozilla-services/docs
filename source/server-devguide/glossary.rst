@@ -17,7 +17,7 @@ Glossary
 
     services-builds
         The *Build* mailing list at services-builds@mozilla.org receives
-        all Hudson failures.
+        all Jenkins failures.
 
         You can register to it at: https://mail.mozilla.org/listinfo/services-builds
 

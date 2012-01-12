@@ -44,7 +44,7 @@ Running tests is done with the *test* target::
 
 It's important to run all tests to make sure your changes are not breaking
 the code base elsewhere. You won't be able to try out all possible 
-execution environments of course, and that's the job of the Hudson CI server.
+execution environments of course, and that's the job of the Jenkins CI server.
 
 *make test* needs to include the tests from all the project dependencies.
 That's the case when you start a fresh project with a template.
@@ -53,7 +53,7 @@ That's the case when you start a fresh project with a template.
 External dependencies
 ---------------------
 
-In Hudson the tests are running in an environment built from scratch 
+In Jenkins the tests are running in an environment built from scratch 
 so the tests should not:
 
 1. depend on any file that is not in the checkout
@@ -83,7 +83,7 @@ XXX
 4. Revert your change
 =====================
 
-The next steps are taken care of by Hudson, who launch a test cycle to make
+The next steps are taken care of by Jenkins, who launch a test cycle to make
 sure that your change has not broken anything under every environment 
 your code is used in. If it happens, an email is sent at 
 :term:`services-builds`.
