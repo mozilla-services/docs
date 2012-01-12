@@ -105,7 +105,7 @@ The Sync server uses the **syncserver** logger everywhere.
 
 In the following example, all Sync errors are logged in a specific file
 as long as **DEFAULT:debug** is activated. Other logs are in
-a separate file.::
+a separate file::
 
     [loggers]
     keys = root,syncserver
@@ -167,7 +167,7 @@ The configuration file has one section for each module loaded by the
 application.  The configuration data will be available on the application
 object as a dictionary-like object stored in the `config` attribute.  The
 settings from the `[global]` section will be stored as the simple key name,
-while the settings from the other sctions will be keyed as
+while the settings from the other sections will be keyed as
 `<section_name>.<key>`.
 
 So::
@@ -296,7 +296,7 @@ Available options (o: optional, m: multi-line, d: default):
 - **heartbeat_page** [o, default:__heartbeat__]: defines the path of
   the heartbeat page. The heartbeat page is used by an HTTP Monitor to
   check that the server is still running properly. It returns a 200 if
-  everything works, and a 503 if there's an issue. A Typical issue is
+  everything works, and a 503 if there's an issue. A typical issue is
   the inability for the application to reach a backend server, like
   MySQL or OpenLDAP.
 
@@ -309,13 +309,13 @@ Available options (o: optional, m: multi-line, d: default):
 
   This feature is disabled by default to avoid any security issue.
 
-- **shared_secret** [o, default: None]: defins a secret string that
+- **shared_secret** [o, default: None]: defines a secret string that
   can be used by the client when creating users, to bypass the
   captcha challenge.
 
 - **graceful_shutdown_interval** [o, default: 1]: Number of seconds before the
   app starts to shutdown. New requests are still accepted but the heartbeat
-  page start to return 503.
+  page starts to return 503.
 
 - **hard_shutdown_interval** [o, default: 1]: Number of seconds before the app
   is shut down. Any new call returns a 503, and pending requests have that time
@@ -337,7 +337,7 @@ Storage
 -------
 
 
-The storage section is **storage**. It contains everything neeed by the
+The storage section is **storage**. It contains everything needed by the
 storage server to read and write data.
 
 Available options (o: optional, m: multi-line, d: default):
@@ -453,10 +453,10 @@ registration.
 
 Available options (o: optional, m: multi-line, d: default):
 
-- **use**: if set to false, all operations will be done w/ captcha.
-- **public_key**: public key for reCaptacha.
-- **private_key**: private key for reCaptacha.
-- **use_ssl**: if set to true, will use SSL when connection to recaptcha.
+- **use**: if set to false, all operations will be done without captcha.
+- **public_key**: public key for reCaptcha.
+- **private_key**: private key for reCaptcha.
+- **use_ssl**: if set to true, will use SSL when connecting to reCaptcha.
 
 Example::
 
@@ -471,7 +471,7 @@ Example::
     The keys provided in this example work, as they were generated to provide
     a realistic example. But do not use them in your applications.
 
-    Instead, you should generate a new set of key for you own domain.
+    Instead, you should generate a new set of keys for you own domain.
 
     See: https://www.google.com/recaptcha/admin/create
 
@@ -503,18 +503,18 @@ Example::
 CEF
 ---
 
-The **cef** section configues how CEF security alerts are emited.
+The **cef** section configures how CEF security alerts are emitted.
 
 Available options (o: optional, m: multi-line, d: default):
 
-- **use**: if set to true, CEF alerts are emited.
+- **use**: if set to true, CEF alerts are emitted.
 - **file**: location of the CEF log file. Can be a file path
   or *syslog* to use the syslog facility.
 - **syslog.options** [o, default:none]: comma-separated values for syslog.
   Authorized values are: PID, CONS, NDELAY, NOWAIT, PERROR
 - **syslog.priority** [o, default:INFO]: priority level.
-  Authorized value: EMERG, ALERT, CRIT, ERR, WARNING, NOTICE, INFO, DEBUG.
-- **syslog.facility** [o, default:LOCAL4]: facility
+  Authorized values: EMERG, ALERT, CRIT, ERR, WARNING, NOTICE, INFO, DEBUG.
+- **syslog.facility** [o, default:LOCAL4]: facility.
   Authorized values: KERN, USER, MAIL, DAEMON, AUTH, LPR, NEWS, UUCP, CRON
   and LOCAL0 to LOCAL7.
 - **vendor**: CEF-specific option.

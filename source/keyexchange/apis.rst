@@ -31,8 +31,8 @@ APIS
   Returns in the response body a JSON-encoded random channel id of N chars
   from [a-z0-9].
 
-  When the API is called, The id returned is guaranteed to be unique.
-  The channel created will have a limited TTL (currently configured to
+  When the API is called, the id returned is guaranteed to be unique.
+  The created channel will have a limited TTL (currently configured to
   5 minutes).
 
   Return codes:
@@ -47,7 +47,7 @@ APIS
   Returns in the response body the content of the channel of id ''channel_id''.
   Returns an ''ETag'' response header containing a unique hash.
 
-  The request can contain a ''If-None-Match'' header containing a hash,
+  The request can contain a ''If-None-Match'' header containing a hash.
   If the hash is similar to the current hash of the channel, the server
   will return a 304 and an empty body.
 
@@ -71,7 +71,7 @@ APIS
   before the update to the channel is applied, or \*.
   If different, a precondition failed code is returned.
 
-  if a If-None-Match header is provided and equals to \*, and
+  If a If-None-Match header is provided and equals to \*, and
   if the channel is not empty (e.g. some data has been already
   put in the channel), a precondition failed code is returned.
 
@@ -85,7 +85,7 @@ APIS
 
 **POST https://server/report**
 
-  Reports a log to the server, and optionally ask for a channel deletion.
+  Reports a log to the server, and optionally asks for a channel deletion.
 
   The log is the body of the request. If the
   request contains a ''X-KeyExchange-Log'' header, its value is prepended
@@ -94,9 +94,9 @@ APIS
   2000 chars. If both body and headers are empty, nothing is logged.
 
   The current errors reported by the client are described in the next
-  section, but the log if a free-form string.
+  section, but the log is a free-form string.
 
-  **Warning**: The server is able under a normal exchange to count the number
+  **Warning**: Under a normal exchange the server is able to count the number
   of calls and close the channel at the end, so this API is not to be used
   to close the channel. Some value should be reported to generate a security
   log. The client is therefore encouraged to always provide a report value
@@ -119,7 +119,7 @@ Error messages
 - **jpake.error.timeout** (Timeout) : Reported when the exchange is aborted
   due to timeouts.
 
-- **jpake.error.invalid** (Invalid message): Reported when an malformed message
+- **jpake.error.invalid** (Invalid message): Reported when a malformed message
   is received. A malformed message is one that doesn't correctly parse as JSON.
 
 - **jpake.error.wrongmessage** (Wrong message): Reported when the wrong message
@@ -128,7 +128,7 @@ Error messages
 - **jpake.error.internal** (Internal J-PAKE failure): Reported when a J-PAKE
   computation step or encryption/decryption step fails.
 
-- **jpake.error.keymismatch** (Key mismatch): Reported when the SHA256d or HMAC
+- **jpake.error.keymismatch** (Key mismatch): Reported when the SHA256 or HMAC
   verification fails, in other words when the PIN wasn't entered correctly and
   both sides ended up with different keys.
 

@@ -22,7 +22,7 @@ APIs
     Gets the user a weave node. In general, if the sreg version is called, it
     is expected that a new node will be assigned (client should already have
     failed to get the node out of ldap), but this is not necessarily the case,
-    and it can return an currently assigned node.
+    and it can return a currently assigned node.
 
     The plan is to abstract this call into a separate api that handles node
     assignment, but it is noted here to make sure we remain backwards
@@ -94,7 +94,7 @@ APIs
 
     - 0: The operation was successful
     - 400: 7 (Missing password field)
-    - 400: 10 (Invalid ormissing password reset code)
+    - 400: 10 (Invalid or missing password reset code)
     - 400: 6 (Json parse failure)
     - 404: the user does not exists in the database
     - 503: there was an error updating the password

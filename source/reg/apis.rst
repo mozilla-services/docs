@@ -28,14 +28,10 @@ The URL for a Reg request is structured as follows::
 
 Certain functions use HTTP basic auth (over SSL, so as to maintain password
 security). If the auth username does not match the username in the path, the
-server will issue an Error Response
+server will issue an Error Response.
 
-The Weave User API has a set of Weave Response Codes to cover errors in the
-request or on the server side. The format of a successful response is defined
-in the appropriate request method section. The Sync User API has a set of
-:ref:`respcodes` to cover errors in the request or on the server side.
-The format of a successful response is defined in the appropriate request
-method section.
+The Sync User API has a set of :ref:`respcodes` to cover errors in the request 
+or on the server side. The format of a successful response is defined in the appropriate request method section.
 
 
 APIs
@@ -89,7 +85,7 @@ APIs
 
 **PUT** **https://server/pathname/version/username**
 
-    Requests that an account be created for *username*
+    Requests that an account be created for *username*.
 
     The body is a JSON mapping and should include:
 
@@ -132,7 +128,7 @@ APIs
     Possible errors:
 
     - 400: 7 (Missing password field)
-    - 400: 10 (Invalid ormissing password reset code)
+    - 400: 10 (Invalid or missing password reset code)
     - 400: 9 (Requested password not strong enough)
     - 404: the user does not exists in the database
     - 503: there was an error updating the password

@@ -55,6 +55,7 @@ Application Logging
 - Full application logging will be created to enable incident response review
 - Logged to application server and not via CEF
 - Logs will include:
+
   - Timestamp
   - IP address 
   - Full URL

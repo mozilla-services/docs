@@ -14,7 +14,7 @@ Weave Basic Object
 
 A **Weave Basic Object (WBO)** is the generic JSON wrapper around all
 items passed into and out of the storage server. Like all JSON, Weave
-Basic Objects need to UTF-8 encoded. WBOs have the following fields:
+Basic Objects need to be UTF-8 encoded. WBOs have the following fields:
 
 +---------------+-----------+------------+---------------------------------------------------------------+
 | Parameter     | Default   | Type/Max   |  Description                                                  | 
@@ -31,7 +31,7 @@ Basic Objects need to UTF-8 encoded. WBOs have the following fields:
 |               | submitted | 2 decimal  |                                                               |
 |               |           | places     |                                                               |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| sortindex     | none      | integer    | An integer indicting the relative importance of this item in  |
+| sortindex     | none      | integer    | An integer indicating the relative importance of this item in |
 |               |           |            | the collection.                                               |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | payload       | none      | string     | A string containing a JSON structure encapsulating the data   | 
@@ -90,7 +90,7 @@ use:
 URL semantics
 =============
 
-Storag URLs follow, for the most part, REST semantics. Request and response
+Storage URLs follow, for the most part, REST semantics. Request and response
 bodies are all JSON-encoded.
 
 The URL for Weave Storage requests is structured as follows::
@@ -113,14 +113,11 @@ The URL for Weave Storage requests is structured as follows::
 
 Certain functions use HTTP basic auth (over SSL, so as to maintain password
 security). If the auth username does not match the username in the path, the
-server will issue an Error Response
+server will issue an Error Response.
 
-The User API has a set of Response Codes to cover errors in the
-request or on the server side. The format of a successful response is defined
-in the appropriate request method section. The User API has a set of
-:ref:`respcodes` to cover errors in the request or on the server side.
-The format of a successful response is defined in the appropriate request
-method section.
+The User API has a set of :ref:`respcodes` to cover errors in the request or on
+the server side. The format of a successful response is defined in the
+appropriate request method section.
 
 
 APIs
@@ -135,13 +132,13 @@ APIs
 **GET** **https://server/pathname/version/username/info/collection_usage**
 
     Returns a hash of collections associated with the account, along with 
-    the data volume used for each (in K).
+    the data volume used for each (in KB).
 
 
 **GET** **https://server/pathname/version/username/info/collection_counts**
 
     Returns a hash of collections associated with the account, along with 
-    the total number of items for each collection.
+    the total number of items in each collection.
 
 
 **GET** **https://server/pathname/version/username/info/quota**
@@ -199,7 +196,7 @@ APIs
 
     - **application/whoisi**: each record consists of a 32-bit integer, 
       defining the length of the record, followed by the json record for a 
-      wbo 
+      WBO
 
     - **application/newlines**: each record is a separate json object on 
       its own line. Newlines in the body of the json object are replaced 
@@ -235,7 +232,7 @@ APIs
          "failed": {"{GXS58IDC}11": ["invalid parentid"],
                     "{GXS58IDC}14": ["invalid parentid"],
                     "{GXS58IDC}17": ["invalid parentid"],
-                    "{GXS58IDC}20":["invalid parentid"]}}
+                    "{GXS58IDC}20": ["invalid parentid"]}}
 
 
 **DELETE** **https://server/pathname/version/username/storage/collection**
@@ -260,7 +257,7 @@ APIs
     - **offset**: skips the first n objects in the defined set. Must be 
       used with the limit parameter. [5]_ 
 
-    - **sort** : sorts before deleting [4]_
+    - **sort**: sorts before deleting [4]_
 
      - 'oldest' - Orders by modification date (oldest first)
      - 'newest' - Orders by modification date (newest first)
@@ -353,8 +350,8 @@ HTTP status codes
 
 **404**
 
-    The requested resource could not be found. This may be return for **GET**
-    and **DELETE** requests for non-existent records and empty collections.
+    The requested resource could not be found. This may be returned for **GET**
+    and **DELETE** requests, for non-existent records and empty collections.
 
 
 **503**
@@ -362,4 +359,4 @@ HTTP status codes
     Indicates, in conjuction with the **Retry-After** header, that the server
     is undergoing maintenance. The client should not attempt another sync for
     the number of seconds specified in the header value. The response body
-    may contain JSON string describing the server's status or error.
+    may contain a JSON string describing the server's status or error.

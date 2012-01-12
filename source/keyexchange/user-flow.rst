@@ -19,7 +19,7 @@ or a desktop computer, and "Desktop" refers to a desktop computer.
    and a channel ID.
 3. On Desktop, user chooses "Pair Device" according to the
    instructions displayed on the device.
-4. Mobile and Desktop exchange messages to build the secure channel
+4. Mobile and Desktop exchange messages to build the secure channel.
 5. Once the channel has been established and Mobile and Desktop are
    "paired", the user creates a Sync account on Desktop and Desktop
    uploads its data to the server during the first sync. This step is

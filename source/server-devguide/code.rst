@@ -5,14 +5,14 @@ Code layout
 There are two code layouts:
 
 - the minimal layout: simple Python application.
-- the complete layout  Web application.
+- the complete layout: Web application.
 
 
 Minimal layout
 ==============
 
 The minimal layout is an empty application that includes all the boiler-plate
-code all our application should have.
+code all our applications should have.
 
 A minimal Services' project usually contains:
 
@@ -105,9 +105,9 @@ RPM Spec file
 -------------
 
 The spec file that gets generated is used by "make build_rpm" to generate a 
-RPM for your application. It contains all the require dependencies for a stack
+RPM for your application. It contains all the required dependencies for a stock
 Services application, but will require that you add any new dependency your 
-code could need.
+code needs.
 
 setup.py and MANIFEST.in
 ------------------------
@@ -128,7 +128,7 @@ everything needed to make it a Web application:
 - package/wsgiapp.py: the web application itself.
 - package/controller.py: the web controller to start adding features.
 - package/run.py: the bootstrap file used by Gunicorn to run the app.
-- package/tests/functional/: a minimal functiunal test using WebTest.
+- package/tests/functional/: a minimal functional test using WebTest.
 
 
 XXX

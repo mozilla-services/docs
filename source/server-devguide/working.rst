@@ -32,12 +32,12 @@ Here's an example: https://bugzilla.mozilla.org/show_bug.cgi?id=631233
 Ideally, you should start to write a test that demonstrates the bug or 
 the new feature. See :ref:`testing` for more info on how to write tests.
 
-For bugs, it's fairly easy: you need to write a test that reproduce the
+For bugs, it's fairly easy: you need to write a test that reproduces the
 exact same problem, then fix the code until the code passes.
 For new features, a test that demonstrates how it works needs 
 to be written.
 
-Running tests are done with the *test* target::
+Running tests is done with the *test* target::
 
     $ make test
 
@@ -60,7 +60,7 @@ so the tests should not:
 2. use the LDAP backend - or if it does, mock anything that is trying to call ldap
 
 The test can use MySQL but the database should be configured to use sqlite
-rather than MySQL, since they is not MySQL server there.
+rather than MySQL, since there is no MySQL server.
 
 MemCached can be used and if you have a specific volatile backend, it can
 potentially be installed (Redis, etc.).
@@ -88,5 +88,5 @@ sure that your change has not broken anything under every environment
 your code is used in. If it happens, an email is sent at 
 :term:`services-builds`.
 
-You need in that case to fix immediatly the problem, and if you can't do
-it immediatly, to revert all your changes.
+In that case you need to fix the problem immediately, and if you can't do
+it immediately, you need to revert all your changes.

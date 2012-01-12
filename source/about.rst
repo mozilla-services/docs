@@ -13,7 +13,7 @@ If you want to change its content you can:
 - Read a bit about Sphinx and reStructuredText - http://sphinx.pocoo.org/
 - Check out https://hg.mozilla.org/services/docs and create a local copy of the website
   with **make html**
-- Add a Bugzilla issue in Mozilla Services / Server Others
+- Add a Bugzilla issue in Mozilla Services / Server: Other
 
 
 Structure Description
@@ -22,7 +22,7 @@ Structure Description
 The source is located in the :file:`source` directory and contains:
 
 - **howtos**: a directory with How Tos
-- **serverdevguide**: server development guide, guidelines, how to release a 
+- **server-devguide**: server development guide, guidelines, how to release a 
   server app etc.
 - one directory per Server application (**reg**, **sreg**, etc.)
 

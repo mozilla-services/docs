@@ -36,15 +36,15 @@ used to emit CEF logs:
 
     log_cef(message, severity, environ, config, [username, [signature]], \*\*kw)
 
-    Creates a CEF record, and emit it in syslog or another file.
+    Creates a CEF record, and emits it in syslog or another file.
 
     Args:
         - message: message to log
         - severity: integer from 0 to 10
         - environ: the WSGI environ object
         - config: configuration dict
-        - signature: CEF signature code, defaults to 'AuthFail'
         - username: user name, defaults to 'none'
+        - signature: CEF signature code, defaults to 'AuthFail'
         - extra keywords: extra keys used in the CEF extension
 
 Example::
@@ -74,7 +74,7 @@ is loaded from a unique ini-like file.
 When a request comes in, *Routes* is used to dispatch it to a controller 
 method.
 
-Controllers are simple classes whose methodes receives the request and
+Controllers are simple classes whose methods receive the request and
 need to return a response.
 
 

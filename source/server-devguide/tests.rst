@@ -7,7 +7,7 @@ Writing tests
 A Services application must be tested in various ways:
 
 - unit and functional tests that are run locally
-- functional tests that are run on the dev, stage and productin cluster
+- functional tests that are run on the dev, stage and production cluster
 
 
 Writing unit tests

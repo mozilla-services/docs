@@ -103,7 +103,7 @@ several files::
     syncreg/controllers/user.py:318:1: 'UserController.do_password_reset' is too complex (11) 
 
 
-A more simpler way to use it without having to think about it, is to configure 
+A simpler way to use it without having to think about it, is to configure 
 Mercurial to call it every time you commit a change.
 
 To use the Mercurial hook on any *commit* or *qrefresh*, change your *.hgrc* file 
@@ -116,7 +116,7 @@ like this::
     [flake8]
     strict = 0
 
-If strict option is set to 1, any warning will block the commit. When strict 
+If the strict option is set to 1, any warning will block the commit. When strict
 is set to 0, warnings are just displayed in the standard output.
 
 Using a non-strict mode is good enough: it will show you the issues without

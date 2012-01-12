@@ -14,7 +14,7 @@ Prerequisites
 =============
 
 The various parts are using **Python 2.6** and **Virtualenv**. Make sure your
-system have them. Or install them:
+system has them. Or install them:
 
 - Python 2.6 downloads: http://python.org/download/releases/2.6.6
 - Virtualenv: http://pypi.python.org/pypi/virtualenv
@@ -60,7 +60,7 @@ runtime options.  Use the file "development.ini" as a starting point::
     serving on 0.0.0.0:5000 view at http://127.0.0.1:5000
 
 By default the server is configured to use a SQLite database for the storage
-and the user APIs. Once the server is launched, you can point run the 
+and the user APIs. Once the server is launched, you can run the 
 Firefox Sync Wizard and choose *http://localhost:5000* as your Firefox Custom
 Sync Server.
 
@@ -141,7 +141,7 @@ Here's an example of an Apache setup that uses mod_wsgi::
 
 
 We provide a **sync.wsgi** file for you convenience in the repository.
-Before runnong Apache, edit the file and check that it loads the the right 
+Before running Apache, edit the file and check that it loads the the right 
 .ini file with its full path.
 
 
@@ -161,7 +161,7 @@ Tested under Gentoo.
 
         emerge -avuDN flup virtualenv mercurial
 
-2. Unpack the server-full python version. Let's say under /usr/src/sync-full
+2. Unpack the server-full Python version. Let's say under /usr/src/sync-full
 
 3. Run::
 
@@ -218,16 +218,16 @@ Tested under Gentoo.
 Troubleshooting
 ===============
 
-Most issues with the server are a bad configuration. If your server does not 
-work properly, the first thing to do is to visit **about:sync-log** in 
+Most issues with the server are caused by bad configuration. If your server does
+not work properly, the first thing to do is to visit **about:sync-log** in 
 Firefox to see if there's any error.
 
-You will see a lot of logs, and if the sync failed, and probably an error
+You will see a lot of logs and if the sync failed probably an error.
 
 Misconfigured storage node
 ::::::::::::::::::::::::::
 
-If the last successfull call is finishing like this::
+If the last successful call is finishing like this::
 
     2011-02-24 11:17:57 Net.Resource         DEBUG  GET success 200 http://server/user/1.0/.../node/weave
 

@@ -13,7 +13,7 @@ Profiling
 =========
 
 The base application provides a Profiler that knows how to generate profiling
-data that you'll be able to vizualize in *KCacheGrind*.
+data that you'll be able to visualize in *KCacheGrind*.
 
 To enable it you can toggle the *profile* flag to **True** in your paster file.
 See :ref:`Configuring the Profiler <profile-config>`. 
@@ -31,7 +31,7 @@ http://localhost:5000/__profile__
 
 But the real work should be done in 
 `KCacheGrind <http://kcachegrind.sourceforge.net>`_. 
-Once your have finished testing the application, stop it and you should find 
+Once you have finished testing the application, stop it and you should find 
 at the root of your application a :file:`cachegrind.out` file you can open.
 
 .. image:: /images/kcachegrind.png
