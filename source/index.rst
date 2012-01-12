@@ -24,7 +24,7 @@ How To...
 =========
 
 *This section contains simple how-tos. If you want to see a new one,
-let us know in the mailing list.*
+let us know in the* `mailing list <https://mail.mozilla.org/listinfo/services-dev>`_.
 
 
 .. toctree::
