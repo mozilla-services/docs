@@ -123,7 +123,7 @@ Error messages
   is received. A malformed message is one that doesn't correctly parse as JSON.
 
 - **jpake.error.wrongmessage** (Wrong message): Reported when the wrong message
-  is received, as identified by the <code>type</code> property in the JSON blob.
+  is received, as identified by the ``type`` property in the JSON blob.
 
 - **jpake.error.internal** (Internal J-PAKE failure): Reported when a J-PAKE
   computation step or encryption/decryption step fails.
