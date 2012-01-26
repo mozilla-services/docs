@@ -2,8 +2,8 @@
 History
 =======
 
-v3 - DRAFT
-==========
+v3 - 2012-01-26
+===============
 
 - Added a ``version`` attribute to the JSON payloads.
 
