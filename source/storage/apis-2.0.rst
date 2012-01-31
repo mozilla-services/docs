@@ -16,55 +16,6 @@ This document is currently in **draft** status and should not be treated
 as authoritative.
 
 
-Changes from v1.1
-=================
-
-The following is a summary of protocol changes from :ref:`server_storage_api_11`:
-
-* The term "Weave" is no longer used anywhere in the protocol:
-    * "Weave Basic Objects" have been renamed "Basic Storage Objects".
-    * The "Weave" prefix has been removed from all custom headers.
-
-* Authentication can now be performed using any HTTP Access Authentication
-  method accepted by both client and server.  Mozilla-hosted services will
-  accept only Sagrada Token Server authentication.
-
-* URLs no longer contain a username component; the current user is taken from
-  the authentication info and there is no way to refer to the stored data for
-  another user.
-
-* The WBO fields "parentid" and "predecessorid" have been removed, along with
-  the corresponding query parameters on all requests.
-
-* Timestamps are now reported in integer milliseconds rather than decimal seconds.
-
-* The **GET /info/quota** request now returns an object with keys named "usage"
-  and "quota", rather than just a list of numbers.
-
-* The query parameters for **DELETE /storage/collection** have been removed.
-  The only operations now supported are "delete these specific ids" and
-  "delete the whole collection".
-
-* The **POST /storage/collection** request now accepts application/newlines
-  input in addition to application/json.
-
-* The **POST /storage/collection** request now explicitly allows the server
-  to process objects as they are received, and to error out partway through
-  consuming the objects.
-
-* The **application/whoisi** output format has been removed.
-
-* The *X-If-Modified-Since* header has been added.
-
-* The *X-Weave-Records* header has been renamed to *X-Num-Records*.
-
-* The *X-Weave-Alert* header has been removed.
-
-* The following response codes are explicitly mentioned: 304, 405, 412, 413.
-
-* The collection name "addons" is now a default Mozilla collection.
-
-
 .. _storage_wbo:
 
 Basic Storage Object
@@ -508,3 +459,51 @@ protocol.
     another sync for the number of seconds specified in the header value.
     The response body may contain a JSON string describing the server's status
     or error.
+
+Changes from v1.1
+=================
+
+The following is a summary of protocol changes from :ref:`server_storage_api_11`:
+
+* The term "Weave" is no longer used anywhere in the protocol:
+    * "Weave Basic Objects" have been renamed "Basic Storage Objects".
+    * The "Weave" prefix has been removed from all custom headers.
+
+* Authentication can now be performed using any HTTP Access Authentication
+  method accepted by both client and server.  Mozilla-hosted services will
+  accept only Sagrada Token Server authentication.
+
+* URLs no longer contain a username component; the current user is taken from
+  the authentication info and there is no way to refer to the stored data for
+  another user.
+
+* The WBO fields "parentid" and "predecessorid" have been removed, along with
+  the corresponding query parameters on all requests.
+
+* Timestamps are now reported in integer milliseconds rather than decimal seconds.
+
+* The **GET /info/quota** request now returns an object with keys named "usage"
+  and "quota", rather than just a list of numbers.
+
+* The query parameters for **DELETE /storage/collection** have been removed.
+  The only operations now supported are "delete these specific ids" and
+  "delete the whole collection".
+
+* The **POST /storage/collection** request now accepts application/newlines
+  input in addition to application/json.
+
+* The **POST /storage/collection** request now explicitly allows the server
+  to process objects as they are received, and to error out partway through
+  consuming the objects.
+
+* The **application/whoisi** output format has been removed.
+
+* The *X-If-Modified-Since* header has been added.
+
+* The *X-Weave-Records* header has been renamed to *X-Num-Records*.
+
+* The *X-Weave-Alert* header has been removed.
+
+* The following response codes are explicitly mentioned: 304, 405, 412, 413.
+
+* The collection name "addons" is now a default Mozilla collection.
