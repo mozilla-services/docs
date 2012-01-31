@@ -1,12 +1,12 @@
-.. _server_storage_api_20:
+.. _server_syncstorage_api_20:
 
-================
-Storage API v2.0
-================
+====================
+SyncStorage API v2.0
+====================
 
-The Storage API defines a HTTP web service used to store and retrieve simple
-objects, or **Basic Storage Objects** (**BSOs**), which are organized into
-named **collections**.
+The SyncStorage API defines a HTTP web service used to store and retrieve
+simple objects called **Basic Storage Objects** (**BSOs**), which are organized
+into named **collections**.
 
 
 Status: DRAFT
@@ -16,13 +16,13 @@ This document is currently in **draft** status and should not be treated
 as authoritative.
 
 
-.. _storage_wbo:
+.. _syncstorage_wbo:
 
 Basic Storage Object
 ====================
 
 A **Basic Storage Object (BSO)** is the generic JSON wrapper around all
-items passed into and out of the storage server. Like all JSON, Basic
+items passed into and out of the SyncStorage server. Like all JSON, Basic
 Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 
 +---------------+-----------+------------+---------------------------------------------------------------+
@@ -32,8 +32,8 @@ Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 |               |           |  64        | a BSO within a collection, though objects in different        |
 |               |           |            | collections may have the same ID.                             |
 |               |           |            |                                                               |
-|               |           |            | **Note:**  While the storage server will accept any string as |
-|               |           |            | a BSO id, the Firefox Sync client expects ids to be exactly   |
+|               |           |            | **Note:**  While the syncstorage server will accept any string|
+|               |           |            | as a BSO id, the Firefox Sync client expects ids to be exactly|
 |               |           |            | 12 characters from the base64url alphabet.                    |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | modified      | time      | integer    | The last-modified date, in milliseconds since 01/01/1970 UTC. |
@@ -91,10 +91,10 @@ use:
 URL semantics
 =============
 
-Storage URLs follow, for the most part, REST semantics. Request and response
-bodies are all JSON-encoded.
+SyncStorage URLs follow, for the most part, REST semantics. Request and
+response bodies are all JSON-encoded.
 
-The URL for Storage Server requests is structured as follows::
+The URL for SyncStorage Server requests is structured as follows::
 
     https://<server name>/<api pathname>/<version>/<further instruction>
 
@@ -103,7 +103,8 @@ The URL for Storage Server requests is structured as follows::
 +=====================+===========================+===================================================================+
 | server name         | defined by user account   | the hostname of the server                                        |
 +---------------------+---------------------------+-------------------------------------------------------------------+
-| pathname            | (none)                    | the prefix associated with the service on the box                 |
+| pathname            | (none)                    | the prefix associated with the service on the box, to allow for   |
+|                     |                           | multiple services entrypoints on the same machine.                |
 +---------------------+---------------------------+-------------------------------------------------------------------+
 | version             | 2.0                       | The API version.                                                  |
 +---------------------+---------------------------+-------------------------------------------------------------------+
@@ -115,9 +116,9 @@ framework [1]_ and may use any authentication scheme mutually understood by
 client and server.  Mozilla-hosted services support *only* the BrowserID
 token scheme described *TODO: somewhere*.
 
-The Storage API has a set of :ref:`respcodes` to cover errors in the request or on
-the server side. The format of a successful response is defined in the
-appropriate request method section.
+The SyncStorage API has a set of :ref:`respcodes` to cover errors in the
+request or on the server side. The format of a successful response is
+defined in the appropriate request method section.
 
 
 .. [1] See RFC 2617: http://www.ietf.org/rfc/rfc2617.txt
@@ -355,8 +356,8 @@ Request Headers
 **X-Confirm-Delete**
 
     This header must be present before the server will honour a request to
-    delete all of the user's storage data.  If not present then a precondition
-    error will be returned.
+    delete all of the user's syncstorage data.  If not present then a
+    precondition error will be returned.
 
 
 Response Headers
@@ -398,9 +399,9 @@ Response Headers
 HTTP status codes
 =================
 
-Since the storage protocol is implemented on top of HTTP, clients should be
+Since the syncstorage protocol is implemented on top of HTTP, clients should be
 prepared to deal gracefully with any valid HTTP response.  This section serves
-to highlight the response codes that explicitly form part of the storage
+to highlight the response codes that explicitly form part of the syncstorage
 protocol.
 
 **200 OK**
