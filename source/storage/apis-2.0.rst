@@ -388,6 +388,12 @@ Response Headers
     This header may be sent back with multi-record responses, to indicate the
     total number of records included in the response.
 
+**X-Quota-Remaining**
+
+    This header may be returned in response to write requests, indicating
+    the amount of storage space remaining for the user in KB.  It will
+    not be returned if quotas are not enabled on the server.
+
 
 HTTP status codes
 =================
@@ -499,6 +505,9 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * The **application/whoisi** output format has been removed.
 
 * The *X-If-Modified-Since* header has been added.
+
+* The previously-undocumented *X-Weave-Quota-Remaining* header has been
+  documented, after removing the "Weave" prefix.
 
 * The *X-Weave-Records* header has been renamed to *X-Num-Records*.
 
