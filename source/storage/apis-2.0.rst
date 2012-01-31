@@ -4,8 +4,8 @@
 Storage API v2.0
 ================
 
-The Storage server provides a web service that can be used to store and 
-retrieve **Basic Storage Objects** or **BSOs**, which are organized into
+The Storage API defines a HTTP web service used to store and retrieve simple
+objects, or **Basic Storage Objects** (**BSOs**), which are organized into
 named **collections**.
 
 
