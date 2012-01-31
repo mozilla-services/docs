@@ -153,6 +153,8 @@ APIs
     - **usage**:  the user's total current usage in KB.
     - **quota**:  the user's total quota (or null if quotas are not in use)
 
+    Note that usage numbers may be approximate.
+
 
 **GET** **https://<server>/<pathname>/<version>/storage/<collection>**
 
@@ -517,3 +519,19 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * The following response codes are explicitly mentioned: 304, 405, 412, 413.
 
 * The collection name "addons" is now a default Mozilla collection.
+
+
+Things TODO
+===========
+
+* make payload a JSONString rather than specifying it be encoded JSON object.
+
+* remove ffsync-specific examples and replace them with something easier.
+
+* 204 no content
+
+* document {item:[\\a-zA-Z0-9._?#~-]+} restriction
+
+* necessary to call out the moz-specific collections?
+
+* move deployment details elsewhere?
