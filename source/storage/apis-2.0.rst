@@ -286,9 +286,7 @@ collection.
 
     Note that the server may impose a limit on the total amount of data
     included in the request, and/or may decline to process more than a certain
-    number of BSOs in a single request. If the request is aborted mid-flight,
-    there is no way to determine which items were stored successfully and
-    which were not.
+    number of BSOs in a single request.
 
     Possible HTTP error responses:
 
