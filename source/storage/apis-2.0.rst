@@ -537,8 +537,3 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * Various details of how Firefox Sync is implemented are no longer emphasized,
   since the protocol is being opened up for other applications.
 
-
-Things TODO
-===========
-
-* move deployment details elsewhere?
