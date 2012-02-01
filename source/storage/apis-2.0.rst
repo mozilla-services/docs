@@ -26,7 +26,7 @@ items passed into and out of the SyncStorage server. Like all JSON, Basic
 Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 
 +---------------+-----------+------------+---------------------------------------------------------------+
-| Parameter     | Default   | Type/Max   |  Description                                                  | 
+| Parameter     | Default   | Type/Max   |  Description                                                  |
 +===============+===========+============+===============================================================+
 | id            | required  |  string    | An identifying string. For a user, the id must be unique for  |
 |               |           |  64        | a BSO within a collection, though objects in different        |
@@ -36,17 +36,17 @@ Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 |               |           |            | as a BSO id, the Firefox Sync client expects ids to be exactly|
 |               |           |            | 12 characters from the base64url alphabet.                    |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| modified      | time      | integer    | The last-modified date, in milliseconds since 01/01/1970 UTC. |
-|               | submitted |            | If not specified it will be set automatically by the server.  |
+| modified      | time      | integer    | The last-modified date, in milliseconds since UNIX epoch      |
+|               | submitted |            | (1970-01-01 00:00:00 UTC). If not specified it will be set    |
+|               |           |            | automatically by the server.                                  |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | sortindex     | none      | integer    | An integer indicating the relative importance of this item in |
 |               |           |            | the collection.                                               |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| payload       | none      | string     | A string containing a JSON structure encapsulating the data   | 
-|               |           | 256k       | of the record. This structure is defined separately for each  |
-|               |           |            | BSO type. Parts of the structure may be encrypted, in which   |
-|               |           |            | case the structure should also specify a record for           |
-|               |           |            | decryption.                                                   |
+| payload       | none      | string     | A string containing the data of the record. The structure of  |
+|               |           | 256k       | this string is defined separately for each BSO type. This     |
+|               |           |            | spec makes no requirements for its format. In practice,       |
+|               |           |            | JSONObjects are common.                                       |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | ttl           | none      | integer    | The number of seconds to keep this record. After that time    |
 |               |           |            | this item will no longer be returned in response to any       |
@@ -127,6 +127,12 @@ defined in the appropriate request method section.
 APIs
 ====
 
+Generic Info
+------------
+
+APIs in this section provide a facility for obtaining generic info for the
+authenticated user.
+
 **GET https://<server>/<pathname>/<version>/info/collections**
 
     Returns an object mapping collection names associated with the account to
@@ -142,7 +148,7 @@ APIs
 **GET** **https://<server>/<pathname>/<version>/info/collection_counts**
 
     Returns an object mapping collection names associated with the account to
-    the total number of items in each collection. 
+    the total number of items in each collection.
 
 
 **GET** **https://<server>/<pathname>/<version>/info/quota**
@@ -155,32 +161,37 @@ APIs
 
     Note that usage numbers may be approximate.
 
+Individual Collection Interaction
+---------------------------------
+
+APIs in this section provide a mechanism for interacting with a single
+collection.
 
 **GET** **https://<server>/<pathname>/<version>/storage/<collection>**
 
-    Returns a list of the BSO ids contained in a collection. 
+    Returns a list of the BSO ids contained in a collection.
     This request has additional optional parameters:
 
-    - **ids**: returns the ids for objects in the collection that are in 
+    - **ids**: returns the ids for objects in the collection that are in
       the provided comma-separated list.
 
-    - **older**: returns only ids for objects in the collection that 
+    - **older**: returns only ids for objects in the collection that
       have been last modified before the date given.
 
-    - **newer**: returns only ids for objects in the collection that 
+    - **newer**: returns only ids for objects in the collection that
       have been last modified since the date given.
 
     - **full**: if defined, returns the full BSO, rather than just the id.
 
-    - **index_above**: if defined, only returns items with a higher 
+    - **index_above**: if defined, only returns items with a higher
       sortindex than the value specified.
 
-    - **index_below**: if defined, only returns items with a lower 
+    - **index_below**: if defined, only returns items with a lower
       sortindex than the value specified.
 
     - **limit**: sets the maximum number of ids that will be returned.
 
-    - **offset**: skips the first n ids. For use with the limit 
+    - **offset**: skips the first n ids. For use with the limit
       parameter (required) to paginate through a result set.
 
     - **sort**: sorts the output:
@@ -197,8 +208,8 @@ APIs
 
     - **application/json**: the output is a JSON list containing an object
       for each BSO in the output.
-    - **application/newlines**: each record is a separate JSON object on 
-      its own line. Newlines in the body of the JSON object are replaced 
+    - **application/newlines**: each record is a separate JSON object on
+      its own line. Newlines in the body of the JSON object are replaced
       by '\u000a'.
 
     Possible HTTP status codes:
@@ -222,8 +233,8 @@ APIs
 
 **PUT** **https://<server>/<pathname>/<version>/storage/<collection>/<id>**
 
-    Adds the BSO defined in the request body to the collection. If the BSO 
-    does not contain a payload, it will only update the provided metadata 
+    Adds the BSO defined in the request body to the collection. If the BSO
+    does not contain a payload, it will only update the provided metadata
     fields on an already defined object.
 
     The server will return the timestamp associated with the modification.
@@ -238,14 +249,13 @@ APIs
 
     - **412 Precondition Failed:**  the object has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
-    - **413 Request Entity Too Large:**  the object is larger than the 
+    - **413 Request Entity Too Large:**  the object is larger than the
       server is willing to store.
 
 
 **POST** **https://<server>/<pathname>/<version>/storage/<collection>**
 
-
-    Takes a list of BSOs in the request body and iterates over them, 
+    Takes a list of BSOs in the request body and iterates over them,
     effectively doing a series of PUTs with the same timestamp.
 
     Returns an object with details of success or failure for each BSO.
@@ -259,7 +269,7 @@ APIs
 
     For example::
 
-        {"modified": 1233702554250, 
+        {"modified": 1233702554250,
          "success": ["{GXS58IDC}12", "{GXS58IDC}13", "{GXS58IDC}15",
                      "{GXS58IDC}16", "{GXS58IDC}18", "{GXS58IDC}19"],
          "failed": {"{GXS58IDC}11": ["invalid timestamp"],
@@ -276,7 +286,7 @@ APIs
       for each BSO in the request.
 
     - **application/newlines**: each BSO is sent as a separate JSON object
-      on its own line. Newlines in the body of the BSO object are replaced 
+      on its own line. Newlines in the body of the BSO object are replaced
       by '\u000a'.
 
     Note that the server may impose a limit on the total amount of data
@@ -301,7 +311,7 @@ APIs
     Additional request parameters may modify the selection of which items
     to delete:
 
-    - **ids**: deletes the ids for objects in the collection that are in 
+    - **ids**: deletes the ids for objects in the collection that are in
       the provided comma-separated list. 
 
     Possible HTTP error responses:
@@ -323,6 +333,10 @@ APIs
     - **412 Precondition Failed:**  the object has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
 
+Multi-Collection Interaction
+----------------------------
+
+APIs in this section are used for interaction with multiple collections.
 
 **DELETE** **https://<server>/<pathname>/<version>/storage**
 
@@ -348,8 +362,8 @@ Request Headers
 
 **X-If-Unmodified-Since**
 
-    On any write transaction (PUT, POST, DELETE), this header may be added 
-    to the request, set to a timestamp. If the collection to be acted 
+    On any write transaction (PUT, POST, DELETE), this header may be added
+    to the request, set to a timestamp. If the collection to be acted
     on has been modified since the timestamp given, the request will fail.
     It has the same semantics as the standard If-Unmodified-Since header,
     but the value is expressed in milliseconds.
@@ -382,8 +396,8 @@ Response Headers
 
 **X-Timestamp**
 
-    This header will be sent back with all responses, indicating the current 
-    timestamp on the server. If the request was a PUT or POST, this will 
+    This header will be sent back with all responses, indicating the current
+    timestamp on the server. If the request was a PUT or POST, this will
     also be the modification date of any BSOs submitted or modified.
 
 **X-Num-Records**
