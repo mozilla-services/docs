@@ -81,9 +81,9 @@ URL semantics
 =============
 
 SyncStorage URLs follow, for the most part, REST semantics. Request and
-response bodies are all JSON-encoded.
+response bodies are all JSON-encoded unless otherwise specified.
 
-The URL for SyncStorage Server requests is structured as follows::
+URLs for SyncStorage Server requests are structured as follows::
 
     https://<server name>/<api pathname>/<version>/<further instruction>
 
@@ -116,28 +116,16 @@ defined in the appropriate request method section.
 APIs
 ====
 
-Generic Info
+General Info
 ------------
 
-APIs in this section provide a facility for obtaining generic info for the
+APIs in this section provide a facility for obtaining general info for the
 authenticated user.
 
 **GET https://<server>/<pathname>/<version>/info/collections**
 
     Returns an object mapping collection names associated with the account to
     the last modified timestamp for each collection.
-
-
-**GET** **https://<server>/<pathname>/<version>/info/collection_usage**
-
-    Returns an object mapping collection names associated with the account to
-    the data volume used for each collection (in KB).
-
-
-**GET** **https://<server>/<pathname>/<version>/info/collection_counts**
-
-    Returns an object mapping collection names associated with the account to
-    the total number of items in each collection.
 
 
 **GET** **https://<server>/<pathname>/<version>/info/quota**
@@ -149,6 +137,23 @@ authenticated user.
     - **quota**:  the user's total quota (or null if quotas are not in use)
 
     Note that usage numbers may be approximate.
+
+
+**GET** **https://<server>/<pathname>/<version>/info/collection_usage**
+
+    Returns an object mapping collection names associated with the account to
+    the data volume used for each collection (in KB).
+
+    Note that this request may be very expensive as it calculates more
+    more detailed and accurate usage information than the request to
+    **/info/quota**.
+
+
+**GET** **https://<server>/<pathname>/<version>/info/collection_counts**
+
+    Returns an object mapping collection names associated with the account to
+    the total number of items in each collection.
+
 
 Individual Collection Interaction
 ---------------------------------
@@ -471,6 +476,7 @@ protocol.
     another sync for the number of seconds specified in the header value.
     The response body may contain a JSON string describing the server's status
     or error.
+
 
 Changes from v1.1
 =================
