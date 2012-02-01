@@ -63,7 +63,7 @@ Example::
       "id": "-F_Szdjg3GzY",
       "modified": 1278109839960,
       "sortindex": 140,
-      "payload": "{\"ciphertext\":\"e2zLWJYX\/iTw3WXQqffo00kuuut0Sk3G7erqXD8c65S5QfB85rqolFAU0r72GbbLkS7ZBpcpmAvX6LckEBBhQPyMt7lJzfwCUxIN\/uCTpwlf9MvioGX0d4uk3G8h1YZvrEs45hWngKKf7dTqOxaJ6kGp507A6AvCUVuT7jzG70fvTCIFyemV+Rn80rgzHHDlVy4FYti6tDkmhx8t6OMnH9o\/ax\/3B2cM+6J2Frj6Q83OEW\/QBC8Q6\/XHgtJJlFi6fKWrG+XtFxS2\/AazbkAMWgPfhZvIGVwkM2HeZtiuRLM=\",\"IV\":\"GluQHjEH65G0gPk\/d\/OGmg==\",\"hmac\":\"c550f20a784cab566f8b2223e546c3abbd52e2709e74e4e9902faad8611aa289\"}"
+      "payload": "THIS IS AN EXAMPLE"
     }
 
 
@@ -72,23 +72,9 @@ Collections
 
 Each BSO is assigned to a collection with other related BSOs. Collection names
 may only contain alphanumeric characters, period, underscore and hyphen.
-Default Mozilla collections are:
 
-* bookmarks
-* history
-* forms
-* prefs
-* tabs
-* passwords
-* addons
-
-Additionally, the following collections are supported for internal storage client
-use:
-
-* clients
-* crypto
-* keys
-* meta
+Collections are created implicitly on demand, when storing a BSO in them for
+the first time.
 
 
 URL semantics
@@ -272,11 +258,11 @@ collection.
 
     For example::
 
-        {"modified": 1233702554250,
-         "success": ["{GXS58IDC}12", "{GXS58IDC}13", "{GXS58IDC}15",
-                     "{GXS58IDC}16", "{GXS58IDC}18", "{GXS58IDC}19"],
-         "failed": {"{GXS58IDC}11": ["invalid timestamp"],
-                    "{GXS58IDC}14": ["invalid timestamp"]}
+        {
+         "success": ["GXS58IDC_12", "GXS58IDC_13", "GXS58IDC_15",
+                     "GXS58IDC_16", "GXS58IDC_18", "GXS58IDC_19"],
+         "failed": {"GXS58IDC_11": ["invalid timestamp"],
+                    "GXS58IDC_14": ["invalid timestamp"]}
         }
 
     Posted BSOs whose ids do not appear in either "success" or "failed"
@@ -535,18 +521,15 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 
 * The following response codes are explicitly mentioned: 304, 405, 412, 413.
 
-* The collection name "addons" is now a default Mozilla collection.
+* Various details of how Firefox Sync is implemented are no longer emphasized,
+  since the protocol is being opened up for other applications.
 
 
 Things TODO
 ===========
 
-* make payload a JSONString rather than specifying it be encoded JSON object.
-
 * remove ffsync-specific examples and replace them with something easier.
 
 * 204 no content
-
-* necessary to call out the moz-specific collections?
 
 * move deployment details elsewhere?
