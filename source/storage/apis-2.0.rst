@@ -32,9 +32,12 @@ Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 |               |           |  64        | a BSO within a collection, though objects in different        |
 |               |           |            | collections may have the same ID.                             |
 |               |           |            |                                                               |
-|               |           |            | **Note:**  While the syncstorage server will accept any string|
-|               |           |            | as a BSO id, the Firefox Sync client expects ids to be exactly|
-|               |           |            | 12 characters from the base64url alphabet.                    |
+|               |           |            | BSO ids may contain any alphanumeric character as well as     |
+|               |           |            | the period, underscore, hyphen, tilde, hash and question mark.|
+|               |           |            |                                                               |
+|               |           |            | **Note:**  Applications may impose more stringent requirements|
+|               |           |            | on BSO ids.  For example, the Firefox Sync client expects ids |
+|               |           |            | to be exactly 12 characters from the base64url alphabet.      |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | modified      | time      | integer    | The last-modified date, in milliseconds since UNIX epoch      |
 |               | submitted |            | (1970-01-01 00:00:00 UTC). If not specified it will be set    |
@@ -543,8 +546,6 @@ Things TODO
 * remove ffsync-specific examples and replace them with something easier.
 
 * 204 no content
-
-* document {item:[\\a-zA-Z0-9._?#~-]+} restriction
 
 * necessary to call out the moz-specific collections?
 
