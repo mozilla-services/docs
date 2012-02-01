@@ -231,10 +231,10 @@ collection.
     does not contain a payload, it will only update the provided metadata
     fields on an already defined object.
 
-    The server will return the timestamp associated with the modification.
-
     This request may include the *X-If-Unmodified-Since* header to avoid
     overwriting the data if it has been changed since the client fetched it.
+    Successful requests will receive a **204 No Content** response, with the
+    *X-Timestamp* header giving the new modification time of the object.
 
     Note that the server may impose a limit on the amount of data submitted
     for storage in a single BSO.
@@ -299,7 +299,7 @@ collection.
 **DELETE** **https://<server>/<pathname>/<version>/storage/<collection>**
 
     Deletes the collection and all contents, returning the timestamp of
-    the action.
+    the action. Successful requests will receive a **204 No Content** response.
 
     Additional request parameters may modify the selection of which items
     to delete:
@@ -317,7 +317,7 @@ collection.
 **DELETE** **https://<server>/<pathname>/<version>/storage/<collection>/<id>**
 
     Deletes the BSO at the location given, returning the timestamp of the
-    action.
+    action. Successful requests will receive a **204 No Content** response.
 
     Possible HTTP error responses:
 
@@ -335,6 +335,7 @@ APIs in this section are used for interaction with multiple collections.
 
     Deletes all records for the user, returning the timestamp of the
     action.  The request must include the *X-Confirm-Delete* header.
+    Successful requests will receive a **204 No Content** response.
 
     Possible HTTP error responses:
 
@@ -516,6 +517,10 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * The **POST /storage/collection** request no longer returns **modified** as
   part of its output, since this is available in the *X-Timestamp* header.
 
+* Successful **DELETE** and **PUT** requests now give a **204 No Content**
+  response, rather than redundantly returning the value of *X-Timestamp* in
+  the response body.
+
 * The **application/whoisi** output format has been removed.
 
 * The *X-If-Modified-Since* header has been added.
@@ -535,9 +540,5 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 
 Things TODO
 ===========
-
-* remove ffsync-specific examples and replace them with something easier.
-
-* 204 no content
 
 * move deployment details elsewhere?
