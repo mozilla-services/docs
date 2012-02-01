@@ -255,7 +255,6 @@ collection.
     Returns an object with details of success or failure for each BSO.
     It will have the following keys:
 
-    - **modified:** the modification time for all successfully-stored BSOs.
     - **success:** a list of ids of BSOs that were successfully stored.
     - **failed:** an object whose keys are the ids of BSOs that were not
       stored successfully, and whose values are lists of strings
@@ -392,7 +391,7 @@ Response Headers
 
     This header will be sent back with all responses, indicating the current
     timestamp on the server. If the request was a PUT or POST, this will
-    also be the modification date of any BSOs submitted or modified.
+    also be the modification date of any BSOs modified by the request.
 
 **X-Num-Records**
 
@@ -513,6 +512,9 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * The **POST /storage/collection** request now explicitly allows the server
   to process objects as they are received, and to error out partway through
   consuming the objects.
+
+* The **POST /storage/collection** request no longer returns **modified** as
+  part of its output, since this is available in the *X-Timestamp* header.
 
 * The **application/whoisi** output format has been removed.
 
