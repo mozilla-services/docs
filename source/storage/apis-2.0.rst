@@ -145,7 +145,7 @@ authenticated user.
     the data volume used for each collection (in KB).
 
     Note that this request may be very expensive as it calculates more
-    more detailed and accurate usage information than the request to
+    detailed and accurate usage information than the request to
     **/info/quota**.
 
 
