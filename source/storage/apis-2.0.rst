@@ -40,8 +40,8 @@ Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 |               |           |            | to be exactly 12 characters from the base64url alphabet.      |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | modified      | time      | integer    | The last-modified date, in milliseconds since UNIX epoch      |
-|               | submitted |            | (1970-01-01 00:00:00 UTC). If not specified it will be set    |
-|               |           |            | automatically by the server.                                  |
+|               | submitted |            | (1970-01-01 00:00:00 UTC).  This is set automatically by the  |
+|               |           |            | server; any client-supplied value for this field is ignored.  |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | sortindex     | none      | integer    | An integer indicating the relative importance of this item in |
 |               |           |            | the collection.                                               |
