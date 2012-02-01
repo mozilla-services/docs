@@ -166,32 +166,34 @@ collection.
     Returns a list of the BSO ids contained in a collection.
     This request has additional optional parameters:
 
-    - **ids**: returns the ids for objects in the collection that are in
-      the provided comma-separated list.
+    - **ids**: a comma-separated list of ids. Only objects whose id is in this
+      list will be returned.
 
-    - **older**: returns only ids for objects in the collection that
-      have been last modified before the date given.
+    - **older**: a timestamp in milliseconds. Only objects that were last
+      modified before this time will be returned.
 
-    - **newer**: returns only ids for objects in the collection that
-      have been last modified since the date given.
+    - **newer**: a timestamp in milliseconds. Only objects that were last
+      modified after this time will be returned.
 
-    - **full**: if defined, returns the full BSO, rather than just the id.
+    - **full**: any value.  If provided then the response will be a list of
+      full BSO objects rather than a list of ids.
 
-    - **index_above**: if defined, only returns items with a higher
-      sortindex than the value specified.
+    - **index_above**: an integer. Only objects whose sortindex is higher than
+      this value will be returned.
 
-    - **index_below**: if defined, only returns items with a lower
-      sortindex than the value specified.
+    - **index_below**: an integer. Only objects whose sortindex is lower than
+      this value will be returned.
 
-    - **limit**: sets the maximum number of ids that will be returned.
+    - **limit**: an integer. At most that many objects will be returned.
 
-    - **offset**: skips the first n ids. For use with the limit
-      parameter (required) to paginate through a result set.
+    - **offset**: an integer.  Excludes that many objects from the start of
+      the output.  This is desgined for pagination of results and must be used
+      together with the **limit** parameter.
 
     - **sort**: sorts the output:
-       - 'oldest' - Orders by modification date (oldest first)
-       - 'newest' - Orders by modification date (newest first)
-       - 'index' - Orders by the sortindex descending (highest weight first)
+       - 'oldest' - orders by modification date (oldest first)
+       - 'newest' - orders by modification date (newest first)
+       - 'index' - orders by the sortindex descending (highest weight first)
 
     The response will include an *X-Num-Records* header indicating the
     total number of records to expect in the body.
