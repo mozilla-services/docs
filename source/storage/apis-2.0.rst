@@ -127,6 +127,12 @@ defined in the appropriate request method section.
 APIs
 ====
 
+Generic Info
+------------
+
+APIs in this section provide a facility for obtaining generic info for the
+authenticated user.
+
 **GET https://<server>/<pathname>/<version>/info/collections**
 
     Returns an object mapping collection names associated with the account to
@@ -155,6 +161,11 @@ APIs
 
     Note that usage numbers may be approximate.
 
+Individual Collection Interaction
+---------------------------------
+
+APIs in this section provide a mechanism for interacting with a single
+collection.
 
 **GET** **https://<server>/<pathname>/<version>/storage/<collection>**
 
@@ -322,6 +333,10 @@ APIs
     - **412 Precondition Failed:**  the object has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
 
+Multi-Collection Interaction
+----------------------------
+
+APIs in this section are used for interaction with multiple collections.
 
 **DELETE** **https://<server>/<pathname>/<version>/storage**
 
