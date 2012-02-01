@@ -26,7 +26,7 @@ items passed into and out of the SyncStorage server. Like all JSON, Basic
 Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 
 +---------------+-----------+------------+---------------------------------------------------------------+
-| Parameter     | Default   | Type/Max   |  Description                                                  | 
+| Parameter     | Default   | Type/Max   |  Description                                                  |
 +===============+===========+============+===============================================================+
 | id            | required  |  string    | An identifying string. For a user, the id must be unique for  |
 |               |           |  64        | a BSO within a collection, though objects in different        |
@@ -36,17 +36,17 @@ Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 |               |           |            | as a BSO id, the Firefox Sync client expects ids to be exactly|
 |               |           |            | 12 characters from the base64url alphabet.                    |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| modified      | time      | integer    | The last-modified date, in milliseconds since 01/01/1970 UTC. |
-|               | submitted |            | If not specified it will be set automatically by the server.  |
+| modified      | time      | integer    | The last-modified date, in milliseconds since UNIX epoch      |
+|               | submitted |            | (1970-01-01 00:00:00 UTC). If not specified it will be set    |
+|               |           |            | automatically by the server.                                  |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | sortindex     | none      | integer    | An integer indicating the relative importance of this item in |
 |               |           |            | the collection.                                               |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| payload       | none      | string     | A string containing a JSON structure encapsulating the data   | 
-|               |           | 256k       | of the record. This structure is defined separately for each  |
-|               |           |            | BSO type. Parts of the structure may be encrypted, in which   |
-|               |           |            | case the structure should also specify a record for           |
-|               |           |            | decryption.                                                   |
+| payload       | none      | string     | A string containing the data of the record. The structure of  |
+|               |           | 256k       | this string is defined separately for each BSO type. This     |
+|               |           |            | spec makes no requirements for its format. In practice,       |
+|               |           |            | JSONObjects are common.                                       |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | ttl           | none      | integer    | The number of seconds to keep this record. After that time    |
 |               |           |            | this item will no longer be returned in response to any       |
