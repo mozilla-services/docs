@@ -178,18 +178,19 @@ Tested under Gentoo.
     host = 0.0.0.0
     port = 5000
 
-6. Edit **conf/sync.ini**::
+Be sure to remove the "use_threadpool" and "threadpool_workers" options
+from this section, since fcgi does not support them.
+
+6. Edit **etc/sync.conf**::
 
     [storage]
-    backend = sql
+    backend = syncstorage.storage.sql.SQLStorage
     sqluri = sqlite:////usr/src/sync-full/weave_storage
-    standard_collections = false
+    create_tables = true
 
     [auth]
-    backend = sql
+    backend = services.user.sql.SQLUser
     sqluri = sqlite:////usr/src/sync-full/weave_user
-    pool_size = 100
-    pool_recycle = 3600
     create_tables = true
     fallback_node = https://www.yourserver.net/yourpath/
 
