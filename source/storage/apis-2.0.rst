@@ -33,7 +33,7 @@ Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 |               |           |            | collections may have the same ID.                             |
 |               |           |            |                                                               |
 |               |           |            | BSO ids may contain any alphanumeric character as well as     |
-|               |           |            | the period, underscore, hyphen, tilde, hash and question mark.|
+|               |           |            | the period, underscore and hyphen.                            |
 |               |           |            |                                                               |
 |               |           |            | **Note:**  Applications may impose more stringent requirements|
 |               |           |            | on BSO ids.  For example, the Firefox Sync client expects ids |
