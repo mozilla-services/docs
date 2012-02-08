@@ -198,12 +198,6 @@ collection.
     The response will include an *X-Num-Records* header indicating the
     total number of records to expect in the body.
 
-    The response may include an *X-Incomplete* header, indicating that the
-    request matched more records than the server was willing to return in
-    a single response.  The client can obtain the additional records by
-    re-issuing the request, with the **offset** parameter incremented by
-    the number of records that were returned.
-
     Two output formats are available for multiple record GET requests.
     They are triggered by the presence of the appropriate format in the
     *Accept* request header and are prioritized in the order listed below:
@@ -405,13 +399,6 @@ Response Headers
     This header may be sent back with multi-record responses, to indicate the
     total number of records included in the response.
 
-**X-Incomplete**
-
-    This header may be sent back with multi-record responses, to indicate that
-    the server was unable to include all matching records in the response.
-    Clients receiving this header should use the **offset** and **limit** 
-    parameters to retrieve additional records.
-
 **X-Quota-Remaining**
 
     This header may be returned in response to write requests, indicating
@@ -535,9 +522,6 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
   the response body.
 
 * The **application/whoisi** output format has been removed.
-
-* The *X-Incomplete* header has been added, so that the server can force
-  pagination of requests that match a large number of records.
 
 * The *X-If-Modified-Since* header has been added.
 
