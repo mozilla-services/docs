@@ -387,9 +387,9 @@ Response Headers
     header, **X-Backoff** may be included with any type of response, including
     a **200 OK**.
 
-    Clients should perform any additional requests required to maintain
-    consistency of the stored data, then not attempt any further requests for
-    the number of seconds specified in the header value.
+    Clients should perform the minimum number of additional requests required
+    to maintain consistency of their stored data, then not attempt any futher
+    requests for the number of seconds specified in the header value.
 
 **X-Timestamp**
 
