@@ -300,8 +300,9 @@ Headers
 **X-If-Unmodified-Since**
 
     On any write transaction (PUT, POST, DELETE), this header may be added 
-    to the request, set to a timestamp. If the collection to be acted 
-    on has been modified since the timestamp given, the request will fail.
+    to the request, set to a timestamp in decimal seconds. If the collection to
+    be acted on has been modified since the provided timestamp, the request
+    will fail with an HTTP 412 Precondition Failed status.
 
 
 **X-Weave-Alert**
