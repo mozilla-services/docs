@@ -513,10 +513,6 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * The **POST /storage/collection** request now accepts application/newlines
   input in addition to application/json.
 
-* The **POST /storage/collection** request now explicitly allows the server
-  to process objects as they are received, and to error out partway through
-  consuming the objects.
-
 * The **POST /storage/collection** request no longer returns **modified** as
   part of its output, since this is available in the *X-Timestamp* header.
 
