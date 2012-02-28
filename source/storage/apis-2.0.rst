@@ -385,7 +385,7 @@ Response Headers
     This header may be sent to indicate that the server is under heavy load
     but is still capable of servicing requests.  Unlike the **Retry-After**
     header, **X-Backoff** may be included with any type of response, including
-    a *200 OK*.
+    a **200 OK**.
 
     Clients should perform any additional requests required to maintain
     consistency of the stored data, then not attempt any further requests for
