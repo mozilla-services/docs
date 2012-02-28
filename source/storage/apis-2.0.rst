@@ -375,18 +375,21 @@ Response Headers
 
 **Retry-After**
 
-    When sent together with an HTTP 503 status code, it signifies that the
-    server is undergoing maintenance. The client should not attempt another
-    sync for the number of seconds specified in the header value.
-
+    When sent together with an HTTP 503 status code, this header signifies that
+    the server is undergoing maintenance. The client should not attempt any
+    further requests to the server for the number of seconds specified in
+    the header value.
 
 **X-Backoff**
 
-    Indicates that the server is under heavy load  and the client should not
-    trigger another sync for the number of seconds specified in the header
-    value (usually 1800).  Unlike the *Retry-After* header, this may be
-    included with any type of response, including a *200 OK*.
+    This header may be sent to indicate that the server is under heavy load
+    but is still capable of servicing requests.  Unlike the **Retry-After**
+    header, **X-Backoff** may be included with any type of response, including
+    a *200 OK*.
 
+    Clients should perform any additional requests required to maintain
+    consistency of the stored data, then not attempt any further requests for
+    the number of seconds specified in the header value.
 
 **X-Timestamp**
 
