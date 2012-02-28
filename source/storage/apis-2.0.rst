@@ -44,7 +44,7 @@ Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 |               |           |            | server; any client-supplied value for this field is ignored.  |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | sortindex     | none      | integer    | An integer indicating the relative importance of this item in |
-|               |           |            | the collection.                                               |
+|               |           | 9 digits   | the collection.                                               |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | payload       | none      | string     | A string containing the data of the record. The structure of  |
 |               |           | 256k       | this string is defined separately for each BSO type. This     |
@@ -206,7 +206,7 @@ collection.
       for each BSO in the output.
     - **application/newlines**: each record is a separate JSON object on
       its own line. Newlines in the body of the JSON object are replaced
-      by '\u000a'.
+      by '\\u000a'.
 
     Possible HTTP status codes:
 
@@ -282,7 +282,7 @@ collection.
 
     - **application/newlines**: each BSO is sent as a separate JSON object
       on its own line. Newlines in the body of the BSO object are replaced
-      by '\u000a'.
+      by '\\u000a'.
 
     Note that the server may impose a limit on the total amount of data
     included in the request, and/or may decline to process more than a certain
