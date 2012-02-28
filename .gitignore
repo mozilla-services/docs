@@ -1,0 +1,6 @@
+build
+lib
+bin
+include
+.git
+.hg
