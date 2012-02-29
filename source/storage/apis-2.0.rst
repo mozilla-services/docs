@@ -333,14 +333,8 @@ APIs in this section are used for interaction with multiple collections.
 
 **DELETE** **https://<server>/<pathname>/<version>/storage**
 
-    Deletes all records for the user, returning the timestamp of the
-    action.  The request must include the *X-Confirm-Delete* header.
+    Deletes all records for the user.
     Successful requests will receive a **204 No Content** response.
-
-    Possible HTTP error responses:
-
-    - **412 Precondition Failed:**  the *X-Confirm-Delete* header was
-      not present in the request.
 
 
 Request Headers
@@ -361,13 +355,6 @@ Request Headers
     on has been modified since the timestamp given, the request will fail.
     It has the same semantics as the standard If-Unmodified-Since header,
     but the value is expressed in milliseconds.
-
-
-**X-Confirm-Delete**
-
-    This header must be present before the server will honour a request to
-    delete all of the user's syncstorage data.  If not present then a
-    precondition error will be returned.
 
 
 Response Headers
@@ -530,6 +517,8 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * The *X-Weave-Records* header has been renamed to *X-Num-Records*.
 
 * The *X-Weave-Alert* header has been removed.
+
+* The *X-Confirm-Delete* header has been removed.
 
 * The following response codes are explicitly mentioned: 304, 405, 412, 413.
 
