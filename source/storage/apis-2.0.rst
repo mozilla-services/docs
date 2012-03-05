@@ -77,44 +77,38 @@ Collections are created implicitly on demand, when storing a BSO in them for
 the first time.
 
 
-URL semantics
-=============
+API Access and Discovery
+========================
 
-SyncStorage URLs follow, for the most part, REST semantics. Request and
-response bodies are all JSON-encoded unless otherwise specified.
 
-URLs for SyncStorage Server requests are structured as follows::
+The SyncStorage data for a given user may be accessed via authenticated
+HTTP requests to their SyncStorage API endpoint.  All requests will be
+to URLs of the form::
 
-    https://<server name>/<api pathname>/<version>/<further instruction>
+    https://<endpoint-url>/<api-instruction>
 
-+---------------------+---------------------------+-------------------------------------------------------------------+
-| Component           | Mozilla Default           | Description                                                       |
-+=====================+===========================+===================================================================+
-| server name         | defined by user account   | the hostname of the server                                        |
-+---------------------+---------------------------+-------------------------------------------------------------------+
-| pathname            | (none)                    | the prefix associated with the service on the box, to allow for   |
-|                     |                           | multiple services entrypoints on the same machine.                |
-+---------------------+---------------------------+-------------------------------------------------------------------+
-| version             | 2.0                       | The API version.                                                  |
-+---------------------+---------------------------+-------------------------------------------------------------------+
-| further instruction | (none)                    | The additional function information as defined in the paths below |
-+---------------------+---------------------------+-------------------------------------------------------------------+
+The user's SyncStorage endpoint URL can be obtained from the Discovery
+Service [1]_.
 
 Authentication of requests is achieved via the HTTP Access Authentication
-framework [1]_ and may use any authentication scheme mutually understood by
-client and server.  Mozilla-hosted services support *only* the BrowserID
-token scheme described *TODO: somewhere*.
+framework [2]_ and may use any authentication scheme mutually understood by
+client and server.  Mozilla-hosted services support *only* the Sagrada
+Authentication Token scheme [3]_.
+
+Request and response bodies are all JSON-encoded unless otherwise specified.
 
 The SyncStorage API has a set of :ref:`respcodes` to cover errors in the
 request or on the server side. The format of a successful response is
 defined in the appropriate request method section.
 
 
-.. [1] See RFC 2617: http://www.ietf.org/rfc/rfc2617.txt
+.. [1] https://wiki.mozilla.org/Services/Sagrada/ServiceDiscovery
+.. [2] See RFC 2617: http://www.ietf.org/rfc/rfc2617.txt
+.. [3] https://wiki.mozilla.org/Services/Sagrada/TokenServer
 
 
-APIs
-====
+API Instructions
+================
 
 General Info
 ------------
@@ -122,13 +116,13 @@ General Info
 APIs in this section provide a facility for obtaining general info for the
 authenticated user.
 
-**GET https://<server>/<pathname>/<version>/info/collections**
+**GET https://<endpoint-url>/info/collections**
 
     Returns an object mapping collection names associated with the account to
     the last modified timestamp for each collection.
 
 
-**GET** **https://<server>/<pathname>/<version>/info/quota**
+**GET** **https://<endpoint-url>/info/quota**
 
     Returns an object giving details of the user's current usage and
     quota.  It will have the following keys:
@@ -139,7 +133,7 @@ authenticated user.
     Note that usage numbers may be approximate.
 
 
-**GET** **https://<server>/<pathname>/<version>/info/collection_usage**
+**GET** **https://<endpoint-url>/info/collection_usage**
 
     Returns an object mapping collection names associated with the account to
     the data volume used for each collection (in KB).
@@ -149,7 +143,7 @@ authenticated user.
     **/info/quota**.
 
 
-**GET** **https://<server>/<pathname>/<version>/info/collection_counts**
+**GET** **https://<endpoint-url>/info/collection_counts**
 
     Returns an object mapping collection names associated with the account to
     the total number of items in each collection.
@@ -161,7 +155,7 @@ Individual Collection Interaction
 APIs in this section provide a mechanism for interacting with a single
 collection.
 
-**GET** **https://<server>/<pathname>/<version>/storage/<collection>**
+**GET** **https://<endpoint-url>/storage/<collection>**
 
     Returns a list of the BSO ids contained in a collection.
     This request has additional optional parameters:
@@ -215,7 +209,7 @@ collection.
     - **404 Not Found:**  the user has no such collection.
 
 
-**GET** **https://<server>/<pathname>/<version>/storage/<collection>/<id>**
+**GET** **https://<endpoint-url>/storage/<collection>/<id>**
 
     Returns the BSO in the collection corresponding to the requested id
 
@@ -227,7 +221,7 @@ collection.
       no such object.
 
 
-**PUT** **https://<server>/<pathname>/<version>/storage/<collection>/<id>**
+**PUT** **https://<endpoint-url>/storage/<collection>/<id>**
 
     Adds the BSO defined in the request body to the collection. If the BSO
     does not contain a payload, it will only update the provided metadata
@@ -249,7 +243,7 @@ collection.
       server is willing to store.
 
 
-**POST** **https://<server>/<pathname>/<version>/storage/<collection>**
+**POST** **https://<endpoint-url>/storage/<collection>**
 
     Takes a list of BSOs in the request body and iterates over them,
     effectively doing a series of PUTs with the same timestamp.
@@ -296,7 +290,7 @@ collection.
       server is willing to process in a single batch.
 
 
-**DELETE** **https://<server>/<pathname>/<version>/storage/<collection>**
+**DELETE** **https://<endpoint-url>/storage/<collection>**
 
     Deletes the collection and all contents, returning the timestamp of
     the action. Successful requests will receive a **204 No Content** response.
@@ -314,7 +308,7 @@ collection.
       since the timestamp in the *X-If-Unmodified-Since* header.
 
 
-**DELETE** **https://<server>/<pathname>/<version>/storage/<collection>/<id>**
+**DELETE** **https://<endpoint-url>/storage/<collection>/<id>**
 
     Deletes the BSO at the location given, returning the timestamp of the
     action. Successful requests will receive a **204 No Content** response.
@@ -326,12 +320,13 @@ collection.
     - **412 Precondition Failed:**  the object has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
 
+
 Multi-Collection Interaction
 ----------------------------
 
 APIs in this section are used for interaction with multiple collections.
 
-**DELETE** **https://<server>/<pathname>/<version>/storage**
+**DELETE** **https://<endpoint-url>/storage**
 
     Deletes all records for the user.
     Successful requests will receive a **204 No Content** response.
