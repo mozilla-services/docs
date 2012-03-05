@@ -87,13 +87,9 @@ to URLs of the form::
 
     https://<endpoint-url>/<api-instruction>
 
-The user's SyncStorage endpoint URL can be obtained from the Discovery
-Service [1]_.
-
-Authentication of requests is achieved via the HTTP Access Authentication
-framework [2]_ and may use any authentication scheme mutually understood by
-client and server.  Mozilla-hosted services support *only* the Sagrada
-Authentication Token scheme [3]_.
+The user's SyncStorage endpoint URL can be obtained via the Sagrada Discovery
+and Authentication workflow [1]_.  All requests must be signed using MAC
+Access Authentication credentials [2]_.
 
 Request and response bodies are all JSON-encoded unless otherwise specified.
 
@@ -102,9 +98,8 @@ request or on the server side. The format of a successful response is
 defined in the appropriate request method section.
 
 
-.. [1] https://wiki.mozilla.org/Services/Sagrada/ServiceDiscovery
-.. [2] See RFC 2617: http://www.ietf.org/rfc/rfc2617.txt
-.. [3] https://wiki.mozilla.org/Services/Sagrada/TokenServer
+.. [1] https://wiki.mozilla.org/Services/Sagrada/ServiceClientFlow
+.. [2] https://wiki.mozilla.org/Services/Sagrada/ServiceClientFlow#Access
 
 
 API Instructions
