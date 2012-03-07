@@ -9,7 +9,10 @@ Crypto/storage format v5
 meta/global record
 ==================
 
-The ``meta/global`` record is a special record on the Sync Server that contains general metadata to describe the state of data on the Sync Server. This state includes things like the global storage version and the set of available engines/collections on the server.
+The ``meta/global`` record is a special record on the Sync Server that contains
+general metadata to describe the state of data on the Sync Server. This state
+includes things like the global storage version and the set of available
+engines/collections on the server.
 
 The ``meta/global`` record is different from other records in that it is not
 encrypted. Like all other records, it is a JSON string. It has the following fields:
@@ -135,12 +138,15 @@ Example::
 crypto/keys record
 ==================
 
-In storage version 5, the public/private key layer has been dropped. All bulk keys are now stored in this one WBO. Encryption and HMAC keys are separate keys and kept in key pairs.
+In storage version 5, the public/private key layer has been dropped. All bulk
+keys are now stored in this one WBO. Encryption and HMAC keys are separate keys
+and kept in key pairs.
 
 Encrypting and decrypting
 -------------------------
 
-The ```crypto/keys``` WBO is encrypted and verified just like any other WBO, except the Sync Key bundle is used instead of a bulk key bundle.
+The ```crypto/keys``` WBO is encrypted and verified just like any other WBO,
+except the Sync Key bundle is used instead of a bulk key bundle.
 
 Format
 ------
