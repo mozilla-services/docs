@@ -215,4 +215,4 @@ Tabs describe the opened tabs on a given client to provide functionality like ge
 * **title** *string*: title of the current page
 * **urlHistory** *array of strings*: page urls in the tab's history
 * **icon** *string*: favicon uri of the tab
-* **lastUsed** *string*: string representation of Unix epoch (in seconds) at which the tab was last accessed. This is ghastly; we apologize.
+* **lastUsed** *string* or *integer*: string representation of Unix epoch (in seconds) at which the tab was last accessed. Or the integer 0. Your code should accept either. This is ghastly; we apologize.
