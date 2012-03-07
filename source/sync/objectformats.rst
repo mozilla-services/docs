@@ -21,6 +21,17 @@ adds fields like *id* and *deleted*. Also, remember that there is data at the
 Weave Basic Object (WBO) level as well as *id*, *modified*, *sortindex* and
 *payload*.
 
+Add-ons
+=======
+
+Engine version 1
+----------------
+
+* **addonID** *string*: Public identifier of add-on. This is the *id* attribute from an Addon object obtained from the AddonManager.
+* **applicationID** *string*: The application ID the add-on belongs to.
+* **enabled** *bool*: Indicates whether the add-on is enabled or disabled. true means enabled.
+* **source** *string*: Where the add-on came from. *amo* means it came from addons.mozilla.org or a trusted site.
+
 Bookmarks
 =========
 
