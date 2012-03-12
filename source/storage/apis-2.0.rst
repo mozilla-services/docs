@@ -172,7 +172,10 @@ collection.
 
 **GET** **https://<endpoint-url>/storage/<collection>**
 
-    Returns a list of the BSO ids contained in a collection.
+    Returns a list of the BSOs contained in a collection.  By default only
+    the BSO ids are returned, but full objects can be requested using the
+    **full** parameter.
+
     This request has additional optional parameters:
 
     - **ids**: a comma-separated list of ids. Only objects whose id is in this
@@ -211,11 +214,11 @@ collection.
     They are triggered by the presence of the appropriate format in the
     *Accept* request header and are prioritized in the order listed below:
 
-    - **application/json**: the output is a JSON list containing an object
-      for each BSO in the output.
-    - **application/newlines**: each record is a separate JSON object on
-      its own line. Newlines in the body of the JSON object are replaced
-      by '\\u000a'.
+    - **application/json**: the output is a JSON list containing the
+      requested records, as either string ids or full JSON objects.
+    - **application/newlines**: the output contains each record on a separate
+      line, as either a string id or a full JSON object. Any newlines in each
+      record are replaced by '\\u000a'.
 
     Possible HTTP status codes:
 
