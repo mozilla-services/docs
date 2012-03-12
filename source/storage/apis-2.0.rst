@@ -116,6 +116,11 @@ authenticated user.
     Returns an object mapping collection names associated with the account to
     the last modified timestamp for each collection.
 
+    Possible HTTP status codes:
+
+    - **304 Not Modified:**  no collections have been modified
+      since the timestamp in the *X-If-Modified-Since* header.
+
 
 **GET** **https://<endpoint-url>/info/quota**
 
@@ -127,6 +132,11 @@ authenticated user.
 
     Note that usage numbers may be approximate.
 
+    Possible HTTP status codes:
+
+    - **304 Not Modified:**  no collections have been modified
+      since the timestamp in the *X-If-Modified-Since* header.
+
 
 **GET** **https://<endpoint-url>/info/collection_usage**
 
@@ -137,11 +147,21 @@ authenticated user.
     detailed and accurate usage information than the request to
     **/info/quota**.
 
+    Possible HTTP status codes:
+
+    - **304 Not Modified:**  no collections have been modified
+      since the timestamp in the *X-If-Modified-Since* header.
+
 
 **GET** **https://<endpoint-url>/info/collection_counts**
 
     Returns an object mapping collection names associated with the account to
     the total number of items in each collection.
+
+    Possible HTTP status codes:
+
+    - **304 Not Modified:**  no collections have been modified
+      since the timestamp in the *X-If-Modified-Since* header.
 
 
 Individual Collection Interaction
@@ -332,10 +352,10 @@ Request Headers
 
 **X-If-Modified-Since**
 
-    When requesting an individual BSO, this header may be added to avoid
-    transmission of the resource body if it has not been modified since
-    the client last fetched it.  It has the same semantics as the standard
-    If-Modified-Since header, but the value is expressed in milliseconds.
+    This header may be added to any GET request to avoid transmission of the
+    resource body if it has not been modified since the client last fetched
+    it.  It has the same semantics as the standard If-Modified-Since header,
+    but the value is expressed in milliseconds.
 
 
 **X-If-Unmodified-Since**
