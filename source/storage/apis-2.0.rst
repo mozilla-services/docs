@@ -318,13 +318,15 @@ collection.
     to delete:
 
     - **ids**: deletes the ids for objects in the collection that are in
-      the provided comma-separated list. 
+      the provided comma-separated list.  A maximum of 100 ids may be
+      provided.
 
     Possible HTTP error responses:
 
+    - **400 Bad Request:**  too many ids where included in the query parameter.
     - **404 Not Found:**  the user has no such collection.
-    - **412 Precondition Failed:**  an object in the collection has been modified
-      since the timestamp in the *X-If-Unmodified-Since* header.
+    - **412 Precondition Failed:**  an object in the collection has been
+      modified since the timestamp in the *X-If-Unmodified-Since* header.
 
 
 **DELETE** **https://<endpoint-url>/storage/<collection>/<id>**
@@ -529,7 +531,8 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 
 * The **application/whoisi** output format has been removed.
 
-* The *X-If-Modified-Since* header has been added.
+* The *X-If-Modified-Since* header has been added and can be used on all
+  GET requests.
 
 * The previously-undocumented *X-Weave-Quota-Remaining* header has been
   documented, after removing the "Weave" prefix.
