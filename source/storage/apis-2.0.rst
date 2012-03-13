@@ -9,11 +9,12 @@ simple objects called **Basic Storage Objects** (**BSOs**), which are organized
 into named **collections**.
 
 
-Status: DRAFT
-=============
+Status: FINAL DRAFT
+===================
 
-This document is currently in **draft** status and should not be treated
-as authoritative.
+This document is currently in **final draft** status.  While no substantial
+modifications are expected, there may be small changes and clarifications
+as implementation progresses.
 
 
 .. _syncstorage_wbo:
