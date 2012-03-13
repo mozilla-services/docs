@@ -119,7 +119,7 @@ authenticated user.
 
     Possible HTTP status codes:
 
-    - **304 Not Modified:**  no collections have been modified
+    - **304 Not Modified:**  no collections have been modified or deleted
       since the timestamp in the *X-If-Modified-Since* header.
 
 
@@ -135,7 +135,7 @@ authenticated user.
 
     Possible HTTP status codes:
 
-    - **304 Not Modified:**  no collections have been modified
+    - **304 Not Modified:**  no collections have been modified or deleted
       since the timestamp in the *X-If-Modified-Since* header.
 
 
@@ -150,7 +150,7 @@ authenticated user.
 
     Possible HTTP status codes:
 
-    - **304 Not Modified:**  no collections have been modified
+    - **304 Not Modified:**  no collections have been modified or deleted
       since the timestamp in the *X-If-Modified-Since* header.
 
 
@@ -161,7 +161,7 @@ authenticated user.
 
     Possible HTTP status codes:
 
-    - **304 Not Modified:**  no collections have been modified
+    - **304 Not Modified:**  no collections have been modified or deleted
       since the timestamp in the *X-If-Modified-Since* header.
 
 
