@@ -358,8 +358,11 @@ Request Headers
 
     This header may be added to any GET request to avoid transmission of the
     resource body if it has not been modified since the client last fetched
-    it.  It has the same semantics as the standard If-Modified-Since header,
-    but the value is expressed in milliseconds.
+    it.  It is similar to the standard If-Modified-Since header except the
+    value is expressed in milliseconds.
+
+    If the value of this header is not a valid integer, a **400 Bad Request**
+    response will be returned.
 
 
 **X-If-Unmodified-Since**
@@ -367,8 +370,11 @@ Request Headers
     On any write transaction (PUT, POST, DELETE), this header may be added
     to the request, set to a timestamp. If the collection to be acted
     on has been modified since the timestamp given, the request will fail.
-    It has the same semantics as the standard If-Unmodified-Since header,
-    but the value is expressed in milliseconds.
+    It is similar to the the standard If-Unmodified-Since header except the
+    value is expressed in milliseconds.
+
+    If the value of this header is not a valid integer, a **400 Bad Request**
+    response will be returned.
 
 
 Response Headers
