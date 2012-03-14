@@ -8,10 +8,10 @@ The AITC API defines a HTTP web service used to store and retrieve stuctured
 JSON records that specify a user's **Apps** and **Devices**.
 
 
-Status: FINAL DRAFT
-===================
+Status: DRAFT
+=============
 
-This document is currently in **final draft** status.  While no substantial
+This document is currently in **draft** status.  While no substantial
 modifications are expected, there may be small changes and clarifications
 as implementation progresses.
 
@@ -22,13 +22,14 @@ Record Formats
 ==============
 
 All records are JSON documents, and have both "full" and "abbreviated" forms.
+Each document has a maximum size of 8 kilobytes.
 
 .. _aitc_app_records:
 
 App Records
 -----------
 
-A *full* **App Record** document contains the following fields:
+A full **App Record** document contains the following fields:
 
 +------------------+-----------+-----------------------+----------------------------------------------------+
 | Field            | Default   | Type                  |  Description                                       |
@@ -38,16 +39,17 @@ A *full* **App Record** document contains the following fields:
 | manifestPath     | required  | string                | The location relative to *origin* where the app's  |
 |                  |           |                       | manifest was found.                                |
 +------------------+-----------+-----------------------+----------------------------------------------------+
-| installOrigin    | required  | string                | XXX ??? WHAT IS THIS ??? XXX                       |
+| installOrigin    | required  | string                | The URL of the marketplace from which the app      |
+|                  |           |                       | was installed.                                     |
 +------------------+-----------+-----------------------+----------------------------------------------------+
-| installedTime    | required  | integer               | The time at which the application was initially    |
-|                  |           | millisecond timestamp | installed.  XXX ??? SET BY SERVER ??? XXX          |
+| installedTime    | required  | integer,              | The time at which the application was initially    |
+|                  |           | millisecond timestamp | installed; set by the server on first write.       |
 +------------------+-----------+-----------------------+----------------------------------------------------+
-| modificationTime | required  | integer               | The time at which the application record was last  |
-|                  |           | millisecond timestamp | modified.  XXX ??? SET BY SERVER ??? XXX           |
+| modificationTime | required  | integer,              | The time at which the application record was last  |
+|                  |           | millisecond timestamp | modified; set by the server on each write.         |
 +------------------+-----------+-----------------------+----------------------------------------------------+
 | receipts         | required  | array of strings      | List of the user's purchase recepits for this      |
-|                  |           |                       | application.  XXX ??? ANY SPECIFIC FORMAT ??? XXX  |
+|                  |           |                       | application.  Receipts are opaque strings          |
 +------------------+-----------+-----------------------+----------------------------------------------------+
 
 
@@ -70,6 +72,10 @@ fields.  Example::
       modificationTime: 1330535996945
     }
 
+
+App records are uniquely identified by their *appid*, which is the SHA1 hash
+of the origin URL, base64url-encoded with no padding.
+
 .. _aitc_device_records:
 
 Device Records
@@ -77,33 +83,33 @@ Device Records
 
 A *full* **Device Record** document contains the following fields:
 
-+-------------+-----------+--------------------------+----------------------------------------------------+
-| Field       | Default   | Type                     |  Description                                       |
-+=============+===========+==========================+====================================================+
-| uuid        | required  | string                   | A unique identifier for the device.                |
-|             |           | XXX ??? FORMAT ??? XXX   |                                                    |
-+-------------+-----------+--------------------------+----------------------------------------------------+
-| name        | required  | string                   | A human-readable description of the device.        |
-|             |           | XXX ??? MAX LEN ??? XXX  |                                                    |
-+-------------+-----------+--------------------------+----------------------------------------------------+
-| type        | required  | string                   | XXX ??? SPECIFIC VALUES ??? XXX                    |
-|             |           | XXX ??? MAX LEN ??? XXX  |                                                    |
-+-------------+-----------+--------------------------+----------------------------------------------------+
-| layout      | required  | string                   | An identifier determining the specific format of   |
-|             |           | XXX ??? MAX LEN ??? XXX  | object stored in the "apps" field.                 |
-|             |           |                          | XXX ??? SPECIFIC VALUES ??? XXX                    |
-+-------------+-----------+--------------------------+----------------------------------------------------+
-| addedAt     | required  | string                   | The time at which this device was added to the     |
-|             |           | XXX ??? WHY.. ??? XXX    | user's account.                                    |
-+-------------+-----------+--------------------------+----------------------------------------------------+
-| modifiedAt  | required  | string                   | The time at which tihs device's details were last  |
-|             |           | XXX ??? WHY.. ??? XXX    | modified.                                          |
-+-------------+-----------+--------------------------+----------------------------------------------------+
-| apps        | required  | JSON object              | An arbitrary JSON object describing the apps on    |
-|             |           |                          | device and how they are arranged.  The precise     |
-|             |           |                          | details of this object will depend on the value of |
-|             |           |                          | the "layout" field.                                |
-+-------------+-----------+--------------------------+----------------------------------------------------+
++-------------+-----------+---------------------------+----------------------------------------------------+
+| Field       | Default   | Type                      |  Description                                       |
++=============+===========+==========================++====================================================+
+| uuid        | required  | string,                   | A unique identifier for the device.                |
+|             |           | Uppercase hexadecimal     |                                                    |
+|             |           | in 8-4-4-4-12 UUID format |                                                    |
++-------------+-----------+---------------------------+----------------------------------------------------+
+| name        | required  | string,                   | A human-readable description of the device.        |
+|             |           | non-empty                 |                                                    |
++-------------+-----------+---------------------------+----------------------------------------------------+
+| type        | required  | string,                   | XXX ??? SPECIFIC VALUES ??? XXX                    |
+|             |           | non-empty                 |                                                    |
++-------------+-----------+---------------------------+----------------------------------------------------+
+| layout      | required  | string,                   | An identifier determining the specific format of   |
+|             |           | non-empty                 | object stored in the "apps" field.                 |
++-------------+-----------+---------------------------+----------------------------------------------------+
+| addedAt     | required  | integer,                  | The time at which this device was added to the     |
+|             |           | millisecond timestamp     | user's account.                                    |
++-------------+-----------+---------------------------+----------------------------------------------------+
+| modifiedAt  | required  | integer,                  | The time at which this device's details were last  |
+|             |           | millisecond timestamp     | modified; set by the server on each write.         |
++-------------+-----------+---------------------------+----------------------------------------------------+
+| apps        | required  | JSON object               | An arbitrary JSON object describing the apps on    |
+|             |           |                           | device and how they are arranged.  The precise     |
+|             |           |                           | details of this object will depend on the value of |
+|             |           |                           | the "layout" field.                                |
++-------------+-----------+---------------------------+----------------------------------------------------+
 
 
 Example::
@@ -130,6 +136,8 @@ An *abbreviated* Device Record contains all fields except "apps".  Example::
        modifiedAt: "2012-03-05 13:23:34Z"
     }
 
+
+Device records are uniquely identified by their *uuid* field.
 
 
 API Access and Discovery
@@ -175,19 +183,15 @@ authenticated user.
           apps: [apps records for the user]
         }
 
-    By default abbreviated records are returned.  Content negotiation can
-    be used to request full records according to the value of the *Accept*
-    header as defined below:
-
-    - **application/vnd.moz-aitc-apps-abrv+json**: A JSON object where the
-      "apps" field is a list of abbreviated app records.
-    - **application/vnd.moz-aitc-apps-full+json**: A JSON object where the
-      "apps" field is a list of full app records.
+    By default abbreviated records are returned.  Full records can be
+    requested using the **full** parameter as described below.
 
     This request has additional optional parameters:
 
     - **newer**: a timestamp in milliseconds. Only records that were last
       modified after this time will be returned.
+    - **full**: any value.  If provided then the response will contain a list
+      of full records rather than abbreviated records.
 
     Possible HTTP status codes:
 
@@ -195,9 +199,9 @@ authenticated user.
       since the timestamp in the *X-If-Modified-Since* header.
 
 
-**GET** **https://<endpoint-url>/apps/<id>**
+**GET** **https://<endpoint-url>/apps/<appid>**
 
-    Returns the full app record with the given id.
+    Returns the full app record with the given appid.
 
     Possible HTTP error responses:
 
@@ -206,31 +210,109 @@ authenticated user.
     - **404 Not Found:**  the user has no app record with the given id.
 
 
-**PUT** **https://<endpoint-url>/apps/<id>**
+**PUT** **https://<endpoint-url>/apps/<appid>**
 
-    Create or update an app record with the given id.
+    Create or update an app record with the given id.  The id must be
+    the SHA1 hash of the app record's origin field, base64url-encoded
+    with no padding.
 
     This request may include the *X-If-Unmodified-Since* header to avoid
     overwriting the data if it has been changed since the client fetched it.
     Successful requests will receive a **204 No Content** response, with the
     *X-Timestamp* header giving the new modification time of the object.
 
-    Note that the server may impose a limit on the overall size of the app
-    record.
+    Note that records are limited to 8KB in size.
 
     Possible HTTP error responses:
 
     - **400 Bad Request:**  the record is malformed or otherwise invalid.
-    - **404 Not Found:**  the user has no app record with the given id.
     - **412 Precondition Failed:**  the record has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
     - **413 Request Entity Too Large:**  the record is larger than the
       server is willing to store.
 
 
-**GET** **https://<endpoint-url>/apps/<id>**
+**DELETE** **https://<endpoint-url>/apps/<appid>**
 
     Delete the app record with the given id.
+
+    This request may include the *X-If-Unmodified-Since* header to avoid
+    deleting the data if it has been changed since the client fetched it.
+    Successful requests will receive a **204 No Content** response.
+
+    Possible HTTP error responses:
+
+    - **404 Not Found:**  the user has no app record with the given id.
+    - **412 Precondition Failed:**  the record has been modified since the
+      timestamp in the *X-If-Unmodified-Since* header.
+
+
+Apps
+----
+
+APIs in this section provide access to the device records stored for the
+currently authenticated user.
+
+**GET https://<endpoint-url>/devices/**
+
+    Returns an object giving an array of device records::
+
+        {
+          devices: [device records for the user]
+        }
+
+    By default abbreviated records are returned.  Full records can be
+    requested using the **full** parameter as described below.
+
+    This request has additional optional parameters:
+
+    - **newer**: a timestamp in milliseconds. Only records that were last
+      modified after this time will be returned.
+    - **full**: any value.  If provided then the response will contain a list
+      of full records rather than abbreviated records.
+
+    Possible HTTP status codes:
+
+    - **304 Not Modified:**  no device records have been modified or deleted
+      since the timestamp in the *X-If-Modified-Since* header.
+
+
+**GET** **https://<endpoint-url>/devices/<uuid>**
+
+    Returns the full device record with the given uuid.
+
+    Possible HTTP error responses:
+
+    - **304 Not Modified:**  the record has not been modified since the
+      timestamp in the *X-If-Modified-Since* header.
+    - **404 Not Found:**  the user has no device record with the given id.
+
+
+**PUT** **https://<endpoint-url>/devices/<uuid>**
+
+    Create or update a device record with the given id.  The uuid must be
+    be uppercase hexadecimal in 8-4-4-4-12 UUID format, and must match the
+    uuid contained in the uploaded record.
+
+    This request may include the *X-If-Unmodified-Since* header to avoid
+    overwriting the data if it has been changed since the client fetched it.
+    Successful requests will receive a **204 No Content** response, with the
+    *X-Timestamp* header giving the new modification time of the object.
+
+    Note that records are limited to 8KB in size.
+
+    Possible HTTP error responses:
+
+    - **400 Bad Request:**  the record is malformed or otherwise invalid.
+    - **412 Precondition Failed:**  the record has been modified since the
+      timestamp in the *X-If-Unmodified-Since* header.
+    - **413 Request Entity Too Large:**  the record is larger than the
+      server is willing to store.
+
+
+**DELETE** **https://<endpoint-url>/devices/<uuid>**
+
+    Delete the device record with the given id.
 
     This request may include the *X-If-Unmodified-Since* header to avoid
     deleting the data if it has been changed since the client fetched it.
@@ -307,7 +389,13 @@ protocol.
 
 **200 OK**
 
-    The request was processed successfully.
+    The request was processed successfully, and the server is returning
+    useful information in the response body.
+
+**204 Not Content**
+
+    The request was processed successfully, and the server has no useful
+    data to return in the response body.
 
 
 **304 Not Modified**
