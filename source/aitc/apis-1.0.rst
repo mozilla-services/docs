@@ -84,7 +84,7 @@ of the origin URL, base64url-encoded with no padding::
 Device Records
 --------------
 
-A *full* **Device Record** document contains the following fields:
+A full **Device Record** document contains the following fields:
 
 +-------------+-----------+---------------------------+----------------------------------------------------+
 | Field       | Default   | Type                      |  Description                                       |
@@ -401,6 +401,13 @@ protocol.
     The request was processed successfully, and the server is returning
     useful information in the response body.
 
+
+**201 Created**
+
+    The request was processed successfully and resulted in the creation of
+    a new record.  No entity body is returned.
+
+
 **204 Not Content**
 
     The request was processed successfully, and the server has no useful
@@ -440,7 +447,7 @@ protocol.
 **405 Method Not Allowed**
 
     The request URL does not support the specific request method.  For example,
-    attempting a PUT request to /info/quota would produce a 405 response.
+    attempting a PUT request to https://endpoingquota would produce a 405 response.
 
 
 **412 Precondition Failed**
