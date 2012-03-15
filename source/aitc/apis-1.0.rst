@@ -1,8 +1,8 @@
 .. _server_aitc_api_20:
 
-=============
-AITC API v1.0
-=============
+==========================
+Apps-In-The-Cloud API v1.0
+==========================
 
 The AITC API defines a HTTP web service used to store and retrieve stuctured
 JSON records that specify a user's **Apps** and **Devices**.
@@ -87,13 +87,13 @@ A *full* **Device Record** document contains the following fields:
 | Field       | Default   | Type                      |  Description                                       |
 +=============+===========+==========================++====================================================+
 | uuid        | required  | string,                   | A unique identifier for the device.                |
-|             |           | Uppercase hexadecimal     |                                                    |
+|             |           | uppercase hexadecimal     |                                                    |
 |             |           | in 8-4-4-4-12 UUID format |                                                    |
 +-------------+-----------+---------------------------+----------------------------------------------------+
 | name        | required  | string,                   | A human-readable description of the device.        |
 |             |           | non-empty                 |                                                    |
 +-------------+-----------+---------------------------+----------------------------------------------------+
-| type        | required  | string,                   | XXX ??? SPECIFIC VALUES ??? XXX                    |
+| type        | required  | string,                   | XXX ??? WHAT IS THIS FOR ??? XXX                   |
 |             |           | non-empty                 |                                                    |
 +-------------+-----------+---------------------------+----------------------------------------------------+
 | layout      | required  | string,                   | An identifier determining the specific format of   |
@@ -119,8 +119,8 @@ Example::
        name: "Anant's Mac Pro",
        type: "mobile",
        layout: "android/phone",
-       addedAt: "2012-02-28 12:23:35Z",
-       modifiedAt: "2012-03-05 13:23:34Z",
+       addedAt: "1330535996745",
+       modifiedAt: "1330535996945",
        apps: {}
     }
 
