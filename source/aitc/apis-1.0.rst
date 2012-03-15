@@ -42,10 +42,10 @@ A full **App Record** document contains the following fields:
 | installOrigin    | required  | string                | The URL of the marketplace from which the app      |
 |                  |           |                       | was installed.                                     |
 +------------------+-----------+-----------------------+----------------------------------------------------+
-| installedTime    | required  | integer,              | The time at which the application was initially    |
+| installedAt      | required  | integer,              | The time at which the application was initially    |
 |                  |           | millisecond timestamp | installed; set by the server on first write.       |
 +------------------+-----------+-----------------------+----------------------------------------------------+
-| modificationTime | required  | integer,              | The time at which the application record was last  |
+| modifiedAt       | required  | integer,              | The time at which the application record was last  |
 |                  |           | millisecond timestamp | modified; set by the server on each write.         |
 +------------------+-----------+-----------------------+----------------------------------------------------+
 | receipts         | required  | array of strings      | List of the user's purchase recepits for this      |
@@ -59,22 +59,25 @@ Example::
        origin: "https://example.com",
        manifestPath: "/manifest.webapp",
        installOrigin: "https://marketplace.mozilla.org",
-       installedTime: 1330535996745,
-       modificationTime: 1330535996945,
+       installedAt: 1330535996745,
+       modifiedAt: 1330535996945,
        receipts: ["...", "..."]
     }
 
-An *abbreviated* App Record contains only the "origin" and "modificationTime"
+An *abbreviated* App Record contains only the "origin" and "modifiedAt"
 fields.  Example::
 
     {
       origin: "https://example.com",
-      modificationTime: 1330535996945
+      modifiedAt: 1330535996945
     }
 
 
 App records are uniquely identified by their *appid*, which is the SHA1 hash
-of the origin URL, base64url-encoded with no padding.
+of the origin URL, base64url-encoded with no padding::
+
+    appid = b64urlencode(SHA1(origin))
+
 
 .. _aitc_device_records:
 
@@ -119,8 +122,8 @@ Example::
        name: "Anant's Mac Pro",
        type: "mobile",
        layout: "android/phone",
-       addedAt: "1330535996745",
-       modifiedAt: "1330535996945",
+       addedAt: 1330535996745,
+       modifiedAt: 1330535996945,
        apps: {}
     }
 
@@ -132,8 +135,8 @@ An *abbreviated* Device Record contains all fields except "apps".  Example::
        name: "Anant's Mac Pro",
        type: "mobile",
        layout: "android/phone",
-       addedAt: "2012-02-28 12:23:35Z",
-       modifiedAt: "2012-03-05 13:23:34Z"
+       addedAt: 1330535996745,
+       modifiedAt: 1330535996945,
     }
 
 
@@ -177,7 +180,7 @@ authenticated user.
 
 **GET https://<endpoint-url>/apps/**
 
-    Returns an object giving an array of apps records::
+    Returns an object giving an array of app records::
 
         {
           apps: [apps records for the user]
@@ -188,7 +191,7 @@ authenticated user.
 
     This request has additional optional parameters:
 
-    - **newer**: a timestamp in milliseconds. Only records that were last
+    - **after**: a timestamp in milliseconds. Only records that were last
       modified after this time will be returned.
     - **full**: any value.  If provided then the response will contain a list
       of full records rather than abbreviated records.
@@ -216,10 +219,10 @@ authenticated user.
     the SHA1 hash of the app record's origin field, base64url-encoded
     with no padding.
 
-    This request may include the *X-If-Unmodified-Since* header to avoid
-    overwriting the data if it has been changed since the client fetched it.
-    Successful requests will receive a **204 No Content** response, with the
-    *X-Timestamp* header giving the new modification time of the object.
+    Successful requests will receive a **201 Created** response if a new
+    app record is created, or a **204 No Content** response if an existing
+    app record is updated  The response will include an *X-Timestamp* header
+    giving the new modification time of the object.
 
     Note that records are limited to 8KB in size.
 
@@ -266,7 +269,7 @@ currently authenticated user.
 
     This request has additional optional parameters:
 
-    - **newer**: a timestamp in milliseconds. Only records that were last
+    - **after**: a timestamp in milliseconds. Only records that were last
       modified after this time will be returned.
     - **full**: any value.  If provided then the response will contain a list
       of full records rather than abbreviated records.
@@ -294,10 +297,13 @@ currently authenticated user.
     be uppercase hexadecimal in 8-4-4-4-12 UUID format, and must match the
     uuid contained in the uploaded record.
 
+    Successful requests will receive a **201 Created** response if a new
+    device record is created, or a **204 No Content** response if an existing
+    device record is updated  The response will include an *X-Timestamp* header
+    giving the new modification time of the object.
+
     This request may include the *X-If-Unmodified-Since* header to avoid
     overwriting the data if it has been changed since the client fetched it.
-    Successful requests will receive a **204 No Content** response, with the
-    *X-Timestamp* header giving the new modification time of the object.
 
     Note that records are limited to 8KB in size.
 
@@ -342,9 +348,12 @@ Request Headers
 **X-If-Unmodified-Since**
 
     This header may be added to any PUT or DELETE request, set to a timestamp.
-    If the record to be acted on has been modified since the timestamp given,
-    the request will fail.  It is similar to the the standard
-    If-Unmodified-Since header except the value is expressed in milliseconds.
+    If the target record has been modified since the timestamp given, the
+    request will fail.  It is similar to the the standard If-Unmodified-Since
+    header except the value is expressed in milliseconds.
+
+    To condition the request on the non-existence of the target resource, use
+    an **X-If-Unmodified-Since** value of zero.
 
     If the value of this header is not a valid integer, a **400 Bad Request**
     response will be returned.
