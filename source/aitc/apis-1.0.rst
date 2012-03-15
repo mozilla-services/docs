@@ -447,7 +447,8 @@ protocol.
 **405 Method Not Allowed**
 
     The request URL does not support the specific request method.  For example,
-    attempting a PUT request to https://endpoingquota would produce a 405 response.
+    attempting a PUT request to https://<endpoint-url>/apps/ would produce a
+    405 response.
 
 
 **412 Precondition Failed**
