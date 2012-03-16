@@ -8,27 +8,23 @@ This document serves as an overview of Sync's cryptographic model. The model
 documented here applies to :ref:`version 5 <sync_storageformat5>` of Sync's
 global storage format.
 
-With the exception of a single record (the meta/global), the payload of **all**
-records stored on the storage server are encrypted on the client using a high
-entropy private key that is never made available to the operator of the storage
-service. This means that if all server data is compromised, your data cannot be
-read. The worst that can happen is somebody can see which collections you have
-stored and which IDs you have in those collections. And, since IDs are randomly
-generated on the client, they have no way of knowing what those IDs correspond
-to.
-
 Overview
 ========
 
-Every encrypted record is encrypted using what we call a **key bundle**. A
-**key bundle** consists of a pair of 256 bit keys. One is used for symmetric
-encryption and the other is used for HMAC hashing.
+Every encrypted record (and all but one record on the server is encrypted)
+is encrypted using symmetric key encryption and verified using HMAC hashing.
+The symmetric encryption and HMAC verification keys are only available to
+client machines: they are not transmitted to the server (at least in any form
+the server can read). This means that the data on the server cannot be read by
+anyone with access to the server.
 
-The encryption key in a key bundle is combined with a randomly generated 16
-byte IV and fed into the AES algorithm to produce a ciphertext. The resulting
-ciphertext (in its base64 form) is then *signed* with the key bundle's **HMAC
-key** to produce an **HMAC value**. The *ciphertext*, *IV*, and *HMAC value*
-are what constitute the payload of a record uploaded to the server.
+The aforementioned symmetric encryption key and and HMAC key constitute what's
+called a **key bundle**. Each key is 256 bits.
+
+Individual records are encrypted with AES 256. The encryption key from a key
+bundle is combined with a per-record 16 byte IV and a user's data is converted
+into ciphertext. The ciphertext is *signed* with the key bundle's **HMAC key**.
+The *ciphertext*, *IV*, and *HMAC value* are then uploaded to the server.
 
 When Sync is initially configured, that client generates a random 128 bit
 sequence called the **Sync Key**. This private key is used to derive a special
