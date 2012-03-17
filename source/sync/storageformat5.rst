@@ -1,13 +1,29 @@
 .. _sync_storageformat5:
 
 ========================
-Crypto/storage format v5
+Global Storage Version 5
 ========================
+
+This document describes version 5 of Sync's global storage format. This
+describes not only the technical details of the storage format, but also some
+semantics for how clients supporting version 5 should interact with the Sync
+server.
+
+Overview
+========
+
+A single unencrypted record called the **metaglobal record** (because it exists
+in the *meta* collection with the id *global*) stores essential data used to
+instruct clients how to behave.
+
+A special record called the **cryptokeys record** (because it exists in the
+*crypto* collection with the id *keys*) holds encrypted keys which are used
+to encrypt, decrypt, and verify all other encrypted records on the server.
 
 .. _sync_storageformat5_metaglobal:
 
-meta/global record
-==================
+Metaglobal Record
+=================
 
 The ``meta/global`` record is a special record on the Sync Server that contains
 general metadata to describe the state of data on the Sync Server. This state
@@ -15,12 +31,12 @@ includes things like the global storage version and the set of available
 engines/collections on the server.
 
 The ``meta/global`` record is different from other records in that it is not
-encrypted. Like all other records, it is a JSON string. It has the following fields:
+encrypted.
 
-- **storageVersion**: Integer version of the storage format used. Clients
-  look at this version to ensure they can read data on the server. Clients
-  that don't understand a seen version will typically abort, assuming that
-  a Sync client upgrade is available.
+The payload of this record is a JSON string that deserializes to an object
+(i.e. a hash). This object has the following fields:
+
+- **storageVersion**: Integer version of the global storage format used
 - **syncID**: Opaque string that changes when drastic changes happen to the
   overall data. Change of this string can cause clients to drop cached data.
   The Firefox client uses 12 randomly generated base64url characters, much
@@ -48,92 +64,24 @@ Example
       }
     }
 
+Semantics and Behavior
+----------------------
 
-.. _sync_storageformat5_keybundles:
+Clients should fetch the metaglobal record after it has been determined that a
+full sync should be performed. If the metaglobal record does not exist, the
+client should issue a request to delete all data from the server and then
+create and upload a new metaglobal record.
 
-Key bundles
-===========
+In the common scenario where the metaglobal record exists, the client should
+first check that the storage version from the record is supported. If it is,
+great. If the storage version is older than what the client supports, the
+client may choose to upgrade server data to a new storage version. Keep in
+mind this may break older clients! If the storage version is newer than what
+the client supports, all bets are off and the client should infer that a new
+version is available and that the user should upgrade. **Clients should not
+modify any data on a server if the global storage version is newer than what
+is supported.**
 
-This section expands on the :ref:`Cryptography Overview
-<overview_crypto>`. We provides pseudo-code and sample output of what
-a Sync client implementation would do.
-
-Sync Key
---------
-
-The *Sync Key* is a randomly generated 128 bit sequence. In the user
-interface it should be represented as 26 characters from the
-"friendly" base32 alphabet with dashes after the 1st, 6th, 11th, 16th,
-and 21st character. The friendly base32 alphabet uses lower case
-characters and ``8`` instead of ``l`` as well as ``9`` instead of
-``o``.
-
-In pseudo-code::
-
-  sync_key_ui = encodeBase32(sync_key).lowerCase().replace('l', '8').replace('o', '9')
-  sync_key_ui_dashes = sync_key_ui.replaceRegEx(/(.{1,5})/g, "-$1");
-
-Example::
-
-  sync_key = XXX
-  sync_key_ui = XXX
-  sync_key_ui_dashes = XXX
-
-
-Sync Key bundle
----------------
-
-The *Sync Key bundle* is derived from the *Sync Key* via the SHA-256
-HMAC based HKDF (c.f. `RFC 5869 <http://tools.ietf.org/html/rfc5869>`_).
-
-In pseudo-code::
-
-    HMAC_INPUT = "Sync-AES_256_CBC-HMAC256"
-    encryption_key = HMAC-SHA256(sync_key, "" + HMAC_INPUT + username + "\x01")
-    hmac_key = HMAC-SHA256(sync_key, encryption_key + HMAC_INPUT + username + "\x02")
-
-Example::
-
-  username = XXX
-  sync_key = XXX
-  encryption_key = XXX
-  hmac_key = XXX
-
-Bulk key bundles
------------------
-
-The *Sync Key bundle* is used to verify and decrypt the
-special :ref:`crypto/keys record <sync_storageformat5_cryptokeys>`. It
-contains at least the default bulk key bundle (and optionally key
-bundles for specific collections). See the section on
-:ref:`encrypting/decrypting records <sync_storageformat5_crypto>`
-below for the actual mechanics of encrypting/decrypting records.
-
-All other records are encrypted/signed or verified/decrypted,
-respectively, using the appropriate bulk key bundle (typically the
-default one).
-
-To create a bulk key bundle, simply generate two 256 bit keys.
-
-
-.. _sync_storageformat5_crypto:
-
-Encrypting/decrypting records
-=============================
-
-XXX TODO
-
-Example::
-
-  cleartext: XXX
-  IV: XXX
-  encryption_key: XXX
-  hmac_key: XXX
-  ciphertext: XXX
-  HMAC: XXX
-
-
-.. _sync_storageformat5_cryptokeys:
 
 crypto/keys record
 ==================

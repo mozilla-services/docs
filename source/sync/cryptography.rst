@@ -1,4 +1,4 @@
-.. _sync_cryptography
+.. _sync_cryptography:
 
 =================
 Sync Cryptography
