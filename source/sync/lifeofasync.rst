@@ -109,6 +109,30 @@ response and possibly take action. If you received a 304 and have data to
 upload, you can potentially skip processing if you have all the required values
 cached locally.
 
+.. graphviz::
+
+  digraph fetch_info_collections {
+    PREPARE_REQUEST [label="Prepare HTTP Request"];
+    HAVE_SYNCED_BEFORE [label="Have Synced Before?" shape="diamond"];
+    ADD_IMS [label="Add X-If-Modified-Since Header"];
+    PERFORM_REQUEST [label="Perform HTTP Request"];
+    CHECK_RESPONSE [label="Check Response" shape="diamond"];
+    HAVE_OUTGOING [label="Have Outgoing Changes?" shape="diamond"];
+    REAUTHENTICATE [label="Reauthenticate" shape="Mdiamond"];
+    END_SYNC [label="End Sync" shape="Mdiamond"];
+    NEXT_STEP [label="Next Step" shape="Mdiamond"];
+
+    PREPARE_REQUEST -> HAVE_SYNCED_BEFORE;
+    HAVE_SYNCED_BEFORE -> ADD_IMS [label="Yes"];
+    HAVE_SYNCED_BEFORE -> PERFORM_REQUEST [label="No"];
+    ADD_IMS -> PERFORM_REQUEST;
+    PERFORM_REQUEST -> CHECK_RESPONSE [label="Wait for Response"];
+    CHECK_RESPONSE -> HAVE_OUTGOING [label="304"];
+    CHECK_RESPONSE -> REAUTHENTICATE [label="401, 403"];
+    HAVE_OUTGOING -> END_SYNC [label="No"];
+    HAVE_OUTGOING -> NEXT_STEP [label="Yes"];
+  }
+
 Validate meta/global
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -158,6 +182,42 @@ upgrade." If clients see a new storage format, they should probably stop what
 they are doing. Under no circumstances should clients attempt to modify data
 belonging to a newer storage version. Instead, delete all data and perform a
 fresh start (if this is really what you want to do).
+
+**This section is incomplete. There is more that needs to be described. The
+graph below is also incomplete.**
+
+.. graphviz::
+
+  digraph ensure_metaglobal {
+    CHECK_INFO_COLLECTIONS [label="Check info/collections" shape="diamond"]
+    CHECK_ANY_COLLECTIONS [label="Any Collections Exist?" shape="diamond"]
+
+    DELETE_ALL [label="Delete all Server Collections"];
+    CHECK_DELETE_ALL_RESPONSE [label="Process Response" shape="diamond"];
+
+    CHECK_META_MODIFIED [label="Modified Since Last Sync?" shape="diamond"];
+
+    FRESH_START [label="Fresh Start"];
+    START_NEW_SYNC [label="Start New Sync" shape="Mdiamond"];
+
+    CHECK_INFO_COLLECTIONS -> CHECK_ANY_COLLECTIONS [label="No 'meta' collection"];
+
+    CHECK_ANY_COLLECTIONS -> DELETE_ALL [label="Yes"];
+    CHECK_ANY_COLLECTIONS -> FRESH_START [label="No"];
+    DELETE_ALL -> CHECK_DELETE_ALL_RESPONSE [label="Wait for Response"];
+
+    CHECK_DELETE_ALL_RESPONSE -> FRESH_START [label="204 No Content"];
+    CHECK_DELETE_ALL_RESPONSE -> START_NEW_SYNC [label="401, 403"];
+
+    CHECK_ANY_COLLECTIONS -> CHECK_META_MODIFIED [label="Have 'meta' collection"];
+
+    CHECK_META_MODIFIED -> TODO;
+  }
+
+Validate crypto/keys
+^^^^^^^^^^^^^^^^^^^^
+
+**TODO**
 
 ===========
 OLD CONTENT

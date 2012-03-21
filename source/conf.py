@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 import sys, os
 
-extensions = ['sphinx.ext.viewcode']
+extensions = [
+    'sphinx.ext.graphviz',
+    'sphinx.ext.viewcode'
+]
+
+graphviz_output_format = 'svg'
 
 templates_path = ['_templates']
 source_suffix = '.rst'
