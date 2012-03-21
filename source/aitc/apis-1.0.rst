@@ -250,8 +250,8 @@ authenticated user.
       timestamp in the *X-If-Unmodified-Since* header.
 
 
-Apps
-----
+Devices
+-------
 
 APIs in this section provide access to the device records stored for the
 currently authenticated user.
