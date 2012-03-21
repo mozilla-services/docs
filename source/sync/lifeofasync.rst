@@ -219,14 +219,13 @@ Validate crypto/keys
 
 **TODO**
 
-===========
 OLD CONTENT
 ===========
 
 Don't read below this. It is old and needs to be formalized.
 
 Verify set up
-=============
+-------------
 
 ::
 
@@ -244,7 +243,7 @@ Verify set up
     //   - generate + upload new keys
 
 Perform sync
-============
+------------
 
 ::
 
@@ -259,7 +258,7 @@ Perform sync
     // - if meta/global has changed, reupload it
 
 Syncing an engine
-=================
+-----------------
 
 ::
 
@@ -293,7 +292,7 @@ Syncing an engine
               - process repsonse body
 
 High-level implementation notes
-===============================
+-------------------------------
 
 ::
 
