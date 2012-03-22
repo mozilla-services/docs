@@ -173,9 +173,14 @@ collection.
 
 **GET** **https://<endpoint-url>/storage/<collection>**
 
-    Returns a list of the BSOs contained in a collection.  By default only
-    the BSO ids are returned, but full objects can be requested using the
-    **full** parameter.
+    Returns a list of the BSOs contained in a collection.  For example::
+
+        {
+         "items": ["GXS58IDC_12", "GXS58IDC_13", "GXS58IDC_15"]
+        }
+
+    By default only the BSO ids are returned, but full objects can be requested
+    using the **full** parameter.
 
     This request has additional optional parameters:
 
@@ -211,8 +216,9 @@ collection.
     They are triggered by the presence of the appropriate format in the
     *Accept* request header and are prioritized in the order listed below:
 
-    - **application/json**: the output is a JSON list containing the
-      requested records, as either string ids or full JSON objects.
+    - **application/json**: the output is a JSON object with the key "items"
+      mapping to a list of the requested records, as either string ids or full
+      JSON objects.
     - **application/newlines**: the output contains each record on a separate
       line, as either a string id or a full JSON object. Any newlines in each
       record are replaced by '\\u000a'.
@@ -522,10 +528,14 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * The WBO fields "parentid" and "predecessorid" have been removed, along with
   the corresponding query parameters on all requests.
 
-* Timestamps are now reported in integer milliseconds rather than decimal seconds.
+* Timestamps are now reported in integer milliseconds rather than decimal
+  seconds.
 
 * The **GET /info/quota** request now returns an object with keys named "usage"
   and "quota", rather than just a list of numbers.
+
+* The **GET /storage/collection** request now returns a JSON object rather than
+  a JSON list, to guard against certain security issues in older browsers.
 
 * The query parameters for **DELETE /storage/collection** have been removed.
   The only operations now supported are "delete these specific ids" and
@@ -559,7 +569,8 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 
 * The *X-Confirm-Delete* header has been removed.
 
-* The following response codes are explicitly mentioned: 304, 405, 412, 413.
+* The following response codes are explicitly mentioned: 201, 204, 304, 405,
+  412, 413.
 
 * Various details of how Firefox Sync is implemented are no longer emphasized,
   since the protocol is being opened up for other applications.
