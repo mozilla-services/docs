@@ -108,6 +108,7 @@ The inner payload of the ``crypto/keys`` record contains the following fields:
 - **collection**: String stating the collection of the record. Currently fixed
   to "crypto".
 
+Each key is Base64 encoded.
 
 Example
 -------
@@ -119,3 +120,111 @@ Example
   "collections":{},
   "default:['dGhlc2UtYXJlLWV4YWN0bHktMzItY2hhcmFjdGVycy4=',
             'eWV0LWFub3RoZXItc2V0LW9mLTMyLWNoYXJhY3RlcnM=']}
+
+Collection Records
+==================
+
+All records in non-special collections have a common payload format.
+
+The payload is defined as the JSON encoding of an object containing the
+following fields:
+
+- **ciphertext**: Base64 of encrypted cleartext for underlying payload.
+- **IV**: Base64 encoding of IV used for encryption.
+- **hmac**: Base64 encoding of HMAC for this message.
+
+Here is an example:
+
+::
+
+  {
+    "payload": "{\"ciphertext\":\"K5JZc7t4R2DzL6nanW+xsJMDhMZkiyRnG3ahpuz61hmFrDZu7DbsYHD77r5Eadlj\",\"IV\":\"THPKCzWVX35\\/5123ho6mJQ==\",\"hmac\":\"78ecf07c46b12ab71b769532f15977129d5fc0c121ac261bf4dda88b3329f6bd\"}",
+    "id": "GJN0ojnlXXhU",
+    "modified": 1332402035.78
+  }
+
+The format of the unencrypted ciphertext is defined by the collection it
+resides in. See the :ref:`Object Formats<sync_objectformats>` documentation
+for specifics. That being said, the cleartext is almost certainly a JSON
+string representing an object. This will be assumed for the examples below.
+
+Encryption
+----------
+
+Let's assume you have the following JSON payload to encrypt:
+
+::
+
+   {
+     "foo": "supersecret",
+     "bar": "anothersecret"
+   }
+
+Now, in pseudo-code::
+
+   # collection_name is the name of the collection this record will be inserted
+   # into. bulk_key_bundle is an object that represents the decrypted
+   #crypto/keys record. The called function simply extracts the appropriate
+   # key pair for the specified collection.
+   key_pair = bulk_key_bundle.getKeyPair(collection_name);
+
+   # Just some simple aliasing.
+   encryption_key = key_pair.encryption_key
+   hmac_key = key_pair.hmac_key
+
+   iv = randomBytes(16)
+
+   # cleartext is the example JSON above.
+   ciphertext = AES256(cleartext, encryption_key, iv)
+   ciphertext_b64 = Base64Encode(ciphertext)
+
+   hmac = HMACSHA256(ciphertext_b64, hmac_key)
+
+   payload = {
+     "ciphertext": ciphertext_b64,
+     "IV": Base64Encode(iv),
+     "hmac": Base64Encode(hmac)
+   }
+
+   record.payload = JSONEncode(payload)
+
+Decryption
+----------
+
+Decryption is just the opposite of encryption.
+
+Let's assume we get a record from the server:
+
+::
+
+  {
+    "payload": "{\"ciphertext\":\"K5JZc7t4R2DzL6nanW+xsJMDhMZkiyRnG3ahpuz61hmFrDZu7DbsYHD77r5Eadlj\",\"IV\":\"THPKCzWVX35\\/5123ho6mJQ==\",\"hmac\":\"78ecf07c46b12ab71b769532f15977129d5fc0c121ac261bf4dda88b3329f6bd\"}",
+    "id": "GJN0ojnlXXhU",
+    "modified": 1332402035.78
+  }
+
+To decrypt it::
+
+  fields = JSONDecode(record.payload)
+
+  # The HMAC is computed over the Base64 version of the ciphertext, so we
+  # leave the encoding intact for now.
+  ciphertext_b64 = fields.ciphertext
+
+  remote_hmac = Base64Decode(fields.hmac)
+  iv = Base64Decode(fields.IV)
+
+  key_pair = bulk_key_bundle.getKeyPair(collection_name)
+  encryption_key = key_pair.encryption_key
+  hmac_key = key_pair.hmac_key
+
+  local_hmac = HMACSHA256(ciphertext_b64, hmac_key)
+
+  if local_hmac != remote_hmac:
+    throw Error("HMAC verification failed.")
+
+  ciphertext = Base64Decode(ciphertext_b64)
+
+  cleartext = AESDecrypt(ciphertext, encryption_key, iv)
+
+  object = JSONDecode(cleartext)
