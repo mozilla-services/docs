@@ -199,10 +199,6 @@ collection.
 
     - **limit**: an integer. At most that many objects will be returned.
 
-    - **offset**: an integer.  Excludes that many objects from the start of
-      the output.  This is desgined for pagination of results and must be used
-      together with the **limit** parameter.
-
     - **sort**: sorts the output:
        - 'oldest' - orders by modification date (oldest first)
        - 'newest' - orders by modification date (newest first)
@@ -248,8 +244,11 @@ collection.
 
     This request may include the *X-If-Unmodified-Since* header to avoid
     overwriting the data if it has been changed since the client fetched it.
-    Successful requests will receive a **204 No Content** response, with the
-    *X-Timestamp* header giving the new modification time of the object.
+
+    Successful requests will receive a **201 Created** response if a new
+    BSO is created, or a **204 No Content** response if an existing BSO
+    is updated  The response will include an *X-Timestamp* header giving
+    the new modification time of the object.
 
     Note that the server may impose a limit on the amount of data submitted
     for storage in a single BSO.
@@ -428,7 +427,20 @@ protocol.
 
 **200 OK**
 
-    The request was processed successfully.
+    The request was processed successfully, and the server is returning
+    useful information in the response body.
+
+
+**201 Created**
+
+    The request was processed successfully and resulted in the creation of
+    a new BSO.  No entity body is returned.
+
+
+**204 Not Content**
+
+    The request was processed successfully, and the server has no useful
+    data to return in the response body.
 
 
 **304 Not Modified**
@@ -525,7 +537,11 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * The **POST /storage/collection** request no longer returns **modified** as
   part of its output, since this is available in the *X-Timestamp* header.
 
-* Successful **DELETE** and **PUT** requests now give a **204 No Content**
+* Successful **PUT** requests now give a **201 Created** or **204 No Content**
+  response, rather than redundantly returning the value of *X-Timestamp* in
+  the response body.
+
+* Successful **DELETE** requests now give a **204 No Content** response,
   response, rather than redundantly returning the value of *X-Timestamp* in
   the response body.
 
