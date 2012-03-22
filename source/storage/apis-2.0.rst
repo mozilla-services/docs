@@ -33,12 +33,8 @@ Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 |               |           |  64        | a BSO within a collection, though objects in different        |
 |               |           |            | collections may have the same ID.                             |
 |               |           |            |                                                               |
-|               |           |            | BSO ids may contain any alphanumeric character as well as     |
-|               |           |            | the period, underscore and hyphen.                            |
-|               |           |            |                                                               |
-|               |           |            | **Note:**  Applications may impose more stringent requirements|
-|               |           |            | on BSO ids.  For example, the Firefox Sync client expects ids |
-|               |           |            | to be exactly 12 characters from the base64url alphabet.      |
+|               |           |            | BSO ids may only contain characters from the urlsafe-base64   |
+|               |           |            | alphabet (i.e. alphanumerics, underscore and hyphen)          |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | modified      | time      | integer    | The last-modified date, in milliseconds since UNIX epoch      |
 |               | submitted |            | (1970-01-01 00:00:00 UTC).  This is set automatically by the  |
@@ -72,7 +68,8 @@ Collections
 ===========
 
 Each BSO is assigned to a collection with other related BSOs. Collection names
-may only contain alphanumeric characters, period, underscore and hyphen.
+may only contain characters from the urlsafe-base64 alphabet (i.e. alphanumeric
+characters, underscore and hyphen).
 
 Collections are created implicitly on demand, when storing a BSO in them for
 the first time.
