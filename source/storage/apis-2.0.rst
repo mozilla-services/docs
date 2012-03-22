@@ -199,10 +199,6 @@ collection.
 
     - **limit**: an integer. At most that many objects will be returned.
 
-    - **offset**: an integer.  Excludes that many objects from the start of
-      the output.  This is desgined for pagination of results and must be used
-      together with the **limit** parameter.
-
     - **sort**: sorts the output:
        - 'oldest' - orders by modification date (oldest first)
        - 'newest' - orders by modification date (newest first)
