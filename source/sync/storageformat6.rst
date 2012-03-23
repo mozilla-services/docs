@@ -14,14 +14,130 @@ PROPOSAL
 
 **This document is an unofficial proposal. It can and will change.**
 
-Reasons for Change
-==================
+Cryptographic Model
+===================
 
-Storage version 6 is being proposed because Mozilla will be switching Sync
-to harness BrowserID. At the same time, Mozilla will be deploying version 2.0
-of the :ref:`Storage Service<server_storage>`. This opportunity is presenting an
-opportunity to make a clean break from earlier storage formats and to remove
-historical warts from the design.
+The cryptographic model frequently relies on pairs of 256 bit keys. One key is
+used for AES symmetric encryption; the other for HMAC verification. We refer to
+a single key pair as a **Sync Key Pair**.
+
+There exists a special **Sync Key Pair** called the **Sync Root Key**. The
+**Sync Root Key** is effectively a master key used to encrypt and decrypt
+other keys.
+
+Tied to each collection on the server is a specific **Sync Key Pair**. These
+keys are completely different from the **Sync Root Key**. Together, the
+**Sync Key Pairs** tied to collections comprise the **Sync Key Bundle**.
+The **Sync Key Bundle** is just a container that holds **Sync Key Pair**
+instances and maps them to collections.
+
+The **Sync Root Key** encrypts the **Sync Key Bundle** (and the keys inside).
+The encrypted **Sync Key Bundle** is stored on the server.
+
+Data is encrypted on the client using the **Sync Key Pair** appropriate for
+the collection it will be uploaded to.
+
+The **Sync Root Key** can itself be encrypted and stored on the server. The
+mechanism for doing this is not explicitly defined by this specification.
+
+Representation of Key Pairs
+---------------------------
+
+While **Sync Key Pairs** consist of two separate keys, they should be thought
+of as a single immutable entity. To enforce this, a **Sync Key Pair** is
+represented as a single blob of data, not 2. The blob simply consists of the
+512 total bits (64 bytes) comprising the 2 keys. Inside, the HMAC key is
+appended to the encryption key.
+
+In pseudo-code::
+
+   key_pair = encryption_key + hmac_key
+
+When encoded in JSON, these 512 bit buffers are Base64 encoded.
+
+Encrypted Records
+-----------------
+
+All encrypted records share a common payload format and method for encryption
+and decryption.
+
+The payload of an encrypted records effectively consists of the following
+fields:
+
+* **ciphertext**: The encrypted version of the underlying data.
+* **IV**: Initialization vector used by AES encryption.
+* **HMAC**: HMAC for the encrypted message.
+
+Since these 3 items are all related and all are needed to decrypt and verify
+individual records, they are represented by a single entity, a buffer
+containing all 3 fields concatenated together.
+
+Each binary buffer holds the raw bytes constituting the HMAC signature,
+followed by the raw bytes of the IV, followed by the raw bytes of the
+ciphertext.
+
+In pseudo-code::
+
+   data = hmac + iv + ciphertext
+
+The HMAC signature is always the length of the HMAC key. Since Sync uses 256
+bit HMAC keys, the HMAC signature is 256 bits, or 32 bytes.
+
+The IV is fixed-width at 16 bytes.
+
+The ciphertext is variable length.
+
+Encryption
+^^^^^^^^^^
+
+Encryption is the process of taking some piece of data, referred to as
+**cleartext** and converting it to a payload suitable for a record.
+
+We start with a **Sync Key Pair** (which consists of 2 separate keys) and
+cleartext.
+
+In pseudo-code::
+
+   # collection_name is the name of the collection this record will be inserted
+   # into. The called function obtains the appropriate key pair depending on
+   # the collection the record is destined for.
+   key_pair = getKeyPairForCollection(collection_name)
+
+   # Just some aliasing for readability.
+   encryption_key = key_pair.encryption_key
+   hmac_key = key_pair.hmac_key
+
+   iv = randomBytes(16)
+
+   ciphertext = AES256(encryption_key, iv, cleartext)
+
+   message = iv + ciphertext
+
+   hmac = HMACSHA256(hmac_key, message)
+
+   payload = hmac + message
+
+   # When going to JSON, the binary payload buffer is Base64 encoded first.
+   payload_b64 = Base64Encode(payload)
+
+   record.payload = payload_b64
+
+Decryption
+^^^^^^^^^^
+
+Decryption is the process of taking an encrypted payload and verifying and
+decrypting it with a **Sync Key Pair**.
+
+In pesudo-code::
+
+   # If grabbing the record from JSON, it will Base64 encoded.
+   payload_b64 = record.payload
+   payload = Base64Decode(payload_b64)
+
+   # HMAC is first 32 bytes of payload.
+   hmac_record = payload[0:31]
+
+   TODO
 
 Metaglobal Record
 =================
@@ -33,10 +149,11 @@ The **meta/global** record exists with the same semantics as version 5.
 crypto/master Record
 ====================
 
-Version 6 introduces the **crypto/master** record. This record holds an
-**encrypted** version of the 512 bits consisting the Sync Key. The payload
-field of the BSO is the Base64 representation of the ciphertext of the Sync
-Key.
+Version 6 introduces the **crypto/root** record. This record holds an
+**encrypted** **Sync Root Key**.
+
+The payload is the record is the Base64 representation of the ciphertext
+of the **Sync Root Key**.
 
 Encryption, in pseudo-code::
 
