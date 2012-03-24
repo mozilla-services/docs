@@ -42,12 +42,31 @@ This version initially made the switch to a new crypto model based on AES.
 Because of a faulty implementation of the crypto, version 5 was created to
 force alpha clients created with the faulty implementation to upgrade.
 
-Version 5
----------
+Version 5 (Spring 2011 - Current)
+---------------------------------
 
 Version 5 replaces version 3's cryptographic model with one based on AES.
 
 A :ref:`full overview<sync_storageformat5>` is available for reference.
+
+Version 6 (???)
+---------------
+
+**PROPOSAL**
+
+Version 6 is effectively version 5, but with changes to low-level cryptography
+details.
+
+One driving force behind version 6 was the need to support storage of the
+*encrypted* Sync Key on the storage server. This was required in order to
+support BrowserID integration.
+
+Another driving force was the transition to version 2.0 of the
+:ref:`Storage Service<server_storage>`.
+
+Strictly speaking, neither of these require a new global storage version.
+However, they presented an enticing opportunity to fix minor issues with
+version 5.
 
 Collection/Object Format Versions
 =================================
