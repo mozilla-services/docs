@@ -164,7 +164,7 @@ Now, in pseudo-code::
 
    # collection_name is the name of the collection this record will be inserted
    # into. bulk_key_bundle is an object that represents the decrypted
-   #crypto/keys record. The called function simply extracts the appropriate
+   # crypto/keys record. The called function simply extracts the appropriate
    # key pair for the specified collection.
    key_pair = bulk_key_bundle.getKeyPair(collection_name);
 
