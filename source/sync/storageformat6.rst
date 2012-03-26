@@ -24,7 +24,7 @@ is secured against tampering by employing HMAC-SHA256 hashing.
 
 The cryptographic model frequently relies on pairs of 256 bit keys. One key is
 used for AES symmetric encryption; the other for HMAC verification. We refer to
-a single key pair as a **Key Bundle**.
+such a pair of keys as a **Key Bundle**.
 
 Data on the server is organized into collections (e.g. *history*, *bookmarks*).
 Every collection has a single **Key Bundle** associated with it. We refer to
@@ -32,13 +32,16 @@ a **Key Bundle** that is affiliated with a collection as a **Collection Key
 Bundle**. A single **Collection Key Bundle** is used to perform cryptographic
 operations on every record in the collection to which it is associated.
 
+It is recommended, but not technically required, that each **Collection Key Bundle**
+be associated with a single collection.
+
 Special records on the server hold mappings of collection names to their
 respective **Collection Key Bundles**. The **Collection Key Bundles** are
 encrypted using another higher-level **Key Bundle** before they are stored
-on the server. We refer to these higher-level **Key Bundles** as **Key
-Encrypting Key Bundles**.
+on the server. We refer to these higher-level **Key Bundles** as 
+**Key-Encrypting Key Bundles**.
 
-In the simple case, we have a single **Key Encrypting Key Bundle** used to
+In the simple case, we have a single **Key-Encrypting Key Bundle** used to
 encrypt the collection of all **Collection Key Bundles**. Each **Collection
 Key Bundle** is used to encrypt every record in the collection to which it is
 associated. In other words, we have a master key used to unlock other keys
@@ -49,7 +52,7 @@ In graph form:
 .. graphviz::
 
   digraph {
-    ROOT [label="Key Encrypting Key Bundle"];
+    ROOT [label="Key-Encrypting Key Bundle"];
     BOOKMARKS [label="Bookmarks Collection Key Bundle"];
     HISTORY [label="History Collection Key Bundle"];
 
@@ -83,7 +86,9 @@ In pseudo-code::
 
    key_bundle = encryption_key + hmac_key + metadata
 
-When encoded in JSON, key bundles are Base64 encoded.
+When encoded in JSON, key bundles are Base64 encoded. Note that keys are not
+stored in plaintext, so the Base64 encoding will apply to the ciphertext.
+See below.
 
 Encrypted Records
 -----------------
@@ -110,8 +115,8 @@ In pseudo-code::
 
    data = hmac + iv + ciphertext
 
-The HMAC signature is always the length of the HMAC key. Since Sync uses 256
-bit HMAC keys, the HMAC signature is 256 bits, or 32 bytes.
+The HMAC signature is always the length of the HMAC key. Since Sync uses 256-bit
+HMAC keys, the HMAC signature is 256 bits, or 32 bytes.
 
 The IV is fixed-width at 16 bytes.
 
@@ -126,7 +131,7 @@ Encryption
 ^^^^^^^^^^
 
 Encryption is the process of taking some piece of data, referred to as
-**cleartext** and converting it to **Encrypted Data**.
+**cleartext**, and converting it to **Encrypted Data**.
 
 We start with a **Key Bundle** and cleartext.
 
@@ -134,7 +139,7 @@ In pseudo-code::
 
    # collection_name is the name of the collection this record will be inserted
    # into. The called function obtains the appropriate key bundle depending on
-   # the collection the record is destined for.
+   # the destination collection of the record.
    bundle = getBundleForCollection(collection_name)
 
    # Just some aliasing for readability.
@@ -151,7 +156,7 @@ In pseudo-code::
 
    encrypted_data = hmac + message
 
-   # When going to JSON, the binary payload buffer is Base64 encoded first.
+   # When going to JSON, the binary payload buffer is Base64-encoded first.
    record.payload = Base64Encode(encrypted_data)
 
 Decryption
@@ -190,7 +195,7 @@ In pesudo-code::
 
    cleartext = AESDecrypt(encryption_key, iv, ciphertext)
 
-Metaglobal Record
+Global Metadata Record
 =================
 
 The **meta/global** record exists with the same semantics as version 5, the
@@ -264,13 +269,14 @@ For example::
         "bookmarks": "ENCRYPTED KEY 0",
         "history": "ENCRYPTED KEY 1"
      },
-     "encryptingKey": "ENCRYPTED KEY ENCRYPTING KEY"
+     "encryptingKey": "ENCRYPTED KEY-ENCRYPTING KEY"
    }
 
-The client would decrypt the encrypting key. It would either have this itself
-before making the request. Or, it would have its parent key and would decrypt
-it from the encrypted version in the record. It would then take the decrypted
-encrypting key and decrypt the individual **Collection Key Bundles**.
+The client would -- if not delivered out-of-band -- decrypt the encrypting key.
+This would require its parent key and the contents of this record.
+
+The client would then take the decrypted key-encrypting key and decrypt the
+individual **Collection Key Bundles**.
 
 Pros:
 
@@ -290,12 +296,12 @@ For example::
 
    {
      "data": "ENCRYPTED DATA",
-     "encrypyingKey": "ENCRYPTED KEY ENCRYPTING KEY"
+     "encryptingKey": "ENCRYPTED KEY-ENCRYPTING KEY"
    }
 
 The decrypted key encrypting key would first decrypt the *data* field. This
 would expose the mapping of collection names to *encrypted* **Key Bundles**,
-just like what's in Option 1. From there, the same key encrypting key would
+just as in Option 1. From there, the same key-encrypting key would
 decrypt each individual **Key Bundle**.
 
 Yes, the **Key Bundles** are encrypted with the same key twice. We do not want
@@ -311,7 +317,7 @@ Pros:
 Cons:
 
 * More complicated than version 1
-* Double encryption is slightly less performant.
+* Double encryption involves extra work.
 
 No encryptingKey Variation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -332,19 +338,22 @@ Base32 characters). The historical reason for it being 128 bits is that in
 early versions of Sync (before J-PAKE), people would need to manually enter
 the Sync Key to pair other devices. Even with J-PAKE, people may need to
 manually enter the Sync Key (known as the *Recovery Key* in UI parlance) into
-their client. From the 128 bit Sync Key, 2 256 bit keys were derived via HKDF.
+their client. From the 128-bit Sync Key, two 256-bit keys were derived via HKDF.
 
 With the intent to use BrowserID's key wrapping facility, we feel Sync no
 longer has the requirement that the Sync Key be manageable to enter from
 UI. This is because your Sync Key will be accessible merely by logging into
 BrowserID (your BrowserID credentials will unlock a BrowserID user key and
-that user key can unwrap an *encrypted* Sync Key stored on the server.
+that user key can unwrap an *encrypted* Sync Key stored on the server).
 
-Therefore, in version 6, the Sync Key will consist of a pair of 256 bit keys.
+(We expect that users not using BrowserID will use some other mechanism for
+key exchange other than keyboard entry.)
+
+Therefore, in version 6, the Sync Key will consist of a pair of 256-bit keys.
 Each key will be generated from a cryptographically secure random number
 generator and will not be derived from any other source. This effectively
-replaces the 1 128 bit random key and 2 256 HKDF derived keys with 2 completely
-random 256 bit keys.
+replaces the single 128-bit random key and two 256-bit HKDF-derived keys with
+two completely random 256-bit keys.
 
 Sync Key Stored on Server
 =========================
@@ -354,12 +363,12 @@ Version 6 supports storing the **encrypted** Sync Key on the Storage Server.
 Key Pair Encoding
 -----------------
 
-In version 5, key pairs (the 2 256 bit keys used for symmetric encryption and
+In version 5, key pairs (the two 256-bit keys used for symmetric encryption and
 HMAC verification) were represented in payloads as arrays consisting of two
 strings, each representing the Base64 encoded version of the key.
 
 In version 6, key pairs are transmitted as a a single string or byte array.
-The 2 keys are merely concatenated together to form 1 512 bit data chunk.
+The two keys are merely concatenated together to form one 512-bit data chunk.
 Version 6 also supports additional metadata after the keys. However, the format
 of this metadata is not yet defined.
 
@@ -367,7 +376,7 @@ IV Included in HMAC Hash
 ------------------------
 
 In version 6, the IV is included in the HMAC hash. In previous versions, the
-IV was not included. This change theoretically adds more security to the
+IV was not included. This change adds more theoretical security to the
 verification process.
 
 HMAC Performed Over Raw Ciphertext
