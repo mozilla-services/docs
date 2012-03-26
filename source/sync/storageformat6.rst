@@ -99,7 +99,7 @@ fields:
 * **HMAC**: HMAC for the encrypted message.
 
 Since these 3 items are all related and all are needed to decrypt and verify
-individual messages, they are represented by a single entity, a buffer
+individual messages, they are represented by a single entity - a buffer
 containing all 3 fields concatenated together.
 
 Each binary buffer holds the raw bytes constituting the HMAC signature,
@@ -193,21 +193,61 @@ In pesudo-code::
 Metaglobal Record
 =================
 
-The **meta/global** record exists with the same semantics as version 5.
+The **meta/global** record exists with the same semantics as version 5, the
+only difference being that the **storageVersion** is **6**.
 
 **TODO carry version 5's documentation forward.**
+
+Example::
+
+   {
+     "syncID": "7vO3Zcdu6V4I",
+     "storageVersion": 6,
+     "engines":{
+       "clients":   {"version":1,"syncID":"Re1DKzUQE2jt"},
+       "bookmarks": {"version":2,"syncID":"ApPN6v8VY42s"},
+       "forms":     {"version":1,"syncID":"lLnCTaQM3SPR"},
+       "tabs":      {"version":1,"syncID":"G1nU87H-7jdl"},
+       "history":   {"version":1,"syncID":"9Tvy_Vlb44b2"},
+       "passwords": {"version":1,"syncID":"yfBi2v7PpFO2"},
+       "prefs":     {"version":2,"syncID":"8eONx16GXAlp"}
+     }
+   }
 
 crypto Collection
 =================
 
 There exists a special collection on the server named **crypto**. This
-collection holds records that contain **Key Bundles**.
+collection holds records that contain mappings of collections to **Key
+Bundles**.
+
+Each record in the *crypto* collection has associated with it specific
+semantics. This specification is intentionally vague as to what records and
+semantics are defined, as it is up to clients to define those. In other words,
+the set of records on the server and the specifics of which **Collection Key
+Bundles** they contain and/or which **Key Encrypting Key Bundle** is used to
+secure them is left to the purvue of the client.
+
+The rationale for this is that users may wish to manage their **Collection Key
+Bundles** with different levels of access or security. For example, the record
+containing all the keys may only be decrypted with a highly secure parent key,
+while another record may contain keys for less-sensitive collections, which can
+be unlocked using a key derived from a less secure method, such as PBKDF2.
+
+Clients should support the ability to intelligently use different sets of
+**Collection Key Bundles**, depending on what the user has provided them
+access to. This means clients should not be eager to delete collections for
+which it doesn't have the **Collection Key Bundle**, as the user may have
+purposefully withheld access to that specific collection.
+
+Record Format
+-------------
 
 The exact format of records in this collection has yet to be decided. We have
 a few options.
 
 Option 1
---------
+^^^^^^^^
 
 The payload of every record is an object containing the following fields:
 
@@ -242,7 +282,7 @@ Cons:
   collections.
 
 Options 2
----------
+^^^^^^^^^
 
 This is similar to Option 1 except that the mapping info is itself encrypted.
 
@@ -274,7 +314,7 @@ Cons:
 * Double encryption is slightly less performant.
 
 No encryptingKey Variation
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There is a variation of the above options where the *encrypted* key encrypting
 key is not stored in the record. Instead, it is stored in another record on
