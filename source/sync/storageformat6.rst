@@ -196,7 +196,7 @@ In pesudo-code::
    cleartext = AESDecrypt(encryption_key, iv, ciphertext)
 
 Global Metadata Record
-=================
+======================
 
 The **meta/global** record exists with the same semantics as version 5, the
 only difference being that the **storageVersion** is **6**.
