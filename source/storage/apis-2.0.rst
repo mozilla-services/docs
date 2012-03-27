@@ -258,6 +258,8 @@ collection.
 
     Possible HTTP error responses:
 
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  the object has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
     - **413 Request Entity Too Large:**  the object is larger than the
@@ -305,8 +307,10 @@ collection.
 
     Possible HTTP error responses:
 
-    - **412 Precondition Failed:**  an object in the collection has been modified
-      since the timestamp in the *X-If-Unmodified-Since* header.
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
+    - **412 Precondition Failed:**  an object in the collection has been
+      modified since the timestamp in the *X-If-Unmodified-Since* header.
     - **413 Request Entity Too Large:**  the request contains more data than the
       server is willing to process in a single batch.
 
@@ -327,6 +331,8 @@ collection.
 
     - **400 Bad Request:**  too many ids where included in the query parameter.
     - **404 Not Found:**  the user has no such collection.
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  an object in the collection has been
       modified since the timestamp in the *X-If-Unmodified-Since* header.
 
@@ -340,6 +346,8 @@ collection.
 
     - **404 Not Found:**  the user has no such collection, or it contains
       no such object.
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  the object has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
 
@@ -353,6 +361,11 @@ APIs in this section are used for interaction with multiple collections.
 
     Deletes all records for the user.
     Successful requests will receive a **204 No Content** response.
+
+    Possible HTTP error responses:
+
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
 
 
 Request Headers
@@ -390,6 +403,10 @@ Response Headers
     the server is undergoing maintenance. The client should not attempt any
     further requests to the server for the number of seconds specified in
     the header value.
+
+    When sent together with a HTTP 409 status code, this header gives the time
+    after which the conflicting edits are expected to complete.  Clients should
+    wait until at least this time before retrying the request.
 
 **X-Backoff**
 
@@ -480,6 +497,21 @@ protocol.
 
     The request URL does not support the specific request method.  For example,
     attempting a PUT request to /info/quota would produce a 405 response.
+
+
+**409 Conflict**
+
+    The write request (PUT, POST, DELETE) has been rejected due conflicting
+    changes made by another client, either to the target resource itself or
+    to a related resource.  The server cannot currently complete the request
+    without risking data loss.
+
+    The client should retry the request after accounting for any changes
+    introduced by other clients.
+
+    This response will include a *Retry-After* header indicating the time at
+    which the conflicting edits are expected to complete.  Clients should
+    wait until at least this time before retrying the request.
 
 
 **412 Precondition Failed**
