@@ -14,7 +14,6 @@ deeper.
    :maxdepth: 2
 
    overview
-   cryptography
    lifeofasync
    storageformats
    storageformat5
