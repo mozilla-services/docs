@@ -6,7 +6,6 @@ About this Website
 This website is created using the Sphinx tool and all its content is 
 versioned in a Mercurial repository.
 
-
 If you want to change its content you can:
 
 - Discuss the change in our Mailing list at https://mail.mozilla.org/listinfo/services-dev
@@ -15,6 +14,23 @@ If you want to change its content you can:
   with **make html**
 - Add a Bugzilla issue in Mozilla Services / Server: Other
 
+Generating Documentation
+========================
+
+To generate the docs from source, you'll need to obtain Sphinx along with some
+extensions.
+
+Assuming you are using Virtualenv::
+
+   $ virtualenv sphinx-env
+   $ source sphinx-env/bin/activate
+   # You are now in the fresh virtualenv for Sphinx.
+
+   # Install dependencies.
+   $ pip install sphinx sphinxcontrib-seqdiag
+
+   # Build HTML docs.
+   $ make html
 
 Structure Description
 :::::::::::::::::::::
