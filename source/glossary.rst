@@ -2,9 +2,6 @@
 Glossary
 ========
 
-Terms
-=====
-
 .. glossary::
    :sorted:
 
@@ -62,25 +59,3 @@ Terms
       Derived from the master secret and auth token, used as **secret**.
       This is the only secret shared with the client and is different for each
       auth token.
-
-
-Assumptions
-===========
-
-- A Login Server detains the secret for all the Service Nodes for a given
-  Service.
-
-- Any given webhead in a cluster can receive calls to all service
-  nodes in the cluster.
-
-- The Login Server will support only BrowserID at first,
-  but could support any authentication protocol in the future, as long as it
-  can be done with a single call
-
-- All servers are time-synced
-
-- The expires value for a token is a fixed value per application.
-  For example it could be 30mn for Sync and 2 hours for bipostal.
-
-- The Login Server keeps a white list of domains for BID verifications
-
