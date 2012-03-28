@@ -7,7 +7,7 @@ Welcome to the Mozilla Services Documentation front page.
 This site contains technical information about the various services
 and products provided by the **Mozilla Services Team**. The documentation on
 this site is meant to be more declarative and static in nature.
- 
+
 Other information surrounding the products and services detailed on this site
 can be found at:
 
@@ -49,6 +49,7 @@ jump to the detailed documentation for each service:
    reg/index
    keyexchange/index
    sreg/index
+   token/index
 
 
 Server-side development guide
