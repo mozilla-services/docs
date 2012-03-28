@@ -3,7 +3,8 @@ import sys, os
 
 extensions = [
     'sphinx.ext.graphviz',
-    'sphinx.ext.viewcode'
+    'sphinx.ext.viewcode',
+    'sphinxcontrib.seqdiag',
 ]
 
 graphviz_output_format = 'svg'

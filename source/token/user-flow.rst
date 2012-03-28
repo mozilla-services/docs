@@ -7,30 +7,33 @@ Here's the proposed two-step flow (with Browser ID):
 1. the client trades a browser id assertion for an auth token and corresponding secret
 2. the client uses the auth token to sign subsequent requests using two-legged oauth
 
-Getting an :term:`Auth token` ::
+Getting an :term:`Auth token`:
 
+.. seqdiag::
 
-    Client                       Login Server                  BID         User DB          Node Assignment Server
-    ===========================================================================================================
-                                    |                          |             |                    |
-    request token ---- [1] -------->|------> verify --- [2] -->|             |                    |
-                                    |       get node -- [3] ---|------------>|--> lookup          |
-                                    |                          |             |<-- return node     |
-                                    |  attribute node --[4]----|-------------|------------------->|--> set node
-                                    |                          |             |                    |<-- node
-                                    |<--- build token   [5]    |             |                    |
-    keep token <-------- [6] -------|                          |             |                    |
+   seqdiag {
+     Client -> "Login Server" [label="request token [1]"];
+     "Login Server" -> BID [label="verify [2]"];
+     "Login Server" <-- BID;
+     "Login Server" -> "User DB" [label="get node [3]"];
+     "Login Server" <- "User DB" [label="return node"];
+     "Login Server" -> "Node Assignment Server" [label="assign node [4]"];
+     "Login Server" <- "Node Assignment Server" [label="return node"];
+     "Login Server" -> "Login Server" [label="create response [5]"];
+     "Client" <- "Login Server" [label="token [6]"];
+   }
 
-Calling the :term:`Service` ::
+Calling the :term:`Service`:
 
-    Client                                          Service Node
-    ============================================================
-    create signed auth header [7]    |                 |
-    call node --------------- [8] ---|---------------->|--> verify token [9]
-                                     |                 |    verify request signature [10]
-                                     |                 |<-- process request [11]
-    get response <-------------------|-----------------|
+.. seqdiag::
 
+   seqdiag {
+     Client -> Client [label="sign request [7]"];
+     Client -> "Service Node" [label="perform request [8]"];
+     "Service Node" -> "Service Node" [label="verify token and signature [9], [10]"];
+     "Service Node" -> "Service Node" [label="process request [11]"];
+     Client <- "Service Node" [label="response"];
+   }
 
 Detailed steps:
 
