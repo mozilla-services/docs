@@ -38,11 +38,12 @@ Glossary
 
       See https://tools.ietf.org/html/rfc5869
 
-   Two-Legged OAuth
-      An authentication scheme for HTTP requests, based on a HMAC
-      signature over the request metadata.
+   Mac Access Auth
+      An HTTP authentication method using a message authentication code
+      (MAC) algorithm to provide cryptographic verification of portions of
+      HTTP requests.
 
-      See http://tools.ietf.org/html/rfc5849#section-3
+      See https://tools.ietf.org/html/draft-ietf-oauth-v2-http-mac-01
 
    Auth Token
       Used to identify the user after starting a session.  Contains the

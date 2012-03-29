@@ -4,8 +4,11 @@ User Flow
 
 Here's the proposed two-step flow (with Browser ID):
 
-1. the client trades a browser id assertion for an auth token and corresponding secret
-2. the client uses the auth token to sign subsequent requests using two-legged oauth
+1. the client trades a browser id assertion for an :term:`Auth token` and
+   corresponding secret
+2. the client uses the auth token to sign subsequent requests using
+   :term:`MAC Access Auth`.
+
 
 Getting an :term:`Auth token` ::
 
@@ -56,39 +59,41 @@ Detailed steps:
   The :term:`Auth Token` contains the user id and a timestamp, and is signed
   using the :term:`Signing Secret`. The :term:`Token Secret` is derived from
   the :term:`Master Secret` and :term:`Auth Token` using :term:`HKDF`.
+
   It also adds the :term:`Node` url in the response under
-  *service_entry* [6]
+  *api_endpoint* [6]
 
   ::
 
     HTTP/1.1 200 OK
     Content-Type: application/json
 
-    {'oauth_consumer_key': <auth-token>,
-        'oauth_consumer_secret': <token-secret>,
-        'service_entry': <node>
-        }
+    {'id': <token>,
+     'secret': <derived-secret>,
+     'uid': 12345,
+     'api_endpoint': 'https://example.com/app/1.0/users/12345',
+    }
 
 - the client saves the node location and oauth parameters to use in subsequent
   requests. [6]
 
-- for each subsequent request to the :term:`Service`, the client calculates a special
-  Authorization header using two-legged OAuth [7] and sends the request to the
-  allocated node location [8]::
+- for each subsequent request to the :term:`Service`, the client calculates a
+  special Authorization header using :term:`MAC Access Auth` [7] and sends
+  the request to the allocated node location [8]::
 
-     POST /request HTTP/1.1
-     Host: some.node.services.mozilla.com
-     Authorization: OAuth realm="Example",
-                    oauth_consumer_key=<auth-token>
-                    oauth_signature_method="HMAC-SHA1",
-                    oauth_timestamp="137131201",   (client timestamp)
-                    oauth_nonce="7d8f3e4a",
-                    oauth_signature="bYT5CMsGcbgUdFHObYMEfcx6bsw%3D"
+    POST /request HTTP/1.1
+    Host: some.node.services.mozilla.com
+    Authorization: MAC id=<auth-token>
+                       ts="137131201",   (client timestamp)
+                       nonce="7d8f3e4a",
+                       mac="bYT5CMsGcbgUdFHObYMEfcx6bsw="
 
 - the node uses the :term:`Signing Secret` to validate the :term:`Auth Token` [9].  If invalid
   or expired then the node returns a 401
+
 - the node calculates the :term:`Token Secret` from its :term:`Master Secret` and the
   :term:`Auth Token`, and checks whether the signature in the Authorization header is
   valid [10]. If it's an invalid then the node returns a 401
+
 - the node processes the request as defined by the :term:`Service` [11]
 
