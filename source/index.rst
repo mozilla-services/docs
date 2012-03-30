@@ -51,6 +51,7 @@ jump to the detailed documentation for each service:
    keyexchange/index
    sreg/index
    token/index
+   aitc/index
 
 
 Server-side development guide
