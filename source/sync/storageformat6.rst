@@ -4,15 +4,14 @@
 Global Storage Version 6
 ========================
 
+.. attention::
+
+  This document is an unofficial proposal. It will likely change.
+
 This document describes version 6 of Sync's global storage format. This
 describes not only the technical details of the storage format, but also some
 semantics for how clients supporting version 6 should interact with the Sync
 server.
-
-PROPOSAL
-========
-
-**This document is an unofficial proposal. It will likely change.**
 
 Cryptographic Model
 ===================
