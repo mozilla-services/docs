@@ -8,6 +8,8 @@ extensions = [
 ]
 
 graphviz_output_format = 'svg'
+blockdiag_antialias = True
+seqdiag_antialias = True
 
 templates_path = ['_templates']
 source_suffix = '.rst'
