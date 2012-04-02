@@ -20,7 +20,6 @@ MDN contains content specific for helping developers.
 To contribute to this site, see :ref:`about`.
 
 
-
 How To...
 =========
 
