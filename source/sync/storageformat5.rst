@@ -185,6 +185,8 @@ You take your cleartext input (which is typically a JSON string representing an
 object) and feed it into AES. You Base64 encode the raw byte output of that and
 feed that into HMAC SHA-256.
 
+The AES cipher mode is CBC.
+
 In pseudo-code::
 
     cleartext = "SECRET MESSAGE"
