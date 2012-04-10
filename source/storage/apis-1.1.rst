@@ -357,7 +357,7 @@ HTTP status codes
 
 **503**
 
-    Indicates, in conjuction with the **Retry-After** header, that the server
+    Indicates, in conjunction with the **Retry-After** header, that the server
     is undergoing maintenance. The client should not attempt another sync for
     the number of seconds specified in the header value. The response body
     may contain a JSON string describing the server's status or error.

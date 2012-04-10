@@ -157,7 +157,7 @@ Tested under Gentoo.
     - virtualenv
     - mercurial
 
-    With gentoo use::
+    With Gentoo use::
 
         emerge -avuDN flup virtualenv mercurial
 

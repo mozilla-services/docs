@@ -5,7 +5,7 @@ Server API v1.0
 General description
 ===================
 
-The URL for a SReg request is structured as follows::
+The URL for a Sreg request is structured as follows::
 
     http://<server name>/<username>/<further instruction>
 
@@ -19,7 +19,7 @@ APIs
 
 **GET** **https://server/username/node/weave**
 
-    Gets the user a weave node. In general, if the sreg version is called, it
+    Gets the user a weave node. In general, if the Sreg version is called, it
     is expected that a new node will be assigned (client should already have
     failed to get the node out of ldap), but this is not necessarily the case,
     and it can return a currently assigned node.

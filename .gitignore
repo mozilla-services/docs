@@ -4,3 +4,4 @@ bin
 include
 .git
 .hg
+*.swp

@@ -248,7 +248,7 @@ The generated config object would then have sections named `storage`,
 `host:node0`, `host:node1`, etc., as you might expect.  In addition to being
 available as separate sections, however, these configurations can be merged
 with the sections they refer to to generate "override" configs.  These are made
-avaialable via the `merge(*sections)` method on the config object.
+available via the `merge(*sections)` method on the config object.
 
 So, `app.config` would produce::
 

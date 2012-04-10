@@ -145,7 +145,7 @@ SHA-256 HMAC-based HKDF (`RFC 5869 <http://tools.ietf.org/html/rfc5869>`_).
 Remember that a *key bundle* consists of a 256 bit symmetric *encryption key*
 and a *HMAC key*.
 
-In pesudo-code::
+In pseudo-code::
 
   HMAC_INPUT = "Sync-AES_256_CBC-HMAC256"
   info = HMAC_INPUT + username
@@ -353,7 +353,7 @@ The inner payload of the ``crypto/keys`` record contains the following fields:
 - **default**: Array of length 2 containing the default key pair (encryption
   key, HMAC key).
 - **collections**: Object mapping collection name to collection-specific key
-  pairs which are arrays of length 2 (encryption key, hMAC key).
+  pairs which are arrays of length 2 (encryption key, HMAC key).
 - **collection**: String stating the collection of the record. Currently fixed
   to "crypto".
 

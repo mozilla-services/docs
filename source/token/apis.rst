@@ -19,7 +19,7 @@ Token Server API v1.0
     - **app_version** is the specific version number of the api that you want
       to access.
 
-    The first /1.0/ in the URL defines the version of the sagrada token.
+    The first /1.0/ in the URL defines the version of the Sagrada token.
 
     Example for Browser-Id::
 
@@ -30,9 +30,9 @@ Token Server API v1.0
     This API returns several values in a json mapping:
 
     - **id** -- a signed authorization token, containing the
-      user's id for hthe application and the node.
+      user's id for the application and the node.
     - **secret** -- a secret derived from the shared secret
-    - **uid** -- the user id for this servic
+    - **uid** -- the user id for this service
     - **api_endpoint** -- the root URL for the user for the service.
 
     Example::

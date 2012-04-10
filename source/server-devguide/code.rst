@@ -77,7 +77,7 @@ Makefile
 
 Every project should have a Makefile with these targets:
 
-- **build**: used to build the project inplace and all its dependencies.
+- **build**: used to build the project in-place and all its dependencies.
 - **test**: used to run all tests and produce tests coverage and lint reports.
 - **build_rpms**: used to build all RPMs for the project.
 

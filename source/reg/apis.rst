@@ -178,7 +178,7 @@ APIs
 
 **GET** **https://server/misc/1.0/captcha_html**
 
-    Returns an html body string containing a Recaptcha challenge captcha.
+    Returns an html body string containing a reCaptcha challenge captcha.
     The PUT API to create a user will expect the challenge and response
     from this captcha.
 

@@ -7,6 +7,13 @@ extensions = [
     'sphinxcontrib.seqdiag',
 ]
 
+try:
+    import sphinxcontrib.spelling
+except ImportError:
+    pass
+else:
+    extensions.append("sphinxcontrib.spelling")
+
 graphviz_output_format = 'svg'
 blockdiag_antialias = True
 seqdiag_antialias = True

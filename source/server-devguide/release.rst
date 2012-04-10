@@ -46,11 +46,11 @@ Extract of a spec file::
     $ hg ci -m 'starting the 1.3 developement'
     $ hg push -f    (-f is used to create the new branch in the central repo)
 
-Once everything is commited, go back to the release branch::
+Once everything is committed, go back to the release branch::
 
      $ hg up 1.2-release
 
-Change the .spec file version to 1.2 (it's propably 1.2.devX right now)
+Change the .spec file version to 1.2 (it's probably 1.2.devX right now)
 
 
 2. Pin the dependencies versions
@@ -99,7 +99,7 @@ Each release has a section with the date, containing three parts:
 
 - Impacts: which teams are impacted by the release (Ops, QA, Infrasec, etc)
 - Dependencies: list internal dependencies and their versions.
-- Relevant changes: lists relevant changes with bugzilla numbers.
+- Relevant changes: lists relevant changes with Bugzilla numbers.
 
 Example::
 
@@ -198,7 +198,7 @@ will not be released to PyPI, let's use these conventions:
 .. Note::
 
     *MozSvc* is pronounced **Mozz-Vikk**, which is an ancient Irish Gaelic
-    word that literaly means **"Viking Mice"**.
+    word that literally means **"Viking Mice"**.
 
 
 Versioning scheme

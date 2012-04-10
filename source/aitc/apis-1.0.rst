@@ -4,7 +4,7 @@
 Apps-In-The-Cloud API v1.0
 ==========================
 
-The AITC API defines a HTTP web service used to store and retrieve stuctured
+The AITC API defines a HTTP web service used to store and retrieve structured
 JSON records that specify a user's **Apps** and **Devices**.
 
 
@@ -48,7 +48,7 @@ A full **App Record** document contains the following fields:
 | modifiedAt       | required  | integer,              | The time at which the application record was last  |
 |                  |           | millisecond timestamp | modified; set by the server on each write.         |
 +------------------+-----------+-----------------------+----------------------------------------------------+
-| receipts         | required  | array of strings      | List of the user's purchase recepits for this      |
+| receipts         | required  | array of strings      | List of the user's purchase receipts for this      |
 |                  |           |                       | application.  Receipts are opaque strings          |
 +------------------+-----------+-----------------------+----------------------------------------------------+
 
@@ -377,7 +377,7 @@ Response Headers
     a **200 OK**.
 
     Clients should perform the minimum number of additional requests required
-    to maintain consistency of their stored data, then not attempt any futher
+    to maintain consistency of their stored data, then not attempt any further
     requests for the number of seconds specified in the header value.
 
 **X-Timestamp**

@@ -144,7 +144,7 @@ GET
     - **newer**: Returns only ids for objects in the collection that have been
       last modified since the date given.
     - **full**: If defined, returns the full WBO, rather than just the id.
-    - **index_above**: If defined, only returns items with a higher sortindexi
+    - **index_above**: If defined, only returns items with a higher sortindex
       than the value specified.
     - **index_below**: If defined, only returns items with a lower sortindex
       than the value specified.

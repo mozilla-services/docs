@@ -416,7 +416,7 @@ Response Headers
     a **200 OK**.
 
     Clients should perform the minimum number of additional requests required
-    to maintain consistency of their stored data, then not attempt any futher
+    to maintain consistency of their stored data, then not attempt any further
     requests for the number of seconds specified in the header value.
 
 **X-Timestamp**

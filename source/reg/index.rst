@@ -35,6 +35,6 @@ Resources
 =========
 
 - Original wiki page: https://wiki.mozilla.org/Services/Sync/Server/API/User/1.0
-- Continous Integration server: XXX
+- Continuous Integration server: XXX
 - Server: https://hg.mozilla.org/services/server-reg
 - Client: Firefox 4+

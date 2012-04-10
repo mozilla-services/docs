@@ -30,7 +30,7 @@ sent to the cloud. While many services encrypt data as it is being
 the server.
 
 This means that the Sync server operators can't read your data - even if they
-wanted to. The only way your data can be read is if someone posesses your
+wanted to. The only way your data can be read is if someone possesses your
 secret Sync Key (sometimes referred to as a Recovery Key). This can occur if
 your device is lost or hacked or if you reveal it to another party. The
 important fact to note is that the Sync Key is never made available to the Sync

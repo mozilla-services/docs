@@ -166,7 +166,7 @@ Decryption is the process of taking **Encryted Data** and turning it into
 
 Decryption requires **Encrypted Data** and a **Key Bundle**.
 
-In pesudo-code::
+In pseudo-code::
 
    bundle = getBundleForCollection(collection_name)
    encryption_key = bundle.encryption_key
@@ -230,7 +230,7 @@ semantics. This specification is intentionally vague as to what records and
 semantics are defined, as it is up to clients to define those. In other words,
 the set of records on the server and the specifics of which **Collection Key
 Bundles** they contain and/or which **Key Encrypting Key Bundle** is used to
-secure them is left to the purvue of the client.
+secure them is left to the purview of the client.
 
 The rationale for this is that users may wish to manage their **Collection Key
 Bundles** with different levels of access or security. For example, the record

@@ -11,7 +11,7 @@ Prerequisites
 Setting up a development environment for Services consists of installing
 those packages:
 
-1. make (installed by default on most Linuces)
+1. make (installed by default on most Linuxes)
 2. the latest gcc
 3. Python 2.6 (installed by default under Debuntu, *python26* under CentOS)
 4. Python 2.6 headers (*python2.6-dev* under Debuntu,

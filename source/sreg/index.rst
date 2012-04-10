@@ -4,7 +4,7 @@
 Secure-Registration (Mozilla specific)
 ======================================
 
-.. warning:: The SReg service is used internally in the Mozilla infrastructure
+.. warning:: The Sreg service is used internally in the Mozilla infrastructure
    for security reasons and it is most likely that you will never
    need it outside Mozilla.
 
@@ -51,6 +51,6 @@ Resources
 =========
 
 - Original wiki design page/meeting notes: https://wiki.mozilla.org/Services/Sync/SRegAPI
-- Continous Integration server: XXX
+- Continuous Integration server: XXX
 - Server: https://hg.mozilla.org/services/server-sreg
 - Client: https://hg.mozilla.org/services/server-core/file/tip/services/auth/mozilla_sreg.py
