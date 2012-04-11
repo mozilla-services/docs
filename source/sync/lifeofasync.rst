@@ -217,30 +217,64 @@ graph below is also incomplete.**
 Validate crypto/keys
 ^^^^^^^^^^^^^^^^^^^^
 
-**TODO**
+.. graphviz::
+
+  digraph check_crypto {
+    HAVE_KEYS [label="Have Keys Cached?" shape="diamond"];
+    CRYPTO_COLLECTION_EXISTS [label="crypto Collection Exists?" shape="diamond"];
+    CRYPTO_COLLECTION_EXISTS2 [label="crypto Collection Exists?" shape="diamond"];
+    CRYPTO_COLLECTION_MODIFIED [label="crypto Collection Modified?" shape="diamond"];
+    GENERATE_KEYS [label="Generate Keys"];
+    FETCH_KEYS [label="Fetch Keys"];
+    UPLOAD_KEYS [label="Upload Keys"];
+    VALIDATE_KEYS [label="Keys Valid?" shape="diamond"];
+    NEXT_STEP [label="Next Step"];
+    WUT [label="WUT?"];
+    ABORT [label="Abort"];
+
+    HAVE_KEYS -> CRYPTO_COLLECTION_EXISTS [label="No"];
+
+    CRYPTO_COLLECTION_EXISTS -> GENERATE_KEYS [label="No"];
+    CRYPTO_COLLECTION_EXISTS -> FETCH_KEYS [label="Yes"];
+    FETCH_KEYS -> VALIDATE_KEYS [label="200 OK"];
+    FETCH_KEYS -> ABORT [label="401, 403"];
+    VALIDATE_KEYS -> NEXT_STEP [label="OK"];
+    VALIDATE_KEYS -> GENERATE_KEYS [label="Not OK"];
+    GENERATE_KEYS -> UPLOAD_KEYS;
+    UPLOAD_KEYS -> NEXT_STEP [label="201 No Context"];
+    UPLOAD_KEYS -> ABORT [label="401, 403"];
+
+    HAVE_KEYS -> CRYPTO_COLLECTION_EXISTS2 [label="Yes"];
+    CRYPTO_COLLECTION_EXISTS2 -> CRYPTO_COLLECTION_MODIFIED [label="Yes"];
+    CRYPTO_COLLECTION_EXISTS2 -> WUT [label="No"];
+    CRYPTO_COLLECTION_MODIFIED -> NEXT_STEP [label="No"];
+    CRYPTO_COLLECTION_MODIFIED -> FETCH_KEYS [label="Yes"];
+  }
+
+Collections Pre-Sync
+^^^^^^^^^^^^^^^^^^^^
+
+Once meta/global and the cryptographic keys are in a good state, it is time
+to start syncing the regular collections.
+
+The first thing the client does is record the last modified times from the
+info/collections record. The client will ask the server for records that
+changed between the last time it synced and the last modified time of the
+collection.
+
+Clients Collection
+^^^^^^^^^^^^^^^^^^
+
+The clients collection, while a regular collection, is special. Clients always
+cache all records in the clients collection. This collection is also used
+to send commands between clients. Some commands tell a client to do important
+things, like clear data. Because of this, commands need to be processed before
+other collections.
 
 OLD CONTENT
 ===========
 
 Don't read below this. It is old and needs to be formalized.
-
-Verify set up
--------------
-
-::
-
-    // - fetch keys if 'crypto' timestamp differs from local one
-    //   - if it's non-existent, goto fresh start.
-    //   - decrypt keys with Sync Key, abort if HMAC verification fails.
-    // - fetch meta/global if 'meta' timestamp differs from local one
-    //   - if it's non-existent, goto fresh start.
-    //   - check for storage version. if server data outdated, goto fresh start.
-    //     if client is outdated, abort with friendly error message.
-    //   - if syncID mismatch, reset local timestamps, refetch keys
-    // - if fresh start:
-    //   - wipe server. all of it.
-    //   - create + upload meta/global
-    //   - generate + upload new keys
 
 Perform sync
 ------------
@@ -290,20 +324,3 @@ Syncing an engine
               - POST .../storage/<collection>
                 [{record}, {record}, ...]
               - process repsonse body
-
-High-level implementation notes
--------------------------------
-
-::
-
-   // TODO WRITEME
-   // - Repository
-   //   - fetchSince()
-   //     - for batching: guidsSince() + fetch() (fetches by GUIDs)
-   //   - store()
-   //   - wipe()
-   // - Middleware
-   //   - wraps a repository e.g. to encrypt/decrypt records as they
-   //     pass through
-   // - Synchronizer
-   //   - synchronizes two repositories
