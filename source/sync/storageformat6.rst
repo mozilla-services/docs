@@ -6,7 +6,7 @@ Global Storage Version 6
 
 .. attention::
 
-  This document is an unofficial proposal. It will likely change.
+  This document is a proposal. It will likely change.
 
 This document describes version 6 of Sync's global storage format. This
 describes not only the technical details of the storage format, but also some
@@ -32,13 +32,15 @@ Bundle**. A single **Collection Key Bundle** is used to perform cryptographic
 operations on every record in the collection to which it is associated.
 
 It is recommended, but not technically required, that each **Collection Key Bundle**
-be associated with a single collection.
+be associated with at most a single collection.
 
 Special records on the server hold mappings of collection names to their
 respective **Collection Key Bundles**. The **Collection Key Bundles** are
 encrypted using another higher-level **Key Bundle** before they are stored
-on the server. We refer to these higher-level **Key Bundles** as 
-**Key-Encrypting Key Bundles**.
+on the server. We refer to these higher-level **Key Bundles** as
+**Key-Encrypting Key Bundles**. And, the entity that holds the mapping to
+**Collection Key Bundles** is referred to as a **crypto record** (because it
+is a record stored in the *crypto* collection).
 
 In the simple case, we have a single **Key-Encrypting Key Bundle** used to
 encrypt the collection of all **Collection Key Bundles**. Each **Collection
@@ -64,6 +66,12 @@ In graph form:
     HISTORY -> "History 1";
     HISTORY -> "History 2";
   }
+
+This specification establishes no rules for which **crypto records** exist
+or for how **Key-Encrypting Key Bundles** are managed. This is entirely up to
+the client. In other words, key management is a convention between clients.
+If you are interested in interoperating with Firefox Sync, see
+:ref:`Mozilla's Sync Service<sync_mozilla>`.
 
 This is the essence of the cryptographic model. More details are explained
 below.
@@ -222,8 +230,8 @@ crypto Collection
 =================
 
 There exists a special collection on the server named **crypto**. This
-collection holds records that contain mappings of collections to **Key
-Bundles**.
+collection holds records that contain mappings of collections to **Collection
+Key Bundles**.
 
 Each record in the *crypto* collection has associated with it specific
 semantics. This specification is intentionally vague as to what records and
@@ -286,8 +294,8 @@ Cons:
 * Server data reveals which encrypting keys can be used to unlock which
   collections.
 
-Options 2
-^^^^^^^^^
+Option 2
+^^^^^^^^
 
 This is similar to Option 1 except that the mapping info is itself encrypted.
 
