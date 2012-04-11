@@ -31,7 +31,7 @@ Token Server API v1.0
 
     - **id** -- a signed authorization token, containing the
       user's id for the application and the node.
-    - **secret** -- a secret derived from the shared secret
+    - **key** -- a secret derived from the shared secret
     - **uid** -- the user id for this service
     - **api_endpoint** -- the root URL for the user for the service.
 
@@ -41,7 +41,7 @@ Token Server API v1.0
         Content-Type: application/json
 
         {'id': <token>,
-         'secret': <derived-secret>,
+         'key': <derived-secret>,
          'uid': 12345,
          'api_endpoint': 'https://example.com/app/1.0/users/12345',
         }
