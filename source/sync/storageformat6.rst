@@ -206,7 +206,8 @@ Global Metadata Record
 ======================
 
 The **meta/global** record exists with the same semantics as version 5, the
-only difference being that the **storageVersion** is **6**.
+only difference being that the **storageVersion** is **6** and the **engines**
+key has been renamed to **repositories**.
 
 **TODO carry version 5's documentation forward.**
 
@@ -215,7 +216,7 @@ Example::
    {
      "syncID": "7vO3Zcdu6V4I",
      "storageVersion": 6,
-     "engines":{
+     "repositories":{
        "clients":   {"version":1,"syncID":"Re1DKzUQE2jt"},
        "bookmarks": {"version":2,"syncID":"ApPN6v8VY42s"},
        "forms":     {"version":1,"syncID":"lLnCTaQM3SPR"},
@@ -425,3 +426,9 @@ data recovery and sharing scenarios. The requirement of separate keys per
 collections effectively requires an extra link in the crypto chain where
 extra functionality can be inserted for one collection without impacting
 other collections.
+
+Metaglobal Record Format Change
+-------------------------------
+
+The **engines** key in the metaglobal record has been renamed to
+**repositories**. Semantics are preserved.
