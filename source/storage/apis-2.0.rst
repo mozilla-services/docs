@@ -71,8 +71,13 @@ Each BSO is assigned to a collection with other related BSOs. Collection names
 may only contain characters from the urlsafe-base64 alphabet (i.e. alphanumeric
 characters, underscore and hyphen).
 
-Collections are created implicitly on demand, when storing a BSO in them for
-the first time.
+Collections are created implicitly when a BSO is stored in them for the first
+time.  They continue to exist until they are explicity deleted, even if they
+no longer contain any BSOs.
+
+Each collection has a last-modified timestamp corresponding to the time of
+the last BSO addition, deletion or modification in the collection.  The
+timestamp of an empty collection gives the time of deletion of its last BSO.
 
 
 API Access and Discovery
@@ -317,15 +322,40 @@ collection.
 
 **DELETE** **https://<endpoint-url>/storage/<collection>**
 
-    Deletes the collection and all contents, returning the timestamp of
-    the action. Successful requests will receive a **204 No Content** response.
+    Deletes an entire collection.
+    Successful requests will receive a **204 No Content** response.
 
-    Additional request parameters may modify the selection of which items
-    to delete:
+    After executing this request, the collection will not appear 
+    in the output of **GET /info/collections** and calls to
+    **GET /storage/<collection>** will generate a **404 Not Found**
+    response.
 
-    - **ids**: deletes the ids for objects in the collection that are in
+    Possible HTTP error responses:
+
+    - **400 Bad Request:**  too many ids where included in the query parameter.
+    - **404 Not Found:**  the user has no such collection.
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
+    - **412 Precondition Failed:**  an object in the collection has been
+      modified since the timestamp in the *X-If-Unmodified-Since* header.
+
+
+**DELETE** **https://<endpoint-url>/storage/<collection>?ids=<ids>**
+
+    Deletes multiple BSOs from a collection with a single request.
+    Successful requests will receive a **204 No Content** response.
+
+    This request takes a parameter to select which items to delete:
+
+    - **ids**: deletes BSO from the collection whose ids that are in
       the provided comma-separated list.  A maximum of 100 ids may be
       provided.
+
+    The collection itself will still exist on the server after executing
+    this request.  Even if all the BSOs in the collection are deleted, it
+    will receive an updated last-modified timestamp, appear in the output
+    of **GET /info/collections**, and be readable via
+    **GET /storage/<collection>**
 
     Possible HTTP error responses:
 
@@ -339,8 +369,8 @@ collection.
 
 **DELETE** **https://<endpoint-url>/storage/<collection>/<id>**
 
-    Deletes the BSO at the location given, returning the timestamp of the
-    action. Successful requests will receive a **204 No Content** response.
+    Deletes the BSO at the given location.
+    Successful requests will receive a **204 No Content** response.
 
     Possible HTTP error responses:
 
