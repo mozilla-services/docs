@@ -33,7 +33,7 @@ Resources
 =========
 
 - Original wiki design page/meeting notes: https://wiki.mozilla.org/Services/Sync/SyncKey/J-PAKE
-- Continous Integration server: XXX
+- Continuous Integration server: XXX
 - Server: https://hg.mozilla.org/services/server-key-exchange
 - Clients
 

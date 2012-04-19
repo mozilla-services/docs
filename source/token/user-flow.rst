@@ -48,7 +48,7 @@ Detailed steps:
 
 - the :term:`Login Server` checks the browser id assertion [2] **this step will be
   done locally without calling an external browserid server -- but this could
-  potentially happen** (we can use pyvep + use the BID.org certificate)
+  potentially happen** (we can use PyBrowserID + use the BID.org certificate)
 
 - the :term:`Login Server` asks the Users DB if the user is already allocated to a
   :term:`Node` [3]
@@ -77,7 +77,7 @@ Detailed steps:
      'api_endpoint': 'https://example.com/app/1.0/users/12345',
     }
 
-- the client saves the node location and oauth parameters to use in subsequent
+- the client saves the node location and macauth parameters to use in subsequent
   requests. [6]
 
 - for each subsequent request to the :term:`Service`, the client calculates a

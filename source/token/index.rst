@@ -59,7 +59,7 @@ Assumptions
 - All servers are time-synced
 
 - The expires value for a token is a fixed value per application.
-  For example it could be 30mn for Sync and 2 hours for bipostal.
+  For example it could be 30 minutes for Sync and 2 hours for bipostal.
 
 - The Login Server keeps a white list of domains for BID verifications
 

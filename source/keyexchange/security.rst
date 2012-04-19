@@ -68,7 +68,7 @@ Admin Web Page
 
 - A small web administrator page will be created which will allow an admin to
   view all IP addresses that are currently blacklisted.
-- The admin will be able to un-block any of the IP addresses through this page
+- The admin will be able to unblock any of the IP addresses through this page
 - Otherwise the IP address will be removed from the black list after the time 
   has elapsed that is defined within the configuration file 
 - Access to the web page will be password-protected with a simple .htaccess 

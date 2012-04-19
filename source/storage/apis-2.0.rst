@@ -72,7 +72,7 @@ may only contain characters from the urlsafe-base64 alphabet (i.e. alphanumeric
 characters, underscore and hyphen).
 
 Collections are created implicitly when a BSO is stored in them for the first
-time.  They continue to exist until they are explicity deleted, even if they
+time.  They continue to exist until they are explicitly deleted, even if they
 no longer contain any BSOs.
 
 Each collection has a last-modified timestamp corresponding to the time of
