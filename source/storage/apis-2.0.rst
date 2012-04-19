@@ -36,7 +36,7 @@ Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
 |               |           |            | BSO ids may only contain characters from the urlsafe-base64   |
 |               |           |            | alphabet (i.e. alphanumerics, underscore and hyphen)          |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| modified      | time      | integer    | The last-modified date, in milliseconds since UNIX epoch      |
+| modified      | time      | integer    | The last-modified time, in milliseconds since UNIX epoch      |
 |               | submitted |            | (1970-01-01 00:00:00 UTC).  This is set automatically by the  |
 |               |           |            | server; any client-supplied value for this field is ignored.  |
 +---------------+-----------+------------+---------------------------------------------------------------+
@@ -79,6 +79,9 @@ Each collection has a last-modified timestamp corresponding to the time of
 the last BSO addition, deletion or modification in the collection.  The
 timestamp of an empty collection gives the time of deletion of its last BSO.
 
+The last-modified timestamp can be used for coordination and conflict
+management as described in :ref:`syncstorage_concurrency`.
+
 
 API Access and Discovery
 ========================
@@ -114,7 +117,7 @@ General Info
 APIs in this section provide a facility for obtaining general info for the
 authenticated user.
 
-**GET https://<endpoint-url>/info/collections**
+**GET** **https://<endpoint-url>/info/collections**
 
     Returns an object mapping collection names associated with the account to
     the last modified timestamp for each collection.
@@ -255,7 +258,7 @@ collection.
 
     Successful requests will receive a **201 Created** response if a new
     BSO is created, or a **204 No Content** response if an existing BSO
-    is updated  The response will include an *X-Timestamp* header giving
+    is updated  The response will include an *X-Last-Modified* header giving
     the new modification time of the object.
 
     Note that the server may impose a limit on the amount of data submitted
@@ -408,6 +411,9 @@ Request Headers
     it.  It is similar to the standard If-Modified-Since header except the
     value is expressed in milliseconds.
 
+    It is similar to the standard HTTP **If-Modified-Since** header, but the
+    value is expressed in integer milliseconds for extra precision.
+
     If the value of this header is not a valid integer, a **400 Bad Request**
     response will be returned.
 
@@ -419,6 +425,9 @@ Request Headers
     on has been modified since the timestamp given, the request will fail.
     It is similar to the the standard If-Unmodified-Since header except the
     value is expressed in milliseconds.
+
+    It is similar to the standard HTTP **If-Unmodified-Since** header, but the
+    value is expressed in integer milliseconds for extra precision.
 
     If the value of this header is not a valid integer, a **400 Bad Request**
     response will be returned.
@@ -449,11 +458,24 @@ Response Headers
     to maintain consistency of their stored data, then not attempt any further
     requests for the number of seconds specified in the header value.
 
+**X-Last-Modified**
+
+    This header gives the last-modified timestamp of the target resource as
+    seen during processing of the request, and will be included in all success
+    responses (200, 201, 204).  When given in response to a write request,
+    this will be equal to the modified timestamp of any BSOs created or
+    changed by the request.
+
+    It is similar to the standard HTTP **Last-Modified** header, but the value
+    is expressed in integer milliseconds for extra precision.
+
 **X-Timestamp**
 
     This header will be sent back with all responses, indicating the current
-    timestamp on the server. If the request was a PUT or POST, this will
-    also be the modification date of any BSOs modified by the request.
+    timestamp on the server.
+
+    It is similar to the standard HTTP **Date** header, but the value is
+    expressed in integer milliseconds for extra precision.
 
 **X-Num-Records**
 
@@ -465,6 +487,113 @@ Response Headers
     This header may be returned in response to write requests, indicating
     the amount of storage space remaining for the user in KB.  It will
     not be returned if quotas are not enabled on the server.
+
+
+.. _syncstorage_concurrency:
+
+Concurrency and Conflict Management
+===================================
+
+The SyncStorage service allows multiple clients to synchronize data via
+a shared server without requiring inter-client coordination or blocking.
+To achieve proper synchronization without skipping or overwriting data,
+clients are expected to use timestamp-driven coordination features such
+as **X-Last-Modified** and **X-If-Unmodified-Since**.
+
+The server guarantees a strictly consistent and monotonically-increasing
+view of time within a single collection.  Every BSO has a last-modified
+timestamp to indicate when it was last written, and the collection itself
+has a last-modified timestamp to indicate when any BSO was last added,
+deleted or changed.
+
+Conceptually, each write request will perform the following operations as
+an atomic unit:
+
+  * Take the current timestamp on the server; call this timestamp `Tw`.
+  * Check that `Tw` is less than or equal to the last-modified time of the
+    target collection; if not then a **409 Conflict** response is generated.
+  * Create any new BSOs as specified by the request, setting
+    their last-modified timestamp to `Tw`.
+  * Modify any existing BSOs as specified by the request, setting
+    their last-modified timestamp to `Tw`.
+  * Delete any BSOs as specified by the request.
+  * Set the last-modified time of the collection to `Tw`.
+  * Generate a **201** or **204** response with the **X-Last-Modified** and
+    **X-Timestamp** headers set to `Tw`.
+
+Thus, while write requests from different clients may be processed concurrently
+by the server, they will appear to the clients to have occurred sequentially,
+instantaneously and atomically.
+
+To avoid having the server transmit data that has not changed since the last
+request, clients should set the **X-If-Modified-Since** header and/or the
+**newer** parameter to the last known value of **X-Last-Modified** on the
+target resource.
+
+To avoid overwriting changes made by others, clients should set the
+**X-If-Unmodified-Since** header to the last known value of
+**X-Last-Modified** on the target resource.
+
+
+Example: polling for changes to a BSO
+-------------------------------------
+
+To efficiently check for changes to an individual BSO, use
+**GET /storage/<collection>/<id>** with the **X-If-Modified-Since** header
+set to the last known value of **X-Last-Modified** for that item.
+This will return the updated item if it has been changed since the last
+request, and give a **304 Not Modified** response if it has not::
+
+    last_modified = 0
+    while True:
+        headers = {"X-If-Modified-Since": last_modified}
+        r = server.get("/collection/id", headers)
+        if r.status != 304:
+            print " MODIFIED ITEM: ", r.json_body
+            last_modified = r.headers["X-Last-Modified"]
+
+
+Example: polling for changes to a collection
+--------------------------------------------
+
+To efficiently poll the server for changes within a collection, use
+**GET /storage/<collection>** with the **newer** parameter set to the last
+known value of **X-Last-Modified** for that collection.  This will return
+only the BSOs that have been added or changed since the last request::
+
+    last_modified = 0
+    while True:
+        r = server.get("/collection?newer=" + last_modified)
+        for item in r.json_body["items"]:
+            print "MODIFIED ITEM: ", item
+        last_modified = r.headers["X-Last-Modified"]
+
+
+Example: safely updating items in a collection
+----------------------------------------------
+
+To update items in a collection without overwriting any changes made by other
+clients, use **POST /storage/<collection>** with the **X-If-Unmodified-Since**
+header set to the last known value of **X-Last-Modified** for that collection.
+If other clients have made changes to the collection since the last request,
+the write will fail with a **412 Precondition Failed** response::
+
+    r = server.get("/collection")
+    last_modified = r.headers["X-Last-Modified"]
+
+    bsos = generate_changes_to_the_collection()
+
+    headers = {"X-If-Unmodified-Since": last_modified}
+    r = server.post("/collection", bsos, headers)
+    if r.status == 412:
+        print "WRITE FAILED DUE TO CONCURRENT EDITS"
+
+The client may choose to abort the write, or to merge the changes from the
+server and re-try with an updated value of **X-Last-Modified**.
+
+A similar technique can be used to safely update a single BSO using
+**PUT /storage/<collection>/<id>**.
+
 
 
 HTTP status codes
@@ -576,13 +705,11 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
     * "Weave Basic Objects" have been renamed "Basic Storage Objects".
     * The "Weave" prefix has been removed from all custom headers.
 
-* Authentication can now be performed using any HTTP Access Authentication
-  method accepted by both client and server.  Mozilla-hosted services will
-  accept only Sagrada Token Server authentication.
+* Authentication is now performed using the Sagrada TokenServer flow and
+  MAC Access Authentication.
 
-* URLs no longer contain a username component; the current user is taken from
-  the authentication info and there is no way to refer to the stored data for
-  another user.
+* The structure of the endpoint URL is no longer specified, and should be
+  considered an implementation detail specific to the server.
 
 * The WBO fields "parentid" and "predecessorid" have been removed, along with
   the corresponding query parameters on all requests.
@@ -603,15 +730,18 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * The **POST /storage/collection** request now accepts application/newlines
   input in addition to application/json.
 
+* The *X-Last-Modified* header has been added, to provide clients with a more
+  robust conflict-detection mechanism than the *X-Timestamp* header.
+
 * The **POST /storage/collection** request no longer returns **modified** as
-  part of its output, since this is available in the *X-Timestamp* header.
+  part of its output, since this is available in the *X-Last-Modified* header.
 
 * Successful **PUT** requests now give a **201 Created** or **204 No Content**
-  response, rather than redundantly returning the value of *X-Timestamp* in
+  response, rather than redundantly returning the value of *X-Last-Modified* in
   the response body.
 
 * Successful **DELETE** requests now give a **204 No Content** response,
-  response, rather than redundantly returning the value of *X-Timestamp* in
+  response, rather than redundantly returning the value of *X-Last-Modified* in
   the response body.
 
 * The **application/whoisi** output format has been removed.
@@ -629,7 +759,7 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 * The *X-Confirm-Delete* header has been removed.
 
 * The following response codes are explicitly mentioned: 201, 204, 304, 405,
-  412, 413.
+  409, 412, 413.
 
 * Various details of how Firefox Sync is implemented are no longer emphasized,
   since the protocol is being opened up for other applications.

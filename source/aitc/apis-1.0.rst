@@ -221,14 +221,16 @@ authenticated user.
 
     Successful requests will receive a **201 Created** response if a new
     app record is created, or a **204 No Content** response if an existing
-    app record is updated  The response will include an *X-Timestamp* header
-    giving the new modification time of the object.
+    app record is updated  The response will include an *X-Last-Modified*
+    header giving the new modification time of the object.
 
     Note that records are limited to 8KB in size.
 
     Possible HTTP error responses:
 
     - **400 Bad Request:**  the record is malformed or otherwise invalid.
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  the record has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
     - **413 Request Entity Too Large:**  the record is larger than the
@@ -246,6 +248,8 @@ authenticated user.
     Possible HTTP error responses:
 
     - **404 Not Found:**  the user has no app record with the given id.
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  the record has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
 
@@ -299,8 +303,8 @@ currently authenticated user.
 
     Successful requests will receive a **201 Created** response if a new
     device record is created, or a **204 No Content** response if an existing
-    device record is updated  The response will include an *X-Timestamp* header
-    giving the new modification time of the object.
+    device record is updated  The response will include an *X-Last-Modified*
+    header giving the new modification time of the object.
 
     This request may include the *X-If-Unmodified-Since* header to avoid
     overwriting the data if it has been changed since the client fetched it.
@@ -310,6 +314,8 @@ currently authenticated user.
     Possible HTTP error responses:
 
     - **400 Bad Request:**  the record is malformed or otherwise invalid.
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  the record has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
     - **413 Request Entity Too Large:**  the record is larger than the
@@ -327,6 +333,8 @@ currently authenticated user.
     Possible HTTP error responses:
 
     - **404 Not Found:**  the user has no app record with the given id.
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  the record has been modified since the
       timestamp in the *X-If-Unmodified-Since* header.
 
@@ -341,6 +349,9 @@ Request Headers
     it.  It is similar to the standard If-Modified-Since header except the
     value is expressed in milliseconds.
 
+    It is similar to the standard HTTP **If-Modified-Since** header, but the
+    value is expressed in integer milliseconds for extra precision.
+
     If the value of this header is not a valid integer, a **400 Bad Request**
     response will be returned.
 
@@ -351,6 +362,9 @@ Request Headers
     If the target record has been modified since the timestamp given, the
     request will fail.  It is similar to the the standard If-Unmodified-Since
     header except the value is expressed in milliseconds.
+
+    It is similar to the standard HTTP **If-Unmodified-Since** header, but the
+    value is expressed in integer milliseconds for extra precision.
 
     To condition the request on the non-existence of the target resource, use
     an **X-If-Unmodified-Since** value of zero.
@@ -369,6 +383,11 @@ Response Headers
     further requests to the server for the number of seconds specified in
     the header value.
 
+    When sent together with a HTTP 409 status code, this header gives the time
+    after which the conflicting edits are expected to complete.  Clients should
+    wait until at least this time before retrying the request.
+
+
 **X-Backoff**
 
     This header may be sent to indicate that the server is under heavy load
@@ -380,11 +399,24 @@ Response Headers
     to maintain consistency of their stored data, then not attempt any further
     requests for the number of seconds specified in the header value.
 
+**X-Last-Modified**
+
+    This header gives the last-modified timestamp of the target resource as
+    seen during processing of the request, and will be included in all success
+    responses (200, 201, 204).  When given in response to a write request,
+    this will be equal to the modified timestamp of any records created or
+    changed by the request.
+
+    It is similar to the standard HTTP **Last-Modified** header, but the value
+    is expressed in integer milliseconds for extra precision.
+
 **X-Timestamp**
 
     This header will be sent back with all responses, indicating the current
-    timestamp on the server. If the request was a PUT or POST, this will
-    also be the modification date of any BSOs modified by the request.
+    timestamp on the server.
+
+    It is similar to the standard HTTP **Date** header, but the value
+    is expressed in integer milliseconds for extra precision.
 
 
 HTTP status codes
@@ -449,6 +481,21 @@ protocol.
     The request URL does not support the specific request method.  For example,
     attempting a PUT request to https://<endpoint-url>/apps/ would produce a
     405 response.
+
+
+**409 Conflict**
+
+    The write request (PUT, DELETE) has been rejected due conflicting
+    changes made by another client, either to the target resource itself or
+    to a related resource.  The server cannot currently complete the request
+    without risking data loss.
+
+    The client should retry the request after accounting for any changes
+    introduced by other clients.
+
+    This response will include a *Retry-After* header indicating the time at
+    which the conflicting edits are expected to complete.  Clients should
+    wait until at least this time before retrying the request.
 
 
 **412 Precondition Failed**
