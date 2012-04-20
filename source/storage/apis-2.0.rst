@@ -133,8 +133,9 @@ authenticated user.
     Returns an object giving details of the user's current usage and
     quota.  It will have the following keys:
 
-    - **usage**:  the user's total current usage in KB.
-    - **quota**:  the user's total quota (or null if quotas are not in use)
+    - **usage**:  the user's total current usage in bytes.
+    - **quota**:  the user's total quota in bytes
+                  (or null if quotas are not in use)
 
     Note that usage numbers may be approximate.
 
@@ -147,7 +148,7 @@ authenticated user.
 **GET** **https://<endpoint-url>/info/collection_usage**
 
     Returns an object mapping collection names associated with the account to
-    the data volume used for each collection (in KB).
+    the data volume used for each collection (in bytes).
 
     Note that this request may be very expensive as it calculates more
     detailed and accurate usage information than the request to
@@ -485,7 +486,7 @@ Response Headers
 **X-Quota-Remaining**
 
     This header may be returned in response to write requests, indicating
-    the amount of storage space remaining for the user in KB.  It will
+    the amount of storage space remaining for the user in bytes.  It will
     not be returned if quotas are not enabled on the server.
 
 
@@ -719,6 +720,8 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 
 * The **GET /info/quota** request now returns an object with keys named "usage"
   and "quota", rather than just a list of numbers.
+
+* Usage and quotas are now reported in integer bytes, not float kibibytes.
 
 * The **GET /storage/collection** request now returns a JSON object rather than
   a JSON list, to guard against certain security issues in older browsers.
