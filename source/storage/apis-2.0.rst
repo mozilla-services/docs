@@ -273,6 +273,8 @@ collection.
       timestamp in the *X-If-Unmodified-Since* header.
     - **413 Request Entity Too Large:**  the object is larger than the
       server is willing to store.
+    - **415 Unsupported Media Type:**  the request had a Content-Type other
+      than **application/json**.
 
 
 **POST** **https://<endpoint-url>/storage/<collection>**
@@ -322,6 +324,8 @@ collection.
       modified since the timestamp in the *X-If-Unmodified-Since* header.
     - **413 Request Entity Too Large:**  the request contains more data than the
       server is willing to process in a single batch.
+    - **415 Unsupported Media Type:**  the request had a Content-Type other
+      than **application/json** or **application/newlines**.
 
 
 **DELETE** **https://<endpoint-url>/storage/<collection>**
@@ -686,6 +690,12 @@ protocol.
     The body submitted with a write request (PUT, POST) was larger than the
     server is willing to accept.  For multi-record POST requests, the client
     should retry by sending the records in smaller batches.
+
+
+**415 Unsupported Media Type**
+
+    The Content-Type header submitted with a write request (PUT, POST)
+    specified a data format that is not supported by the server.
 
 
 **503 Service Unavailable**

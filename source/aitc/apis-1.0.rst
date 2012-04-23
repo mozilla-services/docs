@@ -235,6 +235,8 @@ authenticated user.
       timestamp in the *X-If-Unmodified-Since* header.
     - **413 Request Entity Too Large:**  the record is larger than the
       server is willing to store.
+    - **415 Unsupported Media Type:**  the request had a Content-Type other
+      than **application/json**.
 
 
 **DELETE** **https://<endpoint-url>/apps/<appid>**
@@ -510,6 +512,12 @@ protocol.
     The body submitted with a write request (PUT, POST) was larger than the
     server is willing to accept.  For multi-record POST requests, the client
     should retry by sending the records in smaller batches.
+
+
+**415 Unsupported Media Type**
+
+    The Content-Type header submitted with a write request (PUT, POST)
+    specified a data format that is not supported by the server.
 
 
 **503 Service Unavailable**

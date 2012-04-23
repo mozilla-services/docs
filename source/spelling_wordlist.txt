@@ -72,6 +72,7 @@ IRC
 json
 keyexchange
 KeyExchange
+kibibytes
 ldap
 lighttpd
 Linuxes
