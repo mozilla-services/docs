@@ -60,7 +60,6 @@ Status codes and error codes:
  - missing option
  - bad values
  - malformed json
- - unsupported authentication protocol
 
 - **401** : authentication failed or protocol not supported.
   The response in that case will contain WWW-Authenticate headers
