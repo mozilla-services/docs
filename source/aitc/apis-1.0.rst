@@ -48,6 +48,11 @@ A full **App Record** document contains the following fields:
 | modifiedAt       | required  | integer,              | The time at which the application record was last  |
 |                  |           | millisecond timestamp | modified; set by the server on each write.         |
 +------------------+-----------+-----------------------+----------------------------------------------------+
+| name             | required  | string                | The name to be displayed for the app.              |
++------------------+-----------+-----------------------+----------------------------------------------------+
+| deleted          | false     | boolean               | If present, this field must be the boolean value   |
+|                  |           |                       | true.  It marks that the app as being deleted.     |
++------------------+-----------+-----------------------+----------------------------------------------------+
 | receipts         | required  | array of strings      | List of the user's purchase receipts for this      |
 |                  |           |                       | application.  Receipts are opaque strings          |
 +------------------+-----------+-----------------------+----------------------------------------------------+
@@ -61,6 +66,7 @@ Example::
        installOrigin: "https://marketplace.mozilla.org",
        installedAt: 1330535996745,
        modifiedAt: 1330535996945,
+       name: "Examplinator 3000",
        receipts: ["...", "..."]
     }
 
