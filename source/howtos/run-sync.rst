@@ -24,9 +24,9 @@ To run the server, you will also need to have these packages installed:
 - python-dev
 - make
 - mercurial
-- sqlite3 
+- sqlite3
 
-For example, under a fresh Ubuntu, you can run this command to meet all 
+For example, under a fresh Ubuntu, you can run this command to meet all
 requirements::
 
     $ sudo apt-get install python-dev mercurial sqlite3 python-virtualenv
@@ -35,11 +35,11 @@ requirements::
 Building the server
 ===================
 
-Get the latest version at https://hg.mozilla.org/services/server-full and 
+Get the latest version at https://hg.mozilla.org/services/server-full and
 run the **build** command::
 
-    $ hg clone https://hg.mozilla.org/services/server-full 
-    $ cd server-full    
+    $ hg clone https://hg.mozilla.org/services/server-full
+    $ cd server-full
     $ make build
 
 This command will create an isolated Python environment and pull all the
@@ -55,17 +55,17 @@ properly::
 To start the server, you must specify an ini-like file containing various
 runtime options.  Use the file "development.ini" as a starting point::
 
-    $ bin/paster serve development.ini 
-    Starting server in PID 29951. 
+    $ bin/paster serve development.ini
+    Starting server in PID 29951.
     serving on 0.0.0.0:5000 view at http://127.0.0.1:5000
 
 By default the server is configured to use a SQLite database for the storage
-and the user APIs. Once the server is launched, you can run the 
+and the user APIs. Once the server is launched, you can run the
 Firefox Sync Wizard and choose *http://localhost:5000* as your Firefox Custom
 Sync Server.
 
 You should then see a lot of output in the stdout, which are the calls made
-by the browser for the initial sync. 
+by the browser for the initial sync.
 
 
 Using MYSQL or LDAP or ...
@@ -97,9 +97,9 @@ Running behind a Web Server
 ===========================
 
 The built-in server should not be used in production, as it does not really
-support a lot of load. 
+support a lot of load.
 
-If you want to set up a production server, you can use different web servers 
+If you want to set up a production server, you can use different web servers
 that are compatible with the WSGI protocol. For example:
 
 - *Apache* combined with *mod_wsgi*
@@ -141,8 +141,56 @@ Here's an example of an Apache setup that uses mod_wsgi::
 
 
 We provide a **sync.wsgi** file for you convenience in the repository.
-Before running Apache, edit the file and check that it loads the the right 
+Before running Apache, edit the file and check that it loads the the right
 .ini file with its full path.
+
+NginX + Gunicorn
+::::::::::::::::
+
+Tested with debian stable/squeeze
+
+1. First install gunicorn in the server-full python version::
+
+        $ cd /usr/src/server-full
+        $ bin/easy_install gunicorn
+
+2. Then enable gunicorn in the **developement.ini**::
+
+        [server:main]
+        use = egg:gunicorn
+        host = 127.0.0.1
+        port = 5000
+        workers = 2
+        timeout = 60
+
+3. Edit **etc/sync.conf**::
+
+        [auth]
+        fallback_node = https://sync.example.com
+
+4. Finally edit your nginx vhost file::
+
+        server {
+                listen  443 ssl;
+                server_name sync.example.com;
+
+                ssl_certificate /path/to/your.crt;
+                ssl_certificate_key /path/to/your.key;
+
+                location / {
+                        proxy_pass_header Server;
+                        proxy_set_header Host $http_host;
+                        proxy_redirect off;
+                        proxy_set_header X-Real-IP $remote_addr;
+                        proxy_set_header X-Scheme $scheme;
+                        proxy_connect_timeout 10;
+                        proxy_read_timeout 10;
+                        proxy_pass http://localhost:5000/;
+                        }
+                }
+
+5. After restarting your nginx and server-full you should be able to use the
+   sync server behind your nginx installation
 
 
 lighttpd + flup + fcgi
@@ -151,7 +199,7 @@ lighttpd + flup + fcgi
 Tested under Gentoo.
 
 
-1. Make sure you have the following packages installed: 
+1. Make sure you have the following packages installed:
 
     - flup
     - virtualenv
@@ -166,7 +214,7 @@ Tested under Gentoo.
 3. Run::
 
     $ cd usr/src/sync-full/
-    $ make build 
+    $ make build
     $ bin/easy_install flup
 
 4. I had to edit the Makefile to take out the memcache dependency. YMMV.
@@ -220,7 +268,7 @@ Troubleshooting
 ===============
 
 Most issues with the server are caused by bad configuration. If your server does
-not work properly, the first thing to do is to visit **about:sync-log** in 
+not work properly, the first thing to do is to visit **about:sync-log** in
 Firefox to see if there's any error.
 
 You will see a lot of logs and if the sync failed probably an error.
@@ -238,7 +286,7 @@ But is not followed by::
     2011-02-24 11:17:57 Service.Main         DEBUG  Caching URLs under storage user base: http://server/.../
     2011-02-24 11:17:57 Net.Resource         DEBUG  GET success 200 http://server/.../info/collections
 
-It probably means that your server **fallback_node** option is not properly 
+It probably means that your server **fallback_node** option is not properly
 configured. See the previous section.
 
 Getting a lot of 404
@@ -251,14 +299,14 @@ Looking at the server log might help.
 Getting some 500 errors
 :::::::::::::::::::::::
 
-Check your server logs and look for some tracebacks. Also, make sure your 
+Check your server logs and look for some tracebacks. Also, make sure your
 server-full code is up-to-date by running **make build**
 
 Some common errors:
 
 - `KeyError: "Unknown fully qualified name for the backend: 'sql'"`
 
-  This error means that your backend configuration is outdated. Use the 
+  This error means that your backend configuration is outdated. Use the
   fully qualified names described in the previous sections.
 
 
@@ -268,4 +316,4 @@ Can't get it to work
 Ask for help:
 
 - in our Mailing List: https://mail.mozilla.org/listinfo/services-dev
-- on IRC (irc.mozilla.org) in the #sync channel 
+- on IRC (irc.mozilla.org) in the #sync channel
