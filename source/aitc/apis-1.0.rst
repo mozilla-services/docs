@@ -235,6 +235,8 @@ authenticated user.
     Possible HTTP error responses:
 
     - **400 Bad Request:**  the record is malformed or otherwise invalid.
+    - **403 Forbidden:**  the origin field in the record does not correspond
+      to the **<appid>** in the request URL.
     - **409 Conflict:**  another client has made (or is currently making)
       changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  the record has been modified since the
