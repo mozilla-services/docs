@@ -108,13 +108,12 @@ that are compatible with the WSGI protocol. For example:
 
 
 .. warning:: If you run behind a server, you need to set up the
-   **fallback_node** option in the **[auth]** section accordingly.
+   **fallback_node** option in the **[nodes]** section accordingly.
 
    For example, if your server is located at http://example.com, the
    fallback node should be set to this value::
 
-       [auth]
-       ...
+       [nodes]
        fallback_node = http://example.com
 
 
@@ -165,8 +164,8 @@ Tested with debian stable/squeeze
 
 3. Edit **etc/sync.conf**::
 
-        [auth]
-        fallback_node = https://sync.example.com
+        [nodes]
+        fallback_node = https://www.yourserver.net/yourpath/
 
 4. Finally edit your nginx vhost file::
 
@@ -240,6 +239,8 @@ from this section, since fcgi does not support them.
     backend = services.user.sql.SQLUser
     sqluri = sqlite:////usr/src/sync-full/weave_user
     create_tables = true
+
+    [nodes]
     fallback_node = https://www.yourserver.net/yourpath/
 
 7. Edit your **lighttpd.conf**::
