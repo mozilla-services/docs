@@ -52,8 +52,22 @@ properly::
 
     $ make test
 
-To start the server, you must specify an ini-like file containing various
-runtime options.  Use the file "development.ini" as a starting point::
+The server is configured using an ini-like file to specify various
+runtime settings.  The file "etc/sync.conf" will provide a useful starting
+point".
+
+There is one setting that you *must* specify before running the server: the
+client-visible URL for the storage service node.  To ensure that the :ref:`reg`
+and Node-Assignment flow works correctly, this should be set to the URL at
+which you will be running the server.
+
+Open "etc/sync.conf", locate and uncomment the following lines::
+
+    [nodes]
+    fallback_node = http://localhost:5000/
+
+Now you can run the server using paster and the provided "development.ini"
+file::
 
     $ bin/paster serve development.ini
     Starting server in PID 29951.
@@ -125,14 +139,14 @@ that are compatible with the WSGI protocol. For example:
 - *lighttpd* with *flup*, using the *fcgi* or *scgi* protocol
 
 
-.. warning:: If you run behind a server, you need to set up the
-   **fallback_node** option in the **[nodes]** section accordingly.
+.. note:: Remember, you must set the **nodes.fallback_node** option to the
+   client-visible URL of your sync server.
 
-   For example, if your server is located at http://example.com, the
-   fallback node should be set to this value::
+   For example, if your server will be located at http://example.com/ff-sync/,
+   the fallback node should be set to this value in your config file::
 
        [nodes]
-       fallback_node = http://example.com
+       fallback_node = http://example.com/ff-sync/
 
 
 Apache + mod_wsgi
