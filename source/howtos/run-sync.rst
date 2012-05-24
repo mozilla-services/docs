@@ -67,6 +67,24 @@ Sync Server.
 You should then see a lot of output in the stdout, which are the calls made
 by the browser for the initial sync.
 
+Updating the server
+===================
+
+You should periodically update your code to make sure you've got the latest
+fixes.  The following commands will update server-full in place::
+
+    $ cd /path/to/server-full
+    $ hg pull
+    $ hg update
+    $ make build
+
+By default, the **build** command will checkout the latest released tags for
+each server product.  If you need access to a fix that has not yet been
+released (or if you just want to live on the bleeding edge) then you can 
+build the development channel like so::
+
+    $ make build CHANNEL=dev
+
 
 Using MYSQL or LDAP or ...
 ==========================
