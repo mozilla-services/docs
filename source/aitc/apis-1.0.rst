@@ -50,9 +50,9 @@ A full **App Record** document contains the following fields:
 +------------------+-----------+-----------------------+----------------------------------------------------+
 | name             | required  | string                | The name to be displayed for the app.              |
 +------------------+-----------+-----------------------+----------------------------------------------------+
-| deleted          | false     | boolean               | If present, this field must be the boolean value   |
+| hidden           | false     | boolean               | If present, this field must be the boolean value   |
 |                  |           |                       | true.  It marks that the app has been globally     |
-|                  |           |                       | deleted from all the user's devices.               |
+|                  |           |                       | hidden across all the user's devices.              |
 +------------------+-----------+-----------------------+----------------------------------------------------+
 | receipts         | required  | array of strings      | List of the user's purchase receipts for this      |
 |                  |           |                       | application.  Receipts are opaque strings          |
