@@ -239,13 +239,10 @@ Tested under Gentoo.
 
         emerge -avuDN virtualenv mercurial
 
-2. Unpack the server-full Python version. Let's say under /usr/src/sync-full
+1. Install flup in the server-full python version::
 
-3. Run::
-
-    $ cd usr/src/sync-full/
-    $ make build
-    $ bin/easy_install flup
+        $ cd /usr/src/server-full
+        $ bin/easy_install flup
 
 4. I had to edit the Makefile to take out the memcache dependency. YMMV.
 
@@ -263,12 +260,12 @@ from this section, since fcgi does not support them.
 
     [storage]
     backend = syncstorage.storage.sql.SQLStorage
-    sqluri = sqlite:////usr/src/sync-full/weave_storage
+    sqluri = sqlite:////usr/src/server-full/weave_storage
     create_tables = true
 
     [auth]
     backend = services.user.sql.SQLUser
-    sqluri = sqlite:////usr/src/sync-full/weave_user
+    sqluri = sqlite:////usr/src/server-full/weave_user
     create_tables = true
 
     [nodes]
@@ -289,7 +286,7 @@ from this section, since fcgi does not support them.
 
 8. Start the Python server::
 
-        /usr/src/sync-full/paster serve /usr/src/sync-full/development.ini --daemon
+        /usr/src/server-full/paster serve /usr/src/server-full/development.ini --daemon
 
 9. Restart your lighttpd::
 
