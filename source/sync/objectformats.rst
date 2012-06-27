@@ -24,8 +24,10 @@ Weave Basic Object (WBO) level as well as *id*, *modified*, *sortindex* and
 Add-ons
 =======
 
-Engine version 1
-----------------
+Version 1
+---------
+
+Version 1 is likely only affiliated with storage format 5 clients.
 
 * **addonID** *string*: Public identifier of add-on. This is the *id* attribute from an Addon object obtained from the AddonManager.
 * **applicationID** *string*: The application ID the add-on belongs to.
@@ -35,8 +37,8 @@ Engine version 1
 Bookmarks
 =========
 
-Engine version 1
-----------------
+Version 1
+---------
 
 One bookmark record exists for each *bookmark item*, where an item may actually
 be a folder or a separator. Each item will have a *type* that determines what
@@ -140,8 +142,8 @@ Separators help split sections of a folder.
 * **predecessorid** *string*: GUID of the item before this (empty if it's first)
 * **type** *string*: "separator"
 
-Engine version 2
-----------------
+Version 2
+---------
 
 Same as engine version 1, except:
 
@@ -173,6 +175,9 @@ Form data is used to give suggestions for autocomplete for a HTML text input for
 History
 =======
 
+Version 1
+---------
+
 Every page a user visits generates a history item/page. One history (page) per record.
 
 * **histUri** *string*: uri of the page
@@ -197,8 +202,8 @@ Saved passwords help users get back into websites that require a login such as H
 Preferences
 ===========
 
-Engine version 1
-----------------
+Version 1
+---------
 
 Some preferences used by Firefox will be synced to other clients. There is only one record for preferences with a GUID "preferences".
 
@@ -207,8 +212,8 @@ Some preferences used by Firefox will be synced to other clients. There is only 
 * **type** *string*: the type of preference (int, string, boolean)
 * **value** *depends on type*: value of the preference
 
-Engine version 2
-----------------
+Version 2
+---------
 
 There is only one record for preferences, using nsIXULAppInfo.ID as the GUID. Custom preferences can be synced by following `these instructions <https://developer.mozilla.org/en/Firefox_Sync/Syncing_custom_preferences>`_.
 
@@ -218,6 +223,9 @@ Note: The preferences that determine which preferences are synced are now includ
 
 Tabs
 ====
+
+Version 1
+---------
 
 Tabs describe the opened tabs on a given client to provide functionality like get-up-n-go. Each client will provide one record.
 
