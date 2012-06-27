@@ -296,3 +296,26 @@ Tabs describe the opened tabs on a given client to provide functionality like ge
 * **urlHistory** *array of strings*: page urls in the tab's history
 * **icon** *string*: favicon uri of the tab
 * **lastUsed** *string* or *integer*: string representation of Unix epoch (in seconds) at which the tab was last accessed. Or the integer 0. Your code should accept either. This is ghastly; we apologize.
+
+Version 2
+---------
+
+.. note::
+
+  Proposal corresponding with storage format 6.
+
+In version 2, each tab is represented by its own record. (This is a change from
+version 1.)
+
+The payload of the BSO is a JSON object containing the following fields:
+
+* **clientID** *string*: ID of the client this tab originated on.
+* **title** *string*: Title of page that is active in the tab.
+* **history** *array of strings*: URLs in this tab's history. Initial element
+  is the current URL. Subsequent URLs were previously visited URLs.
+* **lastUsed** *number*: Time in seconds since Unix epoch that tab was last
+  active.
+* **icon** *string*: Base64 encoded favicon image.
+* **groupName** *string*: Name of tab group this tab is associated with. This
+  is usually used for presentation purposes and is typically the same string
+  across all records in a particular tab group.
