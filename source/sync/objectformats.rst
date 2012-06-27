@@ -186,6 +186,67 @@ Every page a user visits generates a history item/page. One history (page) per r
 * **date** *integer*: datetime of the visit
 * **type** *integer*: `transition type <https://developer.mozilla.org/en/nsINavHistoryService#Constants>`_ of the visit
 
+Version 2
+---------
+
+.. note::
+
+  Proposal corresponding with storage format 6.
+
+History visits are now stored as a timeline/stream of visits. The historical
+information for a particular site/URL is spread out of N>=1 records.
+
+Payloads have the structure::
+
+    {
+      "items": [
+        "uri": "http://www.mozilla.org/",
+        "title": "Mozilla",
+        "visits": {
+          1: [1340757179.82, 184],
+          2: [1340341244.31, 12, 4]
+        }
+      ]
+    }
+
+The bulk of the payload is a list of history items. Each item is both a place
+and a set of visits.
+
+* **uri** *string*: URI of the page that was visited.
+* **title** *string*: Title of the page that was visited.
+* **visits** *object*: Mapping of visit type to visit times.
+
+The keys in **visits** define the transition type for the visit. They can be
+one of the following:
+
+* **1**: A link was followed.
+* **2**: The URL was typed by the user.
+* **3**: The user followed a bookmark.
+* **4**: Some inner content was loaded.
+* **5**: A permanent redirect was followed.
+* **6**: A temporary redirect was followed.
+* **7**: The URL was downloaded.
+* **8**: User follows a link that was in a frame.
+
+These correspond to nsINavHistoryService's
+`transition type constants <https://developer.mozilla.org/en/nsINavHistoryService#Constants>`.
+
+The values for each visit type are arrays which encode the visit time. The
+initial array element is the wall time of the first visit being recorded in
+seconds since epoch, typically with millisecond resolution. Each subsequent
+value is the number of seconds elapsed since the previous visit. The values::
+
+    [100000000.000, 10.100, 5.200]
+
+Correspond to the times::
+
+    100000000.000
+    100000010.100
+    100000015.300
+
+The use of deltas to represent times is to minimize the serialized size of
+visits.
+
 Passwords
 =========
 
