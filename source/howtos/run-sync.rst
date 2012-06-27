@@ -232,13 +232,12 @@ Tested under Gentoo.
 
 1. Make sure you have the following packages installed:
 
-    - flup
     - virtualenv
     - mercurial
 
     With Gentoo use::
 
-        emerge -avuDN flup virtualenv mercurial
+        emerge -avuDN virtualenv mercurial
 
 2. Unpack the server-full Python version. Let's say under /usr/src/sync-full
 
