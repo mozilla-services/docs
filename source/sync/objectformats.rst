@@ -152,6 +152,20 @@ Same as engine version 1, except:
 * **children** *array of strings*: ordered list of child GUIDs
 * the special folders 'menu' and 'toolbar' now have records that are synced, purely to maintain order within them according to their '''children''' array.
 
+Version 3
+---------
+
+.. note::
+
+  Proposal corresponding with storage format 6.
+
+Same as version 2 except:
+
+* Support for microsummaries is removed
+* We use the ASCII URL
+
+TODO document full format here since diffs are inconvenient to read.
+
 Clients
 =======
 
