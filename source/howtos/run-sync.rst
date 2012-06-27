@@ -284,6 +284,8 @@ from this section, since fcgi does not support them.
                         ))
                     )
 
+Be sure to **not** add a trailing slash after "/yourpath", otherwise you will get a 404 error.
+
 8. Start the Python server::
 
         /usr/src/server-full/paster serve /usr/src/server-full/development.ini --daemon
