@@ -155,6 +155,9 @@ Same as engine version 1, except:
 Clients
 =======
 
+Version 1
+---------
+
 Client records identify a user's one or multiple clients that are accessing the
 data. The existence of client records can change the behavior of the Firefox
 Sync client -- multiple clients and/or mobile clients result in syncs to happen
@@ -163,6 +166,72 @@ more frequently.
 * **name** *string*: name of the client connecting
 * **type** *string*: type of the client: "desktop" or "mobile"
 * **commands** *array*: commands to be executed upon next sync
+
+Version 2
+---------
+
+.. note::
+
+  Proposal corresponding with storage format 6.
+
+Each client has its own record which it is authoritative for. No other client
+should modify another client's record except in the case where records are
+deleted.
+
+The payload of a client record has the following fields:
+
+* **name** *string*: The name of the client. This is a user-facing value and
+  may be provided by the user.
+* **formfactor** *string*: The form factor of the client. Recognized values
+  include *phone*, *tablet*, *laptop*, *desktop*.
+* **application** *string*: String identifying the application behind the
+  client. This shoud only be used for presentation purposes (e.g. choosing what
+  logo to display).
+* **version** *string*: The version of the client. This is typically the
+  version of the application. Again, this should only be used for presentation
+  purposes.
+* **capabilities** *object*: Denotes the capabilities a client possesses. Keys
+  are string capability names. Values are booleans indicating whether the
+  capability is enabled. Modifying the capabilities of another client's record
+  should not change the enabled state on that client.
+* **mpEnabled** *bool*: Whether *master password* is enabled on the client. If
+  *master password* is enabled on any client in an account, the current client
+  should hesitate before downloading passwords if *master password* is not
+  enabled locally, as this would decrease the security of the passwords locally
+  since they wouldn't be protected with a *master password*.
+
+Commands
+========
+
+Version 1
+---------
+
+.. note::
+
+  Proposal corresponding with storage format 6.
+
+This collection holds commands for clients to process. The ID of command
+records is randomly generated.
+
+Command records contain an extra unencrypted field in the BSO that says which
+client ID they belong to. The value is the hash of the client ID with the
+commands engine salt.
+
+Command data is an object with the following fields:
+
+* **receiverID** *string*: Client ID of the client that should receive the
+  command. This is duplicated inside the payload so it can be verified by
+  the HMAC.
+* **senderID** *string*: Client ID of the client that sent the command.
+* **created** *number*: Integer seconds since Unix epoch that command was
+  created.
+* **action** *string*: The action to be performed by the command. Each command
+  has its own name that uniquely identifies it. It is recommended that actions
+  be namespaced using colon-delimited notation. Sync's commands are all
+  prefixed with *sync:*. e.g. **sync:wipe**. If a command is versioned, the
+  name is the appropriate place to convey that versioning.
+* **data** *object*: Additional data associated with command. This is dependent
+  on the specific command type being issued.
 
 Forms
 =====
