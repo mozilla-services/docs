@@ -28,4 +28,4 @@ Resources
  - https://wiki.mozilla.org/Apps/AITC
 
 - Server: https://github.com/mozilla-services/server-aitc
-- Client: ???
+- Client: https://mxr.mozilla.org/mozilla-central/source/services/aitc/
