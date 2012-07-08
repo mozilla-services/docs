@@ -20,6 +20,8 @@ Documentation content
    :maxdepth: 2
 
    apis-1.0
+   lifeofanapp
+
 
 Resources
 =========
