@@ -227,7 +227,7 @@ collection.
       JSON objects.
     - **application/newlines**: the output contains each record on a separate
       line, as either a string id or a full JSON object. Any newlines in each
-      record are replaced by '\\u000a'.
+      record are replaced by the six-byte escape sequence '\\u000a'.
 
     Possible HTTP status codes:
 
