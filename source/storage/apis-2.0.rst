@@ -226,8 +226,7 @@ collection.
       mapping to a list of the requested records, as either string ids or full
       JSON objects.
     - **application/newlines**: the output contains each record on a separate
-      line, as either a string id or a full JSON object. Any newlines in each
-      record are replaced by the six-byte escape sequence '\\u000a'.
+      line, as either a string id or a full JSON object.
 
     Possible HTTP status codes:
 
@@ -309,8 +308,7 @@ collection.
       for each BSO in the request.
 
     - **application/newlines**: each BSO is sent as a separate JSON object
-      on its own line. Newlines in the body of the BSO object are replaced
-      by '\\u000a'.
+      on its own line.
 
     Note that the server may impose a limit on the total amount of data
     included in the request, and/or may decline to process more than a certain
