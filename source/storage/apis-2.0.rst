@@ -202,12 +202,6 @@ collection.
     - **full**: any value.  If provided then the response will be a list of
       full BSO objects rather than a list of ids.
 
-    - **index_above**: an integer. Only objects whose sortindex is higher than
-      this value will be returned.
-
-    - **index_below**: an integer. Only objects whose sortindex is lower than
-      this value will be returned.
-
     - **limit**: an integer. At most that many objects will be returned.
       If more than that many objects matched the query, an *X-Next-Offset*
       header will be returned.
@@ -825,6 +819,8 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
   the response body.
 
 * The **application/whoisi** output format has been removed.
+
+* The **index_above** and **index_below** parameters have been removed.
 
 * The **offset** parameter is now a server-generated value used to page
   through a set of results.  Clients must not attempt to create their
