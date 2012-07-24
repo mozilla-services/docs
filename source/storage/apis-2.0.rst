@@ -209,6 +209,11 @@ collection.
       this value will be returned.
 
     - **limit**: an integer. At most that many objects will be returned.
+      If more than that many objects matched the query, an *X-Next-Offset*
+      header will be returned.
+
+    - **offset**: a string, as returned in the *X-Next-Offset* header of
+      a previous request using the **limit** parameter.
 
     - **sort**: sorts the output:
        - 'oldest' - orders by modification date (oldest first)
@@ -217,6 +222,12 @@ collection.
 
     The response will include an *X-Num-Records* header indicating the
     total number of records to expect in the body.
+
+    If the request included a **limit** parameter and there were more than
+    that many items matching the query, the response will include an
+    *X-Next-Offset* header.  This value can be passed back to the server in
+    the **offset** parameter to efficiently skip over the items that have
+    already been read.  See :ref:`syncstorage_paging` for an example.
 
     Two output formats are available for multiple record GET requests.
     They are triggered by the presence of the appropriate format in the
@@ -490,6 +501,19 @@ Response Headers
     This header may be sent back with multi-record responses, to indicate the
     total number of records included in the response.
 
+**X-Next-Offset**
+
+    This header may be sent back with multi-record responses where the request
+    included a **limit** parameter.  Its presence indicates that the number of
+    available records exceeded the given limit.  The value from this header
+    can be passed back in the **offset** paramater to retreive additional
+    records.
+
+    The value of this header will always be a string of characters from the
+    urlsafe-base64 alphabet.  The specific contents of the string are an
+    implementation detail of the server, so clients should treat it as an
+    opaque token.
+
 **X-Quota-Remaining**
 
     This header may be returned in response to write requests, indicating
@@ -602,6 +626,46 @@ server and re-try with an updated value of **X-Last-Modified**.
 A similar technique can be used to safely update a single BSO using
 **PUT /storage/<collection>/<id>**.
 
+
+.. _syncstorage_paging:
+
+Example: paging through a large set of items
+--------------------------------------------
+
+The syncstorage server allows efficient paging through a large set of items
+by using the **limit** and **offset** parameters.
+
+Clients should begin by issuing a **GET /storage/<collection>?limit=<LIMIT>**
+request, which will return up to *<LIMIT>* items.  If there were additional
+items matching the query, the response will include an *X-Next-Offset* header
+to let subsequent requests skip over the items that were just returned.
+
+To fetch additional items, repeat the request using the value from
+*X-Next-Offset* as the **offset** parameter.  If the response includes a new
+*X-Next-Offset* value, then there are yet more items to be fetched and the
+process should be repeated; if it does not then all available items have been
+returned.
+
+To guard against other clients making concurrent changes to the collection,
+this technique should always be combined with the **X-If-Unmodified-Since**
+header as shown below::
+
+    r = server.get("/collection?limit=100")
+    print "GOT ITEMS: ", r.json_body["items"]
+
+    last_modified = r.headers["X-Last-Modified"]
+    next_offset = r.headers.get("X-Next-Offset")
+
+    while next_offset:
+        headers = {"X-If-Unmodified-Since": last_modified}
+        r = server.get("/collection?limit=100&offset=" + next_offset, headers)
+
+        if r.status == 412:
+            print "COLLECTION WAS MODIFIED WHILE READING ITEMS"
+            break
+
+        print "GOT ITEMS: ", r.json_body["items"]
+        next_offset = r.headers.get("X-Next-Offset")
 
 
 HTTP status codes
@@ -762,8 +826,15 @@ The following is a summary of protocol changes from :ref:`server_storage_api_11`
 
 * The **application/whoisi** output format has been removed.
 
+* The **offset** parameter is now a server-generated value used to page
+  through a set of results.  Clients must not attempt to create their
+  own values for this parameter.
+
 * The *X-If-Modified-Since* header has been added and can be used on all
   GET requests.
+
+* The *X-If-Unmodified-Since* header can be used on GET requests to collections
+  and items.
 
 * The previously-undocumented *X-Weave-Quota-Remaining* header has been
   documented, after removing the "Weave" prefix.
