@@ -515,153 +515,6 @@ Response Headers
     not be returned if quotas are not enabled on the server.
 
 
-.. _syncstorage_concurrency:
-
-Concurrency and Conflict Management
-===================================
-
-The SyncStorage service allows multiple clients to synchronize data via
-a shared server without requiring inter-client coordination or blocking.
-To achieve proper synchronization without skipping or overwriting data,
-clients are expected to use timestamp-driven coordination features such
-as **X-Last-Modified** and **X-If-Unmodified-Since**.
-
-The server guarantees a strictly consistent and monotonically-increasing
-view of time within a single collection.  Every BSO has a last-modified
-timestamp to indicate when it was last written, and the collection itself
-has a last-modified timestamp to indicate when any BSO was last added,
-deleted or changed.
-
-Conceptually, each write request will perform the following operations as
-an atomic unit:
-
-  * Take the current timestamp on the server; call this timestamp `Tw`.
-  * Check that `Tw` is less than or equal to the last-modified time of the
-    target collection; if not then a **409 Conflict** response is generated.
-  * Create any new BSOs as specified by the request, setting
-    their last-modified timestamp to `Tw`.
-  * Modify any existing BSOs as specified by the request, setting
-    their last-modified timestamp to `Tw`.
-  * Delete any BSOs as specified by the request.
-  * Set the last-modified time of the collection to `Tw`.
-  * Generate a **201** or **204** response with the **X-Last-Modified** and
-    **X-Timestamp** headers set to `Tw`.
-
-Thus, while write requests from different clients may be processed concurrently
-by the server, they will appear to the clients to have occurred sequentially,
-instantaneously and atomically.
-
-To avoid having the server transmit data that has not changed since the last
-request, clients should set the **X-If-Modified-Since** header and/or the
-**newer** parameter to the last known value of **X-Last-Modified** on the
-target resource.
-
-To avoid overwriting changes made by others, clients should set the
-**X-If-Unmodified-Since** header to the last known value of
-**X-Last-Modified** on the target resource.
-
-
-Example: polling for changes to a BSO
--------------------------------------
-
-To efficiently check for changes to an individual BSO, use
-**GET /storage/<collection>/<id>** with the **X-If-Modified-Since** header
-set to the last known value of **X-Last-Modified** for that item.
-This will return the updated item if it has been changed since the last
-request, and give a **304 Not Modified** response if it has not::
-
-    last_modified = 0
-    while True:
-        headers = {"X-If-Modified-Since": last_modified}
-        r = server.get("/collection/id", headers)
-        if r.status != 304:
-            print " MODIFIED ITEM: ", r.json_body
-            last_modified = r.headers["X-Last-Modified"]
-
-
-Example: polling for changes to a collection
---------------------------------------------
-
-To efficiently poll the server for changes within a collection, use
-**GET /storage/<collection>** with the **newer** parameter set to the last
-known value of **X-Last-Modified** for that collection.  This will return
-only the BSOs that have been added or changed since the last request::
-
-    last_modified = 0
-    while True:
-        r = server.get("/collection?newer=" + last_modified)
-        for item in r.json_body["items"]:
-            print "MODIFIED ITEM: ", item
-        last_modified = r.headers["X-Last-Modified"]
-
-
-Example: safely updating items in a collection
-----------------------------------------------
-
-To update items in a collection without overwriting any changes made by other
-clients, use **POST /storage/<collection>** with the **X-If-Unmodified-Since**
-header set to the last known value of **X-Last-Modified** for that collection.
-If other clients have made changes to the collection since the last request,
-the write will fail with a **412 Precondition Failed** response::
-
-    r = server.get("/collection")
-    last_modified = r.headers["X-Last-Modified"]
-
-    bsos = generate_changes_to_the_collection()
-
-    headers = {"X-If-Unmodified-Since": last_modified}
-    r = server.post("/collection", bsos, headers)
-    if r.status == 412:
-        print "WRITE FAILED DUE TO CONCURRENT EDITS"
-
-The client may choose to abort the write, or to merge the changes from the
-server and re-try with an updated value of **X-Last-Modified**.
-
-A similar technique can be used to safely update a single BSO using
-**PUT /storage/<collection>/<id>**.
-
-
-.. _syncstorage_paging:
-
-Example: paging through a large set of items
---------------------------------------------
-
-The syncstorage server allows efficient paging through a large set of items
-by using the **limit** and **offset** parameters.
-
-Clients should begin by issuing a **GET /storage/<collection>?limit=<LIMIT>**
-request, which will return up to *<LIMIT>* items.  If there were additional
-items matching the query, the response will include an *X-Next-Offset* header
-to let subsequent requests skip over the items that were just returned.
-
-To fetch additional items, repeat the request using the value from
-*X-Next-Offset* as the **offset** parameter.  If the response includes a new
-*X-Next-Offset* value, then there are yet more items to be fetched and the
-process should be repeated; if it does not then all available items have been
-returned.
-
-To guard against other clients making concurrent changes to the collection,
-this technique should always be combined with the **X-If-Unmodified-Since**
-header as shown below::
-
-    r = server.get("/collection?limit=100")
-    print "GOT ITEMS: ", r.json_body["items"]
-
-    last_modified = r.headers["X-Last-Modified"]
-    next_offset = r.headers.get("X-Next-Offset")
-
-    while next_offset:
-        headers = {"X-If-Unmodified-Since": last_modified}
-        r = server.get("/collection?limit=100&offset=" + next_offset, headers)
-
-        if r.status == 412:
-            print "COLLECTION WAS MODIFIED WHILE READING ITEMS"
-            break
-
-        print "GOT ITEMS: ", r.json_body["items"]
-        next_offset = r.headers.get("X-Next-Offset")
-
-
 HTTP status codes
 =================
 
@@ -766,6 +619,158 @@ protocol.
     another sync for the number of seconds specified in the header value.
     The response body may contain a JSON string describing the server's status
     or error.
+
+
+
+
+.. _syncstorage_concurrency:
+
+Concurrency and Conflict Management
+===================================
+
+The SyncStorage service allows multiple clients to synchronize data via
+a shared server without requiring inter-client coordination or blocking.
+To achieve proper synchronization without skipping or overwriting data,
+clients are expected to use timestamp-driven coordination features such
+as **X-Last-Modified** and **X-If-Unmodified-Since**.
+
+The server guarantees a strictly consistent and monotonically-increasing
+view of time within a single collection.  Every BSO has a last-modified
+timestamp to indicate when it was last written, and the collection itself
+has a last-modified timestamp to indicate when any BSO was last added,
+deleted or changed.
+
+Conceptually, each write request will perform the following operations as
+an atomic unit:
+
+  * Take the current timestamp on the server; call this timestamp `Tw`.
+  * Check that `Tw` is less than or equal to the last-modified time of the
+    target collection; if not then a **409 Conflict** response is generated.
+  * Create any new BSOs as specified by the request, setting
+    their last-modified timestamp to `Tw`.
+  * Modify any existing BSOs as specified by the request, setting
+    their last-modified timestamp to `Tw`.
+  * Delete any BSOs as specified by the request.
+  * Set the last-modified time of the collection to `Tw`.
+  * Generate a **201** or **204** response with the **X-Last-Modified** and
+    **X-Timestamp** headers set to `Tw`.
+
+Thus, while write requests from different clients may be processed concurrently
+by the server, they will appear to the clients to have occurred sequentially,
+instantaneously and atomically.
+
+To avoid having the server transmit data that has not changed since the last
+request, clients should set the **X-If-Modified-Since** header and/or the
+**newer** parameter to the last known value of **X-Last-Modified** on the
+target resource.
+
+To avoid overwriting changes made by others, clients should set the
+**X-If-Unmodified-Since** header to the last known value of
+**X-Last-Modified** on the target resource.
+
+
+Examples
+========
+
+Example: polling for changes to a BSO
+-------------------------------------
+
+To efficiently check for changes to an individual BSO, use
+**GET /storage/<collection>/<id>** with the **X-If-Modified-Since** header
+set to the last known value of **X-Last-Modified** for that item.
+This will return the updated item if it has been changed since the last
+request, and give a **304 Not Modified** response if it has not::
+
+    last_modified = 0
+    while True:
+        headers = {"X-If-Modified-Since": last_modified}
+        r = server.get("/collection/id", headers)
+        if r.status != 304:
+            print " MODIFIED ITEM: ", r.json_body
+            last_modified = r.headers["X-Last-Modified"]
+
+
+Example: polling for changes to a collection
+--------------------------------------------
+
+To efficiently poll the server for changes within a collection, use
+**GET /storage/<collection>** with the **newer** parameter set to the last
+known value of **X-Last-Modified** for that collection.  This will return
+only the BSOs that have been added or changed since the last request::
+
+    last_modified = 0
+    while True:
+        r = server.get("/collection?newer=" + last_modified)
+        for item in r.json_body["items"]:
+            print "MODIFIED ITEM: ", item
+        last_modified = r.headers["X-Last-Modified"]
+
+
+Example: safely updating items in a collection
+----------------------------------------------
+
+To update items in a collection without overwriting any changes made by other
+clients, use **POST /storage/<collection>** with the **X-If-Unmodified-Since**
+header set to the last known value of **X-Last-Modified** for that collection.
+If other clients have made changes to the collection since the last request,
+the write will fail with a **412 Precondition Failed** response::
+
+    r = server.get("/collection")
+    last_modified = r.headers["X-Last-Modified"]
+
+    bsos = generate_changes_to_the_collection()
+
+    headers = {"X-If-Unmodified-Since": last_modified}
+    r = server.post("/collection", bsos, headers)
+    if r.status == 412:
+        print "WRITE FAILED DUE TO CONCURRENT EDITS"
+
+The client may choose to abort the write, or to merge the changes from the
+server and re-try with an updated value of **X-Last-Modified**.
+
+A similar technique can be used to safely update a single BSO using
+**PUT /storage/<collection>/<id>**.
+
+
+.. _syncstorage_paging:
+
+Example: paging through a large set of items
+--------------------------------------------
+
+The syncstorage server allows efficient paging through a large set of items
+by using the **limit** and **offset** parameters.
+
+Clients should begin by issuing a **GET /storage/<collection>?limit=<LIMIT>**
+request, which will return up to *<LIMIT>* items.  If there were additional
+items matching the query, the response will include an *X-Next-Offset* header
+to let subsequent requests skip over the items that were just returned.
+
+To fetch additional items, repeat the request using the value from
+*X-Next-Offset* as the **offset** parameter.  If the response includes a new
+*X-Next-Offset* value, then there are yet more items to be fetched and the
+process should be repeated; if it does not then all available items have been
+returned.
+
+To guard against other clients making concurrent changes to the collection,
+this technique should always be combined with the **X-If-Unmodified-Since**
+header as shown below::
+
+    r = server.get("/collection?limit=100")
+    print "GOT ITEMS: ", r.json_body["items"]
+
+    last_modified = r.headers["X-Last-Modified"]
+    next_offset = r.headers.get("X-Next-Offset")
+
+    while next_offset:
+        headers = {"X-If-Unmodified-Since": last_modified}
+        r = server.get("/collection?limit=100&offset=" + next_offset, headers)
+
+        if r.status == 412:
+            print "COLLECTION WAS MODIFIED WHILE READING ITEMS"
+            break
+
+        print "GOT ITEMS: ", r.json_body["items"]
+        next_offset = r.headers.get("X-Next-Offset")
 
 
 Changes from v1.1
