@@ -233,6 +233,8 @@ collection.
     - **304 Not Modified:**  no objects in the collection have been modified
       since the timestamp in the *X-If-Modified-Since* header.
     - **404 Not Found:**  the user has no such collection.
+    - **412 Precondition Failed:**  an object in the collection has been
+      modified since the timestamp in the *X-If-Unmodified-Since* header.
 
 
 **GET** **https://<endpoint-url>/storage/<collection>/<id>**
@@ -245,6 +247,8 @@ collection.
       timestamp in the *X-If-Modified-Since* header.
     - **404 Not Found:**  the user has no such collection, or it contains
       no such object.
+    - **412 Precondition Failed:**  the object has been modified
+      since the timestamp in the *X-If-Unmodified-Since* header.
 
 
 **PUT** **https://<endpoint-url>/storage/<collection>/<id>**
@@ -409,30 +413,31 @@ Request Headers
 
 **X-If-Modified-Since**
 
-    This header may be added to any GET request to avoid transmission of the
-    resource body if it has not been modified since the client last fetched
-    it.  It is similar to the standard If-Modified-Since header except the
-    value is expressed in milliseconds.
+    This header may be added to any GET request, set to a timestamp.  If the
+    target resource has not been modified since the timestamp given, then a
+    **304 Not Modified** response will be returned and re-transmission of the
+    unchanged data will be avoided.
 
     It is similar to the standard HTTP **If-Modified-Since** header, but the
     value is expressed in integer milliseconds for extra precision.
 
-    If the value of this header is not a valid integer, a **400 Bad Request**
-    response will be returned.
+    If the value of this header is not a valid integer, or if the
+    **X-If-Unmodified-Since** header is also present, then a
+    **400 Bad Request** response will be returned.
 
 
 **X-If-Unmodified-Since**
 
-    On any write transaction (PUT, POST, DELETE), this header may be added
-    to the request, set to a timestamp. If the collection to be acted
-    on has been modified since the timestamp given, the request will fail.
-    It is similar to the the standard If-Unmodified-Since header except the
-    value is expressed in milliseconds.
+    This header may be added to any request to a collection or item, set to a
+    timestamp.  If the resource to be acted on has been modified since the
+    timestamp given, the request will fail with a **412 Precondition Failed**
+    response.
 
     It is similar to the standard HTTP **If-Unmodified-Since** header, but the
     value is expressed in integer milliseconds for extra precision.
 
-    If the value of this header is not a valid integer, a **400 Bad Request**
+    If the value of this header is not a valid integer, or if the
+    **X-If-Modified-Since** header is also present, then a **400 Bad Request**
     response will be returned.
 
 
