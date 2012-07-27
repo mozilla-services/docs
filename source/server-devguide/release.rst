@@ -84,9 +84,8 @@ Example::
     recaptcha-client == 1.0.6
 
 
-On every release, you can decide to raise the versions to the latest stables
-versions, after you've tried them.
-
+After you've tried a release, you can decide to raise the version to the latest
+stable version.
 
 3. Update RELEASE.txt
 ::::::::::::::::::::::
