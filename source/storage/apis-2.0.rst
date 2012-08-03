@@ -500,7 +500,7 @@ Response Headers
     This header may be sent back with multi-record responses where the request
     included a **limit** parameter.  Its presence indicates that the number of
     available records exceeded the given limit.  The value from this header
-    can be passed back in the **offset** paramater to retreive additional
+    can be passed back in the **offset** parameter to retrieve additional
     records.
 
     The value of this header will always be a string of characters from the

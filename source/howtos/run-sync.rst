@@ -108,7 +108,7 @@ File Permissions
 The default configuration of the server uses a file-based sqlite database,
 so you should carefully check that the permissions on this file are appropriate
 for your setup.  The file and its containing directory should be writable by
-the user under which the server is running, and inaccessable to other users
+the user under which the server is running, and inaccessible to other users
 on the system.
 
 You may like to set the umask of the server process to ensure that any files

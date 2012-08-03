@@ -199,7 +199,7 @@ The payload of a client record has the following fields:
 * **formfactor** *string*: The form factor of the client. Recognized values
   include *phone*, *tablet*, *laptop*, *desktop*.
 * **application** *string*: String identifying the application behind the
-  client. This shoud only be used for presentation purposes (e.g. choosing what
+  client. This should only be used for presentation purposes (e.g. choosing what
   logo to display).
 * **version** *string*: The version of the client. This is typically the
   version of the application. Again, this should only be used for presentation

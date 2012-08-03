@@ -13,7 +13,7 @@ and BrowserID for authentication, and a different REST API to communicate with
 the server.
 
 The general model is that the server is the authoritative source for a list
-of apps that a user has acquired (but not neccessarily installed, a distinction
+of apps that a user has acquired (but not necessarily installed, a distinction
 we will delve into later). Clients are expected to keep the server updated
 with changes as soon as possible, in an effort to keep the server holding the
 freshest data.
@@ -42,7 +42,7 @@ Notes on obtaining an assertion
 This section describes the methods by which Firefox on the Desktop obtains
 an assertion for the user's email address. The process may be different on
 other platforms, but the basic idea is that we try to obtain an assertion
-silenty whenever possible, and only ask the user to explicitly login if they
+silently whenever possible, and only ask the user to explicitly login if they
 are actively performing an AitC related operation and it makes sense to present
 a login prompt.
 
@@ -99,7 +99,7 @@ TODO: Make this a flowchart.
 
 6. Check the persistent local queue for entries. For an app install and uninstall, a PUT request must be made. If you get a successful response code, remove the item from the queue; if not, add it back to the tail.
 
-  a) Keep track of the number of failures (for both GET and PUT requests). If they exceed a certain threshold, the client may choose to remove the item causing the failure from the queue. Additionally, the client must backoff exponentially when continous errors from the server are received.
+  a) Keep track of the number of failures (for both GET and PUT requests). If they exceed a certain threshold, the client may choose to remove the item causing the failure from the queue. Additionally, the client must backoff exponentially when continuous errors from the server are received.
 
   b) If a PUT results in a 401, obtain a new token from the token server before processing the next item in the queue.
 
@@ -155,7 +155,7 @@ contain, for example, even apps that the user has uninstalled on some or all of
 their devices. However, if an app is uninstalled on all of the user's devices
 the "hidden" flag in the app object on the storage server will be set to true.
 
-All other app states will be device-specific and stored seperately via the
+All other app states will be device-specific and stored separately via the
 Device API (TBD).
 
 Acquired vs. Installed
