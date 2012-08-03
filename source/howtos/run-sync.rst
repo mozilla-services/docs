@@ -99,6 +99,40 @@ build the development channel like so::
 
     $ make build CHANNEL=dev
 
+Security Notes
+==============
+
+File Permissions
+::::::::::::::::
+
+The default configuration of the server uses a file-based sqlite database,
+so you should carefully check that the permissions on this file are appropriate
+for your setup.  The file and its containing directory should be writable by
+the user under which the server is running, and inaccessable to other users
+on the system.
+
+You may like to set the umask of the server process to ensure that any files
+it creates readable only by the appropriate user.  For example::
+
+    $ umask 007
+    $ bin/paster serve development.ini
+
+
+Disabling New Users
+:::::::::::::::::::
+
+The default configuration of the server allows new users to create an account
+through Firefox's builtin setup screen.  This is useful during initial setup,
+but it means that *anybody* could sync against your server if they know its
+URL.
+
+You can disable creation of new accounts by setting **auth.allow_new_users**
+to **false** in the config file::
+
+       [auth]
+       allow_new_users = false
+
+
 
 Using MYSQL or LDAP or ...
 ==========================
