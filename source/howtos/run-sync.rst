@@ -52,6 +52,10 @@ properly::
 
     $ make test
 
+
+Basic Configuration
+===================
+
 The server is configured using an ini-like file to specify various
 runtime settings.  The file "etc/sync.conf" will provide a useful starting
 point".
@@ -66,6 +70,23 @@ Open "etc/sync.conf", locate and uncomment the following lines::
     [nodes]
     fallback_node = http://localhost:5000/
 
+By default the server is configured to use a SQLite database for the storage
+and the user APIs, with the database file stored at "/tmp/test.db".  You will
+almost certainly want to change this to a more permanent location::
+
+    [storage]
+    sqluri = sqlite:////path/to/database/file.db
+
+    [auth]
+    sqluri = sqlite:////path/to/database/file.db
+
+Alternatively, consider using a different database backend as described in
+:ref:`syncserver_alternative_databases`.
+
+
+Running the Server
+==================
+
 Now you can run the server using paster and the provided "development.ini"
 file::
 
@@ -73,13 +94,12 @@ file::
     Starting server in PID 29951.
     serving on 0.0.0.0:5000 view at http://127.0.0.1:5000
 
-By default the server is configured to use a SQLite database for the storage
-and the user APIs. Once the server is launched, you can run the
-Firefox Sync Wizard and choose *http://localhost:5000* as your Firefox Custom
-Sync Server.
+Once the server is launched, you can run the Firefox Sync Wizard and choose
+*http://localhost:5000* as your Firefox Custom Sync Server.
 
 You should then see a lot of output in the stdout, which are the calls made
 by the browser for the initial sync.
+
 
 Updating the server
 ===================
@@ -133,6 +153,8 @@ to **false** in the config file::
        allow_new_users = false
 
 
+
+.. _syncserver_alternative_databases:
 
 Using MYSQL or LDAP or ...
 ==========================
