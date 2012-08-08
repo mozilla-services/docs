@@ -112,7 +112,7 @@ the user under which the server is running, and inaccessible to other users
 on the system.
 
 You may like to set the umask of the server process to ensure that any files
-it creates readable only by the appropriate user.  For example::
+it creates are readable only by the appropriate user.  For example::
 
     $ umask 007
     $ bin/paster serve development.ini
