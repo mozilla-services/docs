@@ -191,7 +191,7 @@ collection.
     This request has additional optional parameters:
 
     - **ids**: a comma-separated list of ids. Only objects whose id is in this
-      list will be returned.
+      list will be returned.  A maximum of 100 ids may be provided.
 
     - **older**: a timestamp in milliseconds. Only objects that were last
       modified before this time will be returned.
@@ -237,6 +237,7 @@ collection.
 
     - **304 Not Modified:**  no objects in the collection have been modified
       since the timestamp in the *X-If-Modified-Since* header.
+    - **400 Bad Request:**  too many ids where included in the query parameter.
     - **404 Not Found:**  the user has no such collection.
     - **412 Precondition Failed:**  an object in the collection has been
       modified since the timestamp in the *X-If-Unmodified-Since* header.
@@ -347,7 +348,6 @@ collection.
 
     Possible HTTP error responses:
 
-    - **400 Bad Request:**  too many ids where included in the query parameter.
     - **404 Not Found:**  the user has no such collection.
     - **409 Conflict:**  another client has made (or is currently making)
       changes that may conflict with the requested operation.
