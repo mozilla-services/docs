@@ -52,6 +52,11 @@ properly::
 
     $ make test
 
+If this gives you an error about "pysqlite2", you may need to install the
+"pysqlite" package like so::
+
+    $ ./bin/pip install pysqlite
+
 
 Basic Configuration
 ===================
