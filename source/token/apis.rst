@@ -50,9 +50,8 @@ Token Server API v1.0
 
 
 All errors are also returned as json responses, following the
-structure described in Cornice.
-
-XXX need to document this in Cornice
+structure `described in Cornice
+<http://cornice.readthedocs.org/en/latest/validation.html#dealing-with-errors>`_
 
 Status codes and error codes:
 
