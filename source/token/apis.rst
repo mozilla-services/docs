@@ -62,10 +62,10 @@ be accepted. This can be something like this::
 
     > GET /1.0/aitc/1.0 (with the BrowserID Assertion in the headers)
     < 403
-    { 'status': 403,
+    { 'status': 'error',
       'errors': [{'location': 'header', 'name': 'X-Conditions-Accepted',
-                  'description': 'Need to Accept conditions'}],
-      'urls': {'tos': 'http://url-to-tos'}
+                  'description': 'Need to Accept conditions'},
+                  'condition_urls': {'tos': 'http://url-to-tos'}],
     }
 
 On the next call, the client needs to setup the 'X-Conditions-Accepted' HTTP
