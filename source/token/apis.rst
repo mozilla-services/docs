@@ -48,28 +48,44 @@ Token Server API v1.0
          'duration': 300,
         }
 
+
 Conditions to use the service
 =============================
 
 If the service needs the user to accept some terms of service, privacy policy,
 etc, the client needs to send a special flag saying that these terms of
-services had been effectively signed. Here is the intended client/server flow:
+service had been effectively signed. Here is the intended client/server flow:
 
 On the first call, the URLs that the user has to agree on are not known by the
-client, so if there is a need to, the server will answer with a HTTP 403 "Need
-to accept conditions" containing a json dict with the conditions that needs to
-be accepted. This can be something like this::
+client.  The server will answer with a HTTP 403 "Need
+to accept conditions" containing a json dict with the conditions that need to
+be accepted. This can be something like::
 
-    > GET /1.0/aitc/1.0 (with the BrowserID Assertion in the headers)
-    < 403
-    { 'status': 'error',
-      'errors': [{'location': 'header', 'name': 'X-Conditions-Accepted',
-                  'description': 'Need to Accept conditions'},
-                  'condition_urls': {'tos': 'http://url-to-tos'}],
-    }
+    > GET /1.0/aitc/1.0
+      Authorization: Browser-ID <assertion>
 
-On the next call, the client needs to setup the 'X-Conditions-Accepted' HTTP
-header to True.
+    < 403 Forbidden
+      Content-Type: application/json
+
+      { 'status': 'error',
+         'errors': [{'location': 'header',
+                     'name': 'X-Conditions-Accepted',
+                     'description': 'Need to Accept conditions'},
+                     'condition_urls': {'tos': 'http://url-to-tos'}],
+      }
+
+On the next call, the client needs to include the 'X-Conditions-Accepted' HTTP
+header to indicate acceptance of the terms::
+
+    > GET /1.0/aitc/1.0
+      Authorization: Browser-ID <assertion>
+      X-Conditions-Accepted: True
+
+    < HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      { ... token details ... }
+
 
 Errors
 ======
