@@ -48,11 +48,35 @@ Token Server API v1.0
          'duration': 300,
         }
 
+Conditions to use the service
+=============================
+
+If the service needs the user to accept some terms of service, privacy policy,
+etc, the client needs to send a special flag saying that these terms of
+services had been effectively signed. Here is the intended client/server flow:
+
+On the first call, the URLs that the user has to agree on are not known by the
+client, so if there is a need to, the server will answer with a HTTP 403 "Need
+to accept conditions" containing a json dict with the conditions that needs to
+be accepted. This can be something like this::
+
+    > GET /1.0/aitc/1.0 (with the BrowserID Assertion in the headers)
+    < 403
+    { 'status': 'error',
+      'errors': [{'location': 'header', 'name': 'X-Conditions-Accepted',
+                  'description': 'Need to Accept conditions'},
+                  'condition_urls': {'tos': 'http://url-to-tos'}],
+    }
+
+On the next call, the client needs to setup the 'X-Conditions-Accepted' HTTP
+header to True.
+
+Errors
+======
 
 All errors are also returned as json responses, following the
-structure described in Cornice.
-
-XXX need to document this in Cornice
+structure `described in Cornice
+<http://cornice.readthedocs.org/en/latest/validation.html#dealing-with-errors>`_
 
 Status codes and error codes:
 
