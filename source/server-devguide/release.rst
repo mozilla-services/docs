@@ -28,7 +28,7 @@ The first thing to do is to start a branch to do the releasing work.
 
 Let's say you want to release **1.2**, create a *1.2-release* branch::
 
-    $ hg branch 1.2-release
+    $ git checkout -b 1.2-release
 
 Go back to the default branch, then change the release to **1.3.dev1**, 
 so any further change will be in the 1.3 train.
@@ -38,17 +38,16 @@ Extract of a spec file::
 
     %define version 1.3.dev1
 
-
 ::
 
-    $ hg up default
+    $ git checkout master
     ... edit the spec file so version=1.3.dev1...
-    $ hg ci -m 'starting the 1.3 developement'
-    $ hg push -f    (-f is used to create the new branch in the central repo)
+    $ git commit -m 'starting the 1.3 developement'
+    $ git push origin master
 
 Once everything is committed, go back to the release branch::
 
-     $ hg up 1.2-release
+     $ git checkout 1.2-release
 
 Change the .spec file version to 1.2 (it's probably 1.2.devX right now)
 
@@ -85,9 +84,8 @@ Example::
     recaptcha-client == 1.0.6
 
 
-On every release, you can decide to raise the versions to the latest
-stables versions, after you've tried them.
-
+After you've tried a release, you can decide to raise the version to the latest
+stable version.
 
 3. Update RELEASE.txt
 ::::::::::::::::::::::
@@ -130,8 +128,8 @@ Our tags are following this scheme: "rpm-MAJOR.MINOR.[MICRO]" where
 
 Examples::
 
-    $ hg tag "rpm-1.2"
-    $ hg tag "rpm-1.2.1"
+    $ git tag rpm-1.2
+    $ git tag rpm-1.2.1
 
 
 .. Note::
@@ -155,7 +153,7 @@ this::
 
 The syntax for the options is: **PROJECT_NAME=rpm-X.X**. When used,
 will checkout the given project at the mentioned tag. 
-The tag can be a release tag, or *tip*.
+The tag can be a release tag, or *master*.
 
 *PROJECT_NAME* refers to the name of the repository, after it has been
 upper-cased and all the dashes ("-") replaced by underscores ("_").
@@ -236,8 +234,8 @@ scheme to fix it.
 Development Releases
 --------------------
 
-The tip should always have a version with a *.devN* suffix. That is, the next 
-version to be released, with N being an integer. Examples:
+The master should always have a version with a *.devN* suffix. That is, the
+next version to be released, with N being an integer. Examples:
 
 - 1.5.dev1
 - 1.4.dev23
@@ -263,7 +261,7 @@ Here's a full scenario of versioning usage:
 - devs fix the problems and tag 1.3.2
 - 1.3.2 is pushed on stage, it's working
 - 1.3.2 is pushed in production
-- it works, congrats. Now working on 1.4.dev1 in tip
+- it works, congrats. Now working on 1.4.dev1 in master
 
 
 The Makefile
