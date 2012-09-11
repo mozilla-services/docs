@@ -23,8 +23,13 @@ Basic Storage Object
 ====================
 
 A **Basic Storage Object (BSO)** is the generic JSON wrapper around all
-items passed into and out of the SyncStorage server. Like all JSON, Basic
-Storage Objects need to be UTF-8 encoded. BSOs have the following fields:
+items passed into and out of the SyncStorage server. Like all JSON documents,
+BSOs are composed of unicode character data rather than raw bytes and must
+be encoded for transmission over the network.  The SyncStorage service always
+encodes BSOs in UTF-8.
+
+Basic Storage Objects have the following fields:
+
 
 +---------------+-----------+------------+---------------------------------------------------------------+
 | Parameter     | Default   | Type/Max   |  Description                                                  |
