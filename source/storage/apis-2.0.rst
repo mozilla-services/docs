@@ -593,7 +593,7 @@ protocol.
 
 **304 Not Modified**
 
-    For requests that included the *X-If-Modified-Since-Version* header, this
+    For requests that include the *X-If-Modified-Since-Version* header, this
     response code indicates that the resource has not been modified.  The
     client should continue to use its local copy of the data.
 
