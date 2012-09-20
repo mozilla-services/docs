@@ -54,17 +54,18 @@ Basic Storage Objects have the following fields:
 |               |           |            | This is set automatically by the server according to its own  |
 |               |           |            | clock; any client-supplied value for this field is ignored.   |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| sortindex     | none      | integer    | An integer indicating the relative importance of this item in |
-|               |           | 9 digits   | the collection.                                               |
-+---------------+-----------+------------+---------------------------------------------------------------+
-| payload       | none      | string     | A string containing the data of the record. The structure of  |
-|               |           | 256k       | this string is defined separately for each BSO type. This     |
+| payload       | empty     | string     | A string containing the data of the record. The structure of  |
+|               | string    | 256k       | this string is defined separately for each BSO type. This     |
 |               |           |            | spec makes no requirements for its format. In practice,       |
 |               |           |            | JSONObjects are common.                                       |
 +---------------+-----------+------------+---------------------------------------------------------------+
+| sortindex     | none      | integer    | An integer indicating the relative importance of this item in |
+|               |           | 9 digits   | the collection.                                               |
++---------------+-----------+------------+---------------------------------------------------------------+
 | ttl           | none      | integer    | The number of seconds to keep this record. After that time    |
 |               |           |            | this item will no longer be returned in response to any       |
-|               |           |            | request, and it may be pruned from the database.              |
+|               |           |            | request, and it may be pruned from the database.  If not      |
+|               |           |            | specified or null, the record will not expire.                |
 +---------------+-----------+------------+---------------------------------------------------------------+
 
 
@@ -299,9 +300,51 @@ collection.
 
 **PUT** **https://<endpoint-url>/storage/<collection>/<id>**
 
-    Adds the BSO defined in the request body to the collection. If the BSO
-    does not contain a payload, it will only update the provided metadata
-    fields on an already defined object.
+    Creates or overwrites a specific BSO within a collection.
+
+    The request body must contain full JSON data for the BSO.  It will be
+    written into the specified collection under the specified id.
+
+    This request may include the *X-If-Unmodified-Since-Version* header to
+    avoid overwriting the data if it has been changed since the client
+    fetched it.
+
+    Successful requests will receive a **201 Created** response if a new
+    BSO is created, or a **204 No Content** response if an existing BSO
+    is overwritten.  The response will include an *X-Last-Modified-Version*
+    header giving the new current version number, which is also the new
+    last-modified version number for the containing collection.
+
+    Note that the server may impose a limit on the amount of data submitted
+    for storage in a single BSO.
+
+    Possible HTTP error responses:
+
+    - **409 Conflict:**  another client has made (or is currently making)
+      changes that may conflict with the requested operation.
+    - **412 Precondition Failed:**  the last-modified version number of
+      the item is greater than the value in the
+      *X-If-Unmodified-Since-Version* header.
+    - **413 Request Entity Too Large:**  the object is larger than the
+      server is willing to store.
+    - **415 Unsupported Media Type:**  the request had a Content-Type other
+      than **application/json**.
+
+
+**POST** **https://<endpoint-url>/storage/<collection>/<id>**
+
+    Creates or updates a specific BSO within a collection.
+    The request body must be a JSON object giving new data for the BSO.
+
+    If the target BSO already exists then it will be updated with the data
+    from the request body.  Fields that are not provided in the request body
+    will not be overwritten, so it is possible to e.g. update the `ttl` field
+    of a BSO without re-submitting its `payload`.  Fields that are explicitly
+    set to `null` in the request body will be set to their default value
+    by the server.
+
+    If the target BSO does not exist, then fields that are not provided in
+    the request body will be set to their default value by the server.
 
     This request may include the *X-If-Unmodified-Since-Version* header to
     avoid overwriting the data if it has been changed since the client
@@ -332,10 +375,17 @@ collection.
 **POST** **https://<endpoint-url>/storage/<collection>**
 
     Takes a list of BSOs in the request body and iterates over them,
-    effectively doing a series of PUTs with the same updated version number.
+    effectively doing a series of individual POSTs with the same updated
+    version number.
 
-    Returns an object with details of success or failure for each BSO.
-    It will have the following keys:
+    Each BSO record in the request body must include an "id" field, and the
+    corresponding BSO will be created or updated according to the semantics
+    of a **POST** request targeting that specific record.  In particular,
+    this means that fields not provided in the request body will not be
+    overwritten on BSOs that already exist.
+
+    This request returns an object with details of success or failure for each
+    each BSO.  It will have the following keys:
 
     - **success:** a list of ids of BSOs that were successfully stored.
     - **failed:** an object whose keys are the ids of BSOs that were not
@@ -885,9 +935,14 @@ The following is a summary of protocol changes from
   part of its output, since the last-modified version is available in the
   *X-Last-Modified-Version* header.
 
-* Successful **PUT** requests now give a **201 Created** or **204 No Content**
-  response, rather than redundantly returning a modification time and an
-  *X-Last-Modified-Version*  header
+* The **POST /storage/collection/item** request has been added to allow
+  partial updates of an individual BSO.  Previously partial updates were
+  allowed as part of a **PUT** request, which violated the HTTP semantics
+  for **PUT**.
+
+* Successful writes to an individual item now give a **201 Created** or
+  **204 No Content** response, rather than redundantly returning a
+  modification time and an *X-Last-Modified-Version* header.
 
 * Successful **DELETE** requests now give a **204 No Content** response,
   response, rather than redundantly returning a modification time and an
