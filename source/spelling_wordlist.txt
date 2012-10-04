@@ -58,6 +58,7 @@ flup
 gcc
 Gentoo
 Gunicorn
+gunicorn
 GXS
 hardcoded
 hgrc
@@ -137,6 +138,7 @@ stateful
 stdout
 Str
 svn
+syncstorage
 testsuite
 threadpool
 timeline

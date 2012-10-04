@@ -433,9 +433,9 @@ Response Headers
 HTTP status codes
 =================
 
-Since the aitc protocol is implemented on top of HTTP, clients should be
+Since the AitC protocol is implemented on top of HTTP, clients should be
 prepared to deal gracefully with any valid HTTP response.  This section serves
-to highlight the response codes that explicitly form part of the aitc
+to highlight the response codes that explicitly form part of the AitC
 protocol.
 
 

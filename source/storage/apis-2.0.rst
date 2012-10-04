@@ -879,10 +879,10 @@ The following is a summary of protocol changes from
   input in addition to application/json.
 
 * The *X-Last-Modified-Version* header has been added, to provide clients with
-  a moreprobust conflict-detection mechanism than the *X-Timestamp* header.
+  a more robust conflict-detection mechanism than the *X-Timestamp* header.
 
 * The **POST /storage/collection** request no longer returns **modified** as
-  part of its output, since the last-modified versio is available in the
+  part of its output, since the last-modified version is available in the
   *X-Last-Modified-Version* header.
 
 * Successful **PUT** requests now give a **201 Created** or **204 No Content**
