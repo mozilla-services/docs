@@ -36,6 +36,7 @@ config
 configs
 crypto
 datacenter
+debian
 Debuntu
 deserializes
 dev
@@ -57,8 +58,8 @@ firebird
 flup
 gcc
 Gentoo
-Gunicorn
 gunicorn
+Gunicorn
 GXS
 hardcoded
 hgrc
@@ -151,6 +152,7 @@ umask
 uninstall
 uninstalled
 uninstalls
+unparsable
 uri
 url
 urls
