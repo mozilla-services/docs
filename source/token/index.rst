@@ -1,4 +1,4 @@
-.. _ezsetup:
+.. _tokenserver:
 
 ============
 Token Server
