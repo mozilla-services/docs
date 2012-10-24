@@ -27,6 +27,7 @@ Resources
 =========
 
 - Original wiki pages:
+
  - https://wiki.mozilla.org/Apps/AITC
 
 - Server: https://github.com/mozilla-services/server-aitc

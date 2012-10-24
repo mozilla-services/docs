@@ -33,7 +33,7 @@ Versions 1, 2, and 3
 --------------------
 
 These were used by an old version of Sync which was deprecated in early 2011.
-Historical information is `available <https://wiki.mozilla.org/index.php?title=Labs/Weave/Developer/Crypto&oldid=200527>`_.
+Historical information is `available here <https://wiki.mozilla.org/index.php?title=Labs/Weave/Developer/Crypto&oldid=200527>`_.
 
 These versions should not be in active use and should all be upgraded to a
 newer storage format.

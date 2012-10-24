@@ -19,3 +19,4 @@ deeper.
    storageformat5
    storageformat6
    objectformats
+   mozilla
