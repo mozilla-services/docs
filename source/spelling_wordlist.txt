@@ -21,6 +21,7 @@ bipostal
 bso
 BSO
 Bugzilla
+builtin
 cachegrind
 captcha
 captchas
@@ -58,6 +59,7 @@ firebird
 flup
 gcc
 Gentoo
+getVS
 gunicorn
 Gunicorn
 GXS
@@ -123,6 +125,7 @@ prefs
 prepended
 proxying
 py
+pysqlite
 qrefresh
 reCaptcha
 redis
@@ -144,6 +147,7 @@ testsuite
 threadpool
 timeline
 timestamp
+tmp
 toolbar
 Tos
 ttl

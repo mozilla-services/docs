@@ -236,7 +236,7 @@ We provide a **sync.wsgi** file for you convenience in the repository.
 Before running Apache, edit the file and check that it loads the the right
 .ini file with its full path.
 
-NginX + Gunicorn
+Nginx + Gunicorn
 ::::::::::::::::
 
 Tested with debian stable/squeeze
@@ -258,7 +258,7 @@ Tested with debian stable/squeeze
 3. Edit **etc/sync.conf**::
 
         [nodes]
-        fallback_node = https://www.yourserver.net/yourpath/
+        fallback_node = https://www.yourserver.net/some/path/
 
 4. Finally edit your nginx vhost file::
 
@@ -330,12 +330,12 @@ from this section, since fcgi does not support them.
     create_tables = true
 
     [nodes]
-    fallback_node = https://www.yourserver.net/yourpath/
+    fallback_node = https://www.yourserver.net/some/path/
 
 7. Edit your **lighttpd.conf**::
 
         server.modules   += ( "mod_fastcgi" )
-        fastcgi.server    = (   "/yourpath" => ((
+        fastcgi.server    = (   "/some/path" => ((
                                 "host" => "127.0.0.1",
                                 "port" => 5000,
                         "idle-imeout" => 32,
@@ -345,7 +345,7 @@ from this section, since fcgi does not support them.
                         ))
                     )
 
-Be sure to **not** add a trailing slash after "/yourpath", otherwise you will get a 404 error.
+Be sure to **not** add a trailing slash after "/some/path", otherwise you will get a 404 error.
 
 8. Start the Python server::
 
