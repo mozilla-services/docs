@@ -68,6 +68,8 @@ Client Development
 .. toctree::
    :maxdepth: 1
 
+   healthreport/index
+   metrics/index
    sync/index
 
 Miscellaneous
