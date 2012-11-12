@@ -127,6 +127,7 @@ proxying
 py
 pysqlite
 qrefresh
+querystring
 reCaptcha
 redis
 reqs
