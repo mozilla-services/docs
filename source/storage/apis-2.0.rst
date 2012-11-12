@@ -37,34 +37,35 @@ Basic Storage Objects have the following fields:
 +---------------+-----------+------------+---------------------------------------------------------------+
 | Parameter     | Default   | Type/Max   |  Description                                                  |
 +===============+===========+============+===============================================================+
-| id            | required  |  string    | An identifying string. For a user, the id must be unique for  |
+| id            | required  |  string,   | An identifying string. For a user, the id must be unique for  |
 |               |           |  64        | a BSO within a collection, though objects in different        |
 |               |           |            | collections may have the same ID.                             |
 |               |           |            |                                                               |
 |               |           |            | BSO ids may only contain characters from the urlsafe-base64   |
 |               |           |            | alphabet (i.e. alphanumerics, underscore and hyphen)          |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| version       | none      | integer    | The version number at which this object was last modified.    |
-|               |           | 16 digits  | This is a server-assigned integer that is set automatically   |
-|               |           |            | on each write; any client-supplied value for this field is    |
+| version       | none      | integer,   | The version number at which this object was last modified.    |
+|               |           | positive,  | This is a server-assigned integer that is set automatically   |
+|               |           | 16 digits  | on each write; any client-supplied value for this field is    |
 |               |           |            | ignored.                                                      |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| timestamp     | none      | integer    | The timestamp at which this object was last modified, in      |
-|               |           |            | milliseconds since UNIX epoch (1970-01-01 00:00:00 UTC).      |
-|               |           |            | This is set automatically by the server according to its own  |
+| timestamp     | none      | integer,   | The timestamp at which this object was last modified, in      |
+|               |           | positive,  | milliseconds since UNIX epoch (1970-01-01 00:00:00 UTC).      |
+|               |           | 16 digits  | This is set automatically by the server according to its own  |
 |               |           |            | clock; any client-supplied value for this field is ignored.   |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| payload       | empty     | string     | A string containing the data of the record. The structure of  |
+| payload       | empty     | string,    | A string containing the data of the record. The structure of  |
 |               | string    | 256k       | this string is defined separately for each BSO type. This     |
 |               |           |            | spec makes no requirements for its format. In practice,       |
 |               |           |            | JSONObjects are common.                                       |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| sortindex     | none      | integer    | An integer indicating the relative importance of this item in |
-|               |           | 9 digits   | the collection.                                               |
+| sortindex     | none      | integer,   | An integer indicating the relative importance of this item in |
+|               |           | positive,  | the collection.                                               |
+|               |           | 9 digits   |                                                               |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| ttl           | none      | integer    | The number of seconds to keep this record. After that time    |
-|               |           |            | this item will no longer be returned in response to any       |
-|               |           |            | request, and it may be pruned from the database.  If not      |
+| ttl           | none      | integer,   | The number of seconds to keep this record. After that time    |
+|               |           | positive,  | this item will no longer be returned in response to any       |
+|               |           | 9 digits   | request, and it may be pruned from the database.  If not      |
 |               |           |            | specified or null, the record will not expire.                |
 +---------------+-----------+------------+---------------------------------------------------------------+
 
@@ -239,9 +240,9 @@ collection.
     - **full**: any value.  If provided then the response will be a list of
       full BSO objects rather than a list of ids.
 
-    - **limit**: an integer. At most that many objects will be returned.
-      If more than that many objects matched the query, an *X-Next-Offset*
-      header will be returned.
+    - **limit**: a positive integer. At most that many objects will be.
+      returned. If more than that many objects matched the query, an
+      *X-Next-Offset* header will be returned.
 
     - **offset**: a string, as returned in the *X-Next-Offset* header of
       a previous request using the **limit** parameter.
@@ -523,7 +524,7 @@ Request Headers
     It is similar to the standard HTTP **If-Modified-Since** header, but the
     value is an opaque version number rather than a timestamp.
 
-    If the value of this header is not a valid integer, or if the
+    If the value of this header is not a valid positive integer, or if the
     **X-If-Unmodified-Since-Version** header is also present, then a
     **400 Bad Request** response will be returned.
 
@@ -538,7 +539,7 @@ Request Headers
     It is similar to the standard HTTP **If-Unmodified-Since** header, but the
     value is an opaque version number rather than a timestamp.
 
-    If the value of this header is not a valid integer, or if the
+    If the value of this header is not a valid positive integer, or if the
     **X-If-Modified-Since-Version** header is also present, then a
     **400 Bad Request** response will be returned.
 
