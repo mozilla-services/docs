@@ -321,6 +321,8 @@ collection.
 
     Possible HTTP error responses:
 
+    - **403 Forbidden:**  the user has exceeded their storage quota
+      (status="quota-exceeded").
     - **409 Conflict:**  another client has made (or is currently making)
       changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  the last-modified version number of
@@ -362,6 +364,8 @@ collection.
 
     Possible HTTP error responses:
 
+    - **403 Forbidden:**  the user has exceeded their storage quota
+      (status="quota-exceeded").
     - **409 Conflict:**  another client has made (or is currently making)
       changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  the last-modified version number of
@@ -420,6 +424,8 @@ collection.
 
     Possible HTTP error responses:
 
+    - **403 Forbidden:**  the user has exceeded their storage quota
+      (status="quota-exceeded").
     - **409 Conflict:**  another client has made (or is currently making)
       changes that may conflict with the requested operation.
     - **412 Precondition Failed:**  the last-modified version number of
@@ -675,10 +681,17 @@ protocol.
     The server refused to fulfill the request, for reasons other than invalid
     user credentials.
 
-    This response may be used to refuse service to clients with known problems
-    or incompatibilities.  The JSON error response in this case will have a
-    `status` field of "upgrade-required".  Clients should inform the user of
-    the failure and refrain from making further requests.
+    The response will have a *Content-Type* of **application/json** and the
+    body will follow the format described in :ref:`syncstorage_error_format`
+    to give a description of the error.  The `status` field of the error
+    response may give further information, as follows:
+
+      * **quota-exceeded**:  A write request could not be processed because
+        the user has exceeded the storage quota provided by the server.
+
+      * **upgrade-required**:  The server refused the request due to known
+        bugs or incompatibilities in the client.  Clients should inform the
+        user of the failure and refrain from making further requests.
 
 
 **404 Not Found**
@@ -757,6 +770,8 @@ The top-level JSON object in the response will always contain a key named
 cause of the error:
 
   * **error**:  a generic unexpected error, such as malformed input data.
+  * **quota-exceeded**:  a write request could not be processed because the
+    user has exceeded the storage quota provided by the server.
   * **upgrade-required**:  the server refused the request due to known bugs
     or incompatibilities in the client.
 
