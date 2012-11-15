@@ -137,6 +137,8 @@ Sagrada
 scp
 snode
 sortindex
+sql
+SQLUser
 sqlite
 Sreg
 stateful

@@ -124,6 +124,22 @@ build the development channel like so::
 
     $ make build CHANNEL=dev
 
+
+.. note:: Due to a change in how authentication is handled, users upgrading
+   from a build made prior to January 2012 may need to migrate user accounts
+   into a new database table.  To do so:
+
+      1. Check that the [auth] section in your config file is using the
+        "services.user.sql.SQLUser" backend.
+
+      2. Check if your database contains a "users" table.
+
+      3. If so, use the following migration script to move data
+         into the "user" table::
+
+            deps/server-core/migrations/auth.sql_to_user.sql_migration.txt
+
+
 Security Notes
 ==============
 
