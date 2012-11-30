@@ -12,9 +12,8 @@ into named **collections**.
 Status: FINAL DRAFT
 ===================
 
-This document is currently in **final draft** status.  While no substantial
-modifications are expected, there may be small changes and clarifications
-as implementation progresses.
+This document is currently in **final draft** status.  Barring any problems
+identified during deployment, the protocol will undergo no further changes.
 
 
 Concepts
