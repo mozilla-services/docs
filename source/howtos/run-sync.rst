@@ -418,6 +418,20 @@ Some common errors:
   fully qualified names described in the previous sections.
 
 
+Firefox says the server URL is invalid
+::::::::::::::::::::::::::::::::::::::
+
+Check that you have entered the full URL, including a leading "http://" or
+"https://" component.
+
+Check that you're not running your server on a port number that is commonly
+used for other serivces, such as port 22 (used by ssh) or port 6000 (used by
+X11).  Firefox may prevent outgoing HTTP connections to these ports for
+security reasons.
+
+The current list of blocked ports can be viewed at http://dxr.mozilla.org/mozilla-central/netwerk/base/src/nsIOService.cpp.html#l70.
+
+
 Can't get it to work
 ::::::::::::::::::::
 
