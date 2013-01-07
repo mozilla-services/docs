@@ -417,6 +417,12 @@ Some common errors:
   This error means that your backend configuration is outdated. Use the
   fully qualified names described in the previous sections.
 
+- Various datatype-related errors
+
+  This could indicate that your webserver's own authentication system is
+  interacting badly with the sync server's own system.  You may need to
+  e.g. disable apache's basic auth system.
+
 
 Firefox says the server URL is invalid
 ::::::::::::::::::::::::::::::::::::::
@@ -425,7 +431,7 @@ Check that you have entered the full URL, including a leading "http://" or
 "https://" component.
 
 Check that you're not running your server on a port number that is commonly
-used for other serivces, such as port 22 (used by ssh) or port 6000 (used by
+used for other services, such as port 22 (used by ssh) or port 6000 (used by
 X11).  Firefox may prevent outgoing HTTP connections to these ports for
 security reasons.
 
