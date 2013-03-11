@@ -14,128 +14,116 @@ Currently, the Firefox Health Report is submitted as a compressed JSON
 document. Here is an example JSON document::
 
     {
-        "lastPingDate": "2013-01-07",
-        "thisPingDate": "2013-01-07",
-        "version": 1
-        "data": {
-            "days": {
-                "2012-07-19": {
-                    "org.mozilla.crashes.crashes.1": {
-                        "submitted": 1
-                    }
-                },
-                "2012-08-15": {
-                    "org.mozilla.crashes.crashes.1": {
-                        "submitted": 2
-                    }
-                },
-                "2013-01-07": {
-                    "org.mozilla.addons.counts.1": {
-                        "plugin": 2,
-                        "theme": 1
-                    },
-                    "org.mozilla.appInfo.appinfo.1": {
-                        "isDefaultBrowser": 0
-                    },
-                    "org.mozilla.appInfo.versions.1": {
-                        "version": [
-                            "20.0a1"
-                        ]
-                    },
-                    "org.mozilla.appSessions.previous.1": {
-                        "cleanActiveTime": [
-                            51920,
-                            224188
-                        ],
-                        "cleanTotalTime": [
-                            51920,
-                            359209
-                        ],
-                        "firstPaint": [
-                            1597,
-                            1199
-                        ],
-                        "main": [
-                            29,
-                            32
-                        ],
-                        "sessionRestored": [
-                            1784,
-                            1339
-                        ]
-                    }
-                }
+      "version": 1,
+      "thisPingDate": "2013-03-11",
+      "lastPingDate": "2013-03-10",
+      "data": {
+        "last": {
+          "org.mozilla.addons.active": {
+            "masspasswordreset@johnathan.nightingale": {
+              "userDisabled": false,
+              "appDisabled": false,
+              "version": "1.05",
+              "type": "extension",
+              "scope": 1,
+              "foreignInstall": false,
+              "hasBinaryComponents": false,
+              "installDay": 14973,
+              "updateDay": 15317
             },
-            "last": {
-                "org.mozilla.addons.active.1": {
-                    "{07b90314-1e79-c84a-4b47-fb7e1853be39}": {
-                        "appDisabled": false,
-                        "foreignInstall": true,
-                        "installDay": 15513,
-                        "scope": 8,
-                        "type": "plugin",
-                        "updateDay": 15513,
-                        "userDisabled": false,
-                        "version": "14.5.0"
-                    },
-                    "{470c11d9-f59f-097a-bb98-2d4102ece420}": {
-                        "appDisabled": false,
-                        "foreignInstall": true,
-                        "installDay": 15695,
-                        "scope": 8,
-                        "type": "plugin",
-                        "updateDay": 15695,
-                        "userDisabled": false,
-                        "version": "11.5.502.136"
-                    },
-                    "{972ce4c6-7e08-4474-a285-3208198ce6fd}": {
-                        "appDisabled": false,
-                        "foreignInstall": false,
-                        "hasBinaryComponents": false,
-                        "installDay": 15712,
-                        "scope": 4,
-                        "type": "theme",
-                        "updateDay": 15712,
-                        "userDisabled": false,
-                        "version": "20.0a1"
-                    }
-                },
-                "org.mozilla.appInfo.appinfo.1": {
-                    "appBuildID": "20130106161840",
-                    "distributionID": "",
-                    "distributionVersion": "",
-                    "hotfixVersion": "",
-                    "id": "{ec8030f7-c20a-464f-9b0e-13a3a9e97384}",
-                    "locale": "en-US",
-                    "name": "Firefox",
-                    "os": "Darwin",
-                    "platformBuildID": "20130106161840",
-                    "platformVersion": "20.0a1",
-                    "updateChannel": "default",
-                    "vendor": "Mozilla",
-                    "version": "20.0a1",
-                    "xpcomabi": "x86_64-gcc3"
-                },
-                "org.mozilla.appSessions.current.1": {
-                    "activeTime": 34561,
-                    "firstPaint": 1223,
-                    "main": 28,
-                    "sessionRestored": 1370,
-                    "startDay": 15712,
-                    "totalTime": 62046
-                },
-                "org.mozilla.profile.age.1": {
-                    "profileCreation": 15712
-                },
-                "org.mozilla.sysinfo.sysinfo.1": {
-                    "architecture": "x86-64",
-                    "cpuCount": 8,
-                    "memoryMB": 8192,
-                "name": "Darwin",
-                "version": "12.2.0"
-                }
-            }
+            "places-maintenance@bonardo.net": {
+              "userDisabled": false,
+              "appDisabled": false,
+              "version": "1.3",
+              "type": "extension",
+              "scope": 1,
+              "foreignInstall": false,
+              "hasBinaryComponents": false,
+              "installDay": 15268,
+              "updateDay": 15379
+            },
+            "_v": 1
+          },
+          "org.mozilla.appInfo.appinfo": {
+            "_v": 1,
+            "appBuildID": "20130309030841",
+            "distributionID": "",
+            "distributionVersion": "",
+            "hotfixVersion": "",
+            "id": "{ec8030f7-c20a-464f-9b0e-13a3a9e97384}",
+            "locale": "en-US",
+            "name": "Firefox",
+            "os": "Darwin",
+            "platformBuildID": "20130309030841",
+            "platformVersion": "22.0a1",
+            "updateChannel": "nightly",
+            "vendor": "Mozilla",
+            "version": "22.0a1",
+            "xpcomabi": "x86_64-gcc3"
+          },
+          "org.mozilla.profile.age": {
+            "_v": 1,
+            "profileCreation": 12444
+          },
+          "org.mozilla.appSessions.current": {
+            "_v": 3,
+            "startDay": 15773,
+            "activeTicks": 522,
+            "totalTime": 70858,
+            "main": 1245,
+            "firstPaint": 2695,
+            "sessionRestored": 3436
+          },
+          "org.mozilla.sysinfo.sysinfo": {
+            "_v": 1,
+            "cpuCount": 8,
+            "memoryMB": 16384,
+            "architecture": "x86-64",
+            "name": "Darwin",
+            "version": "12.2.1"
+          }
         },
+        "days": {
+          "2013-03-11": {
+            "org.mozilla.addons.counts": {
+              "_v": 1,
+              "extension": 15,
+              "plugin": 12,
+              "theme": 1
+            },
+            "org.mozilla.places.places": {
+              "_v": 1,
+              "bookmarks": 757,
+              "pages": 104858
+            },
+            "org.mozilla.appInfo.appinfo": {
+              "_v": 1,
+              "isDefaultBrowser": 1
+            }
+          },
+          "2013-03-10": {
+            "org.mozilla.addons.counts": {
+              "_v": 1,
+              "extension": 15,
+              "plugin": 12,
+              "theme": 1
+            },
+            "org.mozilla.places.places": {
+              "_v": 1,
+              "bookmarks": 757,
+              "pages": 104857
+            },
+            "org.mozilla.searches.counts": {
+              "_v": 1,
+              "google.urlbar": 4
+            },
+            "org.mozilla.appInfo.appinfo": {
+              "_v": 1,
+              "isDefaultBrowser": 1
+            }
+          }
+        }
+      }
     }
 
 
