@@ -25,9 +25,20 @@ geckoAppInfo
 ^^^^^^^^^^^^
 
 This field is an object that is a simple map of string keys and values
-describing basic application metadata.
+describing basic application metadata. It is very similar to the *appinfo*
+measurement in the *last* section. The difference is this field is almost
+certainly guaranteed to exist whereas the one in the data part of the
+payload may be omitted in certain scenarios (such as catastrophic client
+error).
 
 It's keys are as follows:
+
+appBuildID
+    The build ID/date of the application. e.g. "20130314113542".
+
+version
+    The value of nsXREAppData.version. This is the application's version. e.g.
+    "21.0.0".
 
 vendor
     The value of nsXREAppData.vendor. Can be empty an empty string. For
@@ -39,13 +50,6 @@ name
 
 id
     The value of nsXREAppData.ID.
-
-version
-    The value of nsXREAppData.version. This is the application's version. e.g.
-    "21.0.0".
-
-appBuildID
-    The build ID/date of the application. e.g. "20130314113542".
 
 platformVersion
     The version of the Gecko platform (as opposed to the app version). For
@@ -60,6 +64,11 @@ os
 
 xpcomabi
     The binary architecture of the build.
+
+updateChanngel
+    The name of the channel used for application updates. Official Mozilla
+    builds have one of the values {release, beta, aurora, nightly}. Local and
+    test builds have *default* as the channel.
 
 Version 1
 ---------
@@ -348,6 +357,20 @@ org.mozilla.appInfo.appinfo
 This measurement contains basic XUL application and Gecko platform
 information. It is reported in the *last* section.
 
+Version 2
+^^^^^^^^^
+
+In addition to fields present in version 1, this version has the following
+fields appearing in the *days* section:
+
+isBlocklistEnabled
+    Whether the blocklist ping is enabled. This is an integer, 0 or 1.
+    This does not indicate whether the blocklist ping was sent but merely
+    whether the application will try to send the blocklist ping.
+
+isTelemetryEnabled
+    Whether Telemetry is enabled. This is an integer, 0 or 1.
+
 Version 1
 ^^^^^^^^^
 
@@ -404,20 +427,67 @@ org.mozilla.appInfo.versions
 
 This measurement contains a history of application version numbers.
 
+Version 2
+^^^^^^^^^
+
+Version 2 reports more fields than version 1 and is not backwards compatible.
+The following fields are present in version 2:
+
+appVersion
+    An array of application version strings.
+appBuildID
+    An array of application build ID strings.
+platformVersion
+    An array of platform version strings.
+platformBuildID
+    An array of platform build ID strings.
+
+When the application is upgraded, the new version and/or build IDs are
+appended to their appropriate fields.
+
+Version 1
+^^^^^^^^^
+
 When the application version (*version* from *org.mozilla.appinfo.appinfo*)
 changes, we record the new version on the day the change was seen. The new
 versions for a day are recorded in an array under the *version* property.
+
+Notes
+^^^^^
+
+If the application isn't upgraded, this measurement will not be present.
+This means this measurement will not be present for most days if a user is
+on the release channel (since updates are typically released every 6 weeks).
+However, users on the Nightly and Aurora channels will likely have a lot
+of these entries since those builds are updated every day.
+
+Values for this measurement are collected when performing the daily
+collection (typically occurs at upload time). As a result, it's possible
+the actual upgrade day may not be attributed to the proper day - the
+reported day may lag behind.
+
+The app and platform versions and build IDs should be identical for most
+clients. If they are different, we are possibly looking at a *Frankenfox*.
 
 Example
 ^^^^^^^
 
 ::
 
-    "2013-02-20": {
+    "2013-03-27": {
       "org.mozilla.appInfo.versions": {
-        "_v": 1,
-        "version": [
-          "22.0a1"
+        "_v": 2,
+        "appVersion": [
+           "22.0.0"
+        ],
+        "appBuildID": [
+          "20130325031100"
+        ],
+        "platformVersion": [
+          "22.0.0"
+        ],
+        "platformBuildID": [
+          "20130325031100"
         ]
       }
     }
@@ -648,6 +718,97 @@ org.mozilla.searches.counts
 This measurement contains information about searches performed in the
 application.
 
+Version 2
+^^^^^^^^^
+
+This behaves like version 1 except we added all search engines that
+Mozilla has a partner agreement with. Like version 1, we concatenate
+a search engine ID with a search origin.
+
+Another difference with version 2 is we should no longer misattribute
+a search to the *other* bucket if the search engine name is localized.
+
+The set of search engine providers is:
+
+* amazon-co-uk
+* amazon-de
+* amazon-en-GB
+* amazon-france
+* amazon-it
+* amazon-jp
+* amazondotcn
+* amazondotcom
+* amazondotcom-de
+* aol-en-GB
+* aol-web-search
+* bing
+* eBay
+* eBay-de
+* eBay-en-GB
+* eBay-es
+* eBay-fi
+* eBay-france
+* eBay-hu
+* eBay-in
+* eBay-it
+* google
+* google-jp
+* google-ku
+* google-maps-zh-TW
+* mailru
+* mercadolibre-ar
+* mercadolibre-cl
+* mercadolibre-mx
+* seznam-cz
+* twitter
+* twitter-de
+* twitter-ja
+* yahoo
+* yahoo-NO
+* yahoo-answer-zh-TW
+* yahoo-ar
+* yahoo-bid-zh-TW
+* yahoo-br
+* yahoo-ch
+* yahoo-cl
+* yahoo-de
+* yahoo-en-GB
+* yahoo-es
+* yahoo-fi
+* yahoo-france
+* yahoo-fy-NL
+* yahoo-id
+* yahoo-in
+* yahoo-it
+* yahoo-jp
+* yahoo-jp-auctions
+* yahoo-mx
+* yahoo-sv-SE
+* yahoo-zh-TW
+* yandex
+* yandex-ru
+* yandex-slovari
+* yandex-tr
+* yandex.by
+* yandex.ru-be
+
+And of course, *other*.
+
+The sources for searches remain:
+
+* abouthome
+* contextmenu
+* searchbar
+* urlbar
+
+The measurement will only be populated with providers and sources that
+occurred that day.
+
+If a user switches locales, searches from default providers on the older
+locale will still be supported. However, if that same search engine is
+added by the user to the new build and is *not* a default search engine
+provider, its searches will be attributed to the *other* bucket.
+
 Version 1
 ^^^^^^^^^
 
@@ -677,11 +838,8 @@ search bar
 url bar
     Searches initiated from the awesomebar/url bar.
 
-Notes
-^^^^^
-
 Due to the localization of search engine names, non en-US locales may wrongly
-attribute searches to the *other* bucket. Bug 841554 tracks.
+attribute searches to the *other* bucket. This is fixed in version 2.
 
 Example
 ^^^^^^^
