@@ -65,7 +65,7 @@ os
 xpcomabi
     The binary architecture of the build.
 
-updateChanngel
+updateChannel
     The name of the channel used for application updates. Official Mozilla
     builds have one of the values {release, beta, aurora, nightly}. Local and
     test builds have *default* as the channel.
