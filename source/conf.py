@@ -52,3 +52,5 @@ man_pages = [
     ('index', 'sync', u'Mozilla Services Documentation',
      [u'Tarek Ziade'], 1)
 ]
+
+html_static_path = ['binaries']
