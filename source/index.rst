@@ -51,6 +51,7 @@ jump to the detailed documentation for each service:
    sreg/index
    token/index
    aitc/index
+   heka/index
 
 
 Server-side development guide
