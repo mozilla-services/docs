@@ -23,5 +23,5 @@ Resources
 =========
 
 - Heka documentation: https://heka-docs.readthedocs.org
-- Heka binaries: https://docs.services.mozilla.com/binaries/hekad-0.2
+- Heka binaries: https://docs.services.mozilla.com/_static/binaries/hekad-0.2
 - Heka source: https://github.com/mozilla-services/heka
