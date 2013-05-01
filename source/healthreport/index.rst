@@ -658,6 +658,51 @@ Example
       "submitted": 2
     }
 
+org.mozilla.healthreport.submissions
+------------------------------------
+
+This measurement contains a history of FHR's own data submission activity.
+It was added in Firefox 23 in early May 2013.
+
+Version 1
+^^^^^^^^^
+
+Daily counts of upload events are recorded.
+
+firstDocumentUploadAttempt
+    An attempt was made to upload the client's first document to the server.
+    These are uploads where the client is not aware of a previous document ID
+    on the server. Unless the client had disabled upload, there should be at
+    most one of these in the history of the client.
+
+continuationUploadAttempt
+    An attempt was made to upload a document that replaces an existing document
+    on the server. Most upload attempts should be attributed to this as opposed
+    to *firstDocumentUploadAttempt*.
+
+uploadSuccess
+    The upload attempt recorded by *firstDocumentUploadAttempt* or
+    *continuationUploadAttempt* was successful.
+
+uploadTransportFailure
+    An upload attempt failed due to transport failure (network unavailable,
+    etc).
+
+uploadServerFailure
+    An upload attempt failed due to a server-reported failure. Ideally these
+    are failures reported by the FHR server itself. However, intermediate
+    proxies, firewalls, etc may trigger this depending on how things are
+    configured.
+
+uploadClientFailure
+    An upload attempt failued due to an error/exception in the client.
+    This almost certainly points to a bug in the client.
+
+The result for an upload attempt is always attributed to the same day as
+the attempt, even if the result occurred on a different day from the attempt.
+Therefore, the sum of the result counts should equal the result of the attempt
+counts.
+
 org.mozilla.places.places
 -------------------------
 
