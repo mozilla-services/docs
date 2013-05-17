@@ -25,11 +25,12 @@ To run the server, you will also need to have these packages installed:
 - make
 - mercurial
 - sqlite3
+- openssl-dev
 
 For example, under a fresh Ubuntu, you can run this command to meet all
 requirements::
 
-    $ sudo apt-get install python-dev mercurial sqlite3 python-virtualenv
+    $ sudo apt-get install python-dev mercurial sqlite3 python-virtualenv libssl-dev
 
 
 Building the server
