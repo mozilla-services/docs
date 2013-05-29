@@ -230,7 +230,7 @@ that are compatible with the WSGI protocol. For example:
 Apache + mod_wsgi
 :::::::::::::::::
 
-Here's an example of an Apache setup that uses mod_wsgi::
+Here's an example of an Apache 2.2 setup that uses mod_wsgi::
 
   <Directory /path/to/sync>
     Order deny,allow
@@ -248,6 +248,23 @@ Here's an example of an Apache setup that uses mod_wsgi::
     ErrorLog  /var/log/apache2/example.com-error.log
   </VirtualHost>
 
+Here's the equivalent setup for Apache 2.4, which uses a different syntax
+for acess control::
+
+  <Directory /path/to/sync>
+    Require all granted
+  </Directory>
+
+  <VirtualHost \*:80>
+    ServerName example.com
+    DocumentRoot /path/to/sync
+    WSGIProcessGroup sync
+    WSGIDaemonProcess sync user=sync group=sync processes=2 threads=25
+    WSGIPassAuthorization On
+    WSGIScriptAlias / /path/to/sync/sync.wsgi
+    CustomLog /var/log/apache2/example.com-access.log combined
+    ErrorLog  /var/log/apache2/example.com-error.log
+  </VirtualHost>
 
 We provide a **sync.wsgi** file for you convenience in the repository.
 Before running Apache, edit the file and check that it loads the the right
