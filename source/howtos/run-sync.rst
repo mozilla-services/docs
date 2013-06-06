@@ -48,6 +48,12 @@ required dependencies in it. A **bin** directory is created and contains a
 **paster** command that can be used to run the server, using the built-in web
 server.
 
+
+.. note:: Occasionally the build may fail due to network issues that make
+   PyPI inaccessible.  If you receive an error about "Could not find suitable
+   distribution", try waiting a little while and then running the build again.
+
+
 If you like, you can run the testsuite to make sure everything is working
 properly::
 
