@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys, os
+from datetime import datetime
 
 extensions = [
     'sphinx.ext.graphviz',
@@ -22,7 +23,8 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 project = u'Mozilla Services'
-copyright = u'2010, Mozilla Foundation, CC BY-SA 2.5'
+year = datetime.now().year
+copyright = u'%s, Mozilla Foundation, CC BY-SA 2.5' % year
 version = ''
 release = ''
 exclude_patterns = []
