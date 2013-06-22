@@ -273,7 +273,9 @@ the add-ons *installDate* and *updateDate* properties, respectively.
 Notes
 ^^^^^
 
-Add-ons that have opted out of AMO updates are not included in the list.
+Add-ons that have opted out of AMO updates via the
+*extensions._id_.getAddons.cache.enabled* preference are, since Bug 868306
+(Firefox 24), included in the list of submitted add-ons.
 
 Example
 ^^^^^^^
