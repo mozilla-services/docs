@@ -15,6 +15,287 @@ document. The root JSON element is an object. A *version* field defines
 the version of the payload which in turn defines the expected contents
 the object.
 
+As of 2013-07-03, desktop submits Version 2, and Firefox for Android submits
+Version 3 payloads.
+
+Version 3
+---------
+
+Version 3 is a complete rebuild of the document format. Events are tracked in
+an "environment". Environments are computed from a large swath of local data
+(e.g., add-ons, CPU count, versions), and a new environment comes into being
+when one of its attributes changes.
+
+Client documents, then, will include descriptions of many environments, and
+measurements will be attributed to one particular environment.
+
+A map of environments is present at the top level of the document, with the
+current named "current" in the map. Each environment has a hash identifier and
+a set of attributes. The current environment is completely described, and has
+its hash present in a "hash" attribute. All other environments are represented
+as a tree diff from the current environment, with their hash as the key in the
+"environments" object.
+
+A removed add-on has the value 'null'.
+
+There is no "last" data at present.
+
+Daily data is hierarchical: by day, then by environment, and then by
+measurement, and is present in "data", just as in v2.
+
+Leading by example::
+
+    {
+      "lastPingDate": "2013-06-29",
+      "thisPingDate": "2013-07-03",
+      "version": 3,
+      "environments": {
+        "current": {
+          "org.mozilla.sysinfo.sysinfo": {
+            "memoryMB": 1567,
+            "cpuCount": 4,
+            "architecture": "armeabi-v7a",
+            "_v": 1,
+            "version": "4.1.2",
+            "name": "Android"
+          },
+          "org.mozilla.profile.age": {
+            "_v": 1,
+            "profileCreation": 15827
+          },
+          "org.mozilla.addons.active": {
+            "QuitNow@TWiGSoftware.com": {
+              "appDisabled": false,
+              "userDisabled": false,
+              "scope": 1,
+              "updateDay": 15885,
+              "foreignInstall": false,
+              "hasBinaryComponents": false,
+              "blocklistState": 0,
+              "type": "extension",
+              "installDay": 15885,
+              "version": "1.18.02"
+            },
+            "{dbbf9331-b713-6eda-1006-205efead09dc}": {
+              "appDisabled": false,
+              "userDisabled": "askToActivate",
+              "scope": 8,
+              "updateDay": 15779,
+              "foreignInstall": true,
+              "blocklistState": 0,
+              "type": "plugin",
+              "installDay": 15779,
+              "version": "11.1 r115"
+            },
+            "desktopbydefault@bnicholson.mozilla.org": {
+              "appDisabled": false,
+              "userDisabled": true,
+              "scope": 1,
+              "updateDay": 15870,
+              "foreignInstall": false,
+              "hasBinaryComponents": false,
+              "blocklistState": 0,
+              "type": "extension",
+              "installDay": 15870,
+              "version": "1.1"
+            },
+            "{6e092a7f-ba58-4abb-88c1-1a4e50b217e4}": {
+              "appDisabled": false,
+              "userDisabled": false,
+              "scope": 1,
+              "updateDay": 15828,
+              "foreignInstall": false,
+              "hasBinaryComponents": false,
+              "blocklistState": 0,
+              "type": "extension",
+              "installDay": 15828,
+              "version": "1.1.0"
+            },
+            "{46551EC9-40F0-4e47-8E18-8E5CF550CFB8}": {
+              "appDisabled": false,
+              "userDisabled": true,
+              "scope": 1,
+              "updateDay": 15879,
+              "foreignInstall": false,
+              "hasBinaryComponents": false,
+              "blocklistState": 0,
+              "type": "extension",
+              "installDay": 15879,
+              "version": "1.3.2"
+            },
+            "_v": 1
+          },
+          "org.mozilla.appInfo.appinfo": {
+            "isTelemetryEnabled": 1,
+            "_v": 2,
+            "isBlocklistEnabled": 1
+          },
+          "geckoAppInfo": {
+            "updateChannel": "nightly",
+            "id": "{aa3c5121-dab2-40e2-81ca-7ea25febc110}",
+            "os": "Android",
+            "platformBuildID": "20130703031323",
+            "platformVersion": "25.0a1",
+            "vendor": "Mozilla",
+            "name": "fennec",
+            "xpcomabi": "arm-eabi-gcc3",
+            "appBuildID": "20130703031323",
+            "_v": 1,
+            "version": "25.0a1"
+          },
+          "hash": "tB4Pnnep9yTxnMDymc3dAB2RRB0=",
+          "org.mozilla.addons.counts": {
+            "extension": 4,
+            "plugin": 1,
+            "_v": 1,
+            "theme": 0
+          }
+        },
+        "k2O3hlreMeS7L1qtxeMsYWxgWWQ=": {
+          "geckoAppInfo": {
+            "platformBuildID": "20130630031138",
+            "appBuildID": "20130630031138",
+            "_v": 1
+          }
+        },
+        "1+KN9TutMpzdl4TJEl+aCxK+xcw=": {
+          "geckoAppInfo": {
+            "platformBuildID": "20130626031100",
+            "appBuildID": "20130626031100",
+            "_v": 1
+          },
+          "org.mozilla.addons.active": {
+            "QuitNow@TWiGSoftware.com": null,
+            "{dbbf9331-b713-6eda-1006-205efead09dc}": null,
+            "desktopbydefault@bnicholson.mozilla.org": null,
+            "{6e092a7f-ba58-4abb-88c1-1a4e50b217e4}": null,
+            "{46551EC9-40F0-4e47-8E18-8E5CF550CFB8}": null,
+            "_v": 1
+          },
+          "org.mozilla.addons.counts": {
+            "extension": 0,
+            "plugin": 0,
+            "_v": 1
+          }
+        }
+      },
+      "data": {
+        "last": {},
+        "days": {
+          "2013-07-03": {
+            "tB4Pnnep9yTxnMDymc3dAB2RRB0=": {
+              "org.mozilla.appSessions": {
+                "normal": [
+                  {
+                    "r": "P",
+                    "d": 2,
+                    "sj": 653
+                  },
+                  {
+                    "r": "P",
+                    "d": 22
+                  },
+                  {
+                    "r": "P",
+                    "d": 5
+                  },
+                  {
+                    "r": "P",
+                    "d": 0
+                  },
+                  {
+                    "r": "P",
+                    "sg": 3560,
+                    "d": 171,
+                    "sj": 518
+                  },
+                  {
+                    "r": "P",
+                    "d": 16
+                  },
+                  {
+                    "r": "P",
+                    "d": 1079
+                  }
+                ],
+                "_v": "4"
+              }
+            },
+            "k2O3hlreMeS7L1qtxeMsYWxgWWQ=": {
+              "org.mozilla.appSessions": {
+                "normal": [
+                  {
+                    "r": "P",
+                    "d": 27
+                  },
+                  {
+                    "r": "P",
+                    "d": 19
+                  },
+                  {
+                    "r": "P",
+                    "d": 55
+                  }
+                ],
+                "_v": "4"
+              },
+              "org.mozilla.searches.counts": {
+                "bartext": {
+                  "google": 1
+                },
+                "_v": "4"
+              }
+            }
+          }
+        }
+      }
+    }
+
+App sessions in Version 3
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sessions are divided into "normal" and "abnormal". Session objects are stored as discrete JSON::
+
+    "org.mozilla.appSessions": {
+      _v: 4,
+      "normal": [
+        {"r":"P", "d": 123},
+      ],
+      "abnormal": [
+        {"r":"A", "oom": true, "stopped": false}
+      ]
+    }
+
+Keys are:
+
+"r"
+    reason. Values are "P" (activity paused), "A" (abnormal termination).
+"d"
+    duration. Value in seconds.
+"sg"
+    Gecko startup time (msec). Present if this is a clean launch. This
+    corresponds to the telemetry timer *FENNEC_STARTUP_TIME_GECKOREADY*.
+"sj"
+    Java activity init time (msec). Present if this is a clean launch. This
+    corresponds to the telemetry timer *FENNEC_STARTUP_TIME_JAVAUI*,
+    and includes initialization tasks beyond initial
+    *onWindowFocusChanged*.
+
+Abnormal terminations will be missing a duration and will feature these keys:
+
+"oom"
+    was the session killed by an OOM exception?
+"stopped"
+    was the session stopped gently?
+
+Other notable differences from Version 2
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* There is no default browser indicator on Android.
+* Add-ons include a *blocklistState* attribute, as returned by AddonManager.
+* Searches are now version 4, and are hierarchical: how the search was started
+  (bartext, barkeyword, barsuggest), and then counts per provider.
+
 Version 2
 ---------
 
@@ -31,7 +312,7 @@ certainly guaranteed to exist whereas the one in the data part of the
 payload may be omitted in certain scenarios (such as catastrophic client
 error).
 
-It's keys are as follows:
+Its keys are as follows:
 
 appBuildID
     The build ID/date of the application. e.g. "20130314113542".
