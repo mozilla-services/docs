@@ -705,6 +705,41 @@ This example comes from an official OS X Nightly build::
       "xpcomabi": "x86_64-gcc3"
     },
 
+org.mozilla.appInfo.update
+--------------------------
+
+This measurement contains information about the application update mechanism
+in the application.
+
+Version 1
+^^^^^^^^^
+
+The following daily values are reported:
+
+enabled
+    Whether automatic application update checking is enabled. 1 for yes,
+    0 for no.
+autoDownload
+    Whether automatic download of available updates is enabled.
+
+Notes
+^^^^^
+
+This measurement was merged to mozilla-central for JS FHR on 2013-07-15.
+
+Example
+^^^^^^^
+
+::
+
+    "2013-07-15": {
+      "org.mozilla.appInfo.update": {
+        "_v": 1,
+        "enabled": 1,
+        "autoDownload": 1,
+      }
+    }
+
 org.mozilla.appInfo.versions
 ----------------------------
 
