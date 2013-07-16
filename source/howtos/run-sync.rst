@@ -209,6 +209,14 @@ For example, to run everything in MySQL:
 For #3, see :ref:`configuration`.
 
 
+For SQL databases, the code will create three tables:
+
+  * *user*:  contains the user accounts, mapping email to numeric id.
+  * *collections*:  contains collection names for each user, by numeric id.
+  * *wbo*:  contains individual sync records for each user, by numeric id.
+
+
+
 Running behind a Web Server
 ===========================
 
