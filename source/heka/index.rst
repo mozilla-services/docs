@@ -14,8 +14,8 @@ It can be used for:
 - Application performance metrics
 - Server load, memory consumption, and other machine metrics
 - Database, Cache server, and other daemon metrics
-- Various statsd counters
-- Log-file transportion and statsd counter generation
+- Log-file parsing and shipping
+- Statsd-like time series data
 
 It is currently being used at Mozilla in the Marketplace and Sync infrastructures.
 
@@ -23,5 +23,5 @@ Resources
 =========
 
 - Heka documentation: http://heka-docs.readthedocs.org
-- Heka binaries: https://docs.services.mozilla.com/_static/binaries/hekad-0.2
+- Heka binaries: https://github.com/mozilla-services/heka/releases
 - Heka source: https://github.com/mozilla-services/heka
