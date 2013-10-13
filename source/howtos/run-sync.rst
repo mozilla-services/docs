@@ -324,7 +324,7 @@ Tested with debian stable/squeeze
                         proxy_set_header X-Real-IP $remote_addr;
                         proxy_set_header X-Scheme $scheme;
                         proxy_connect_timeout 10;
-                        proxy_read_timeout 10;
+                        proxy_read_timeout 120;
                         proxy_pass http://localhost:5000/;
                         }
                 }
