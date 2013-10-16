@@ -126,8 +126,12 @@ Leading by example::
             "_v": 1
           },
           "org.mozilla.appInfo.appinfo": {
+            "_v": 3,
+            "appLocale": "en_us",
+            "osLocale": "en_us",
+            "distribution": "",
+            "acceptLangIsUserSet": 0,
             "isTelemetryEnabled": 1,
-            "_v": 2,
             "isBlocklistEnabled": 1
           },
           "geckoAppInfo": {
@@ -156,6 +160,9 @@ Leading by example::
             "platformBuildID": "20130630031138",
             "appBuildID": "20130630031138",
             "_v": 1
+          },
+          "org.mozilla.appInfo.appinfo": {
+            "_v": 2,
           }
         },
         "1+KN9TutMpzdl4TJEl+aCxK+xcw=": {
@@ -287,6 +294,15 @@ Abnormal terminations will be missing a duration and will feature these keys:
     was the session killed by an OOM exception?
 "stopped"
     was the session stopped gently?
+
+Version 3.1
+^^^^^^^^^^^
+
+As of Firefox 27, *appinfo* is now bumped to v3, including *osLocale*,
+*appLocale* (currently always the same as *osLocale*), *distribution* (a string
+containing the distribution ID and version, separated by a colon), and
+*acceptLangIsUserSet*, an integer-boolean that describes whether the user set
+an *intl.accept_languages* preference.
 
 Other notable differences from Version 2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
