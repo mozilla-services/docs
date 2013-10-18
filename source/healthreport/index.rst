@@ -304,6 +304,10 @@ containing the distribution ID and version, separated by a colon), and
 *acceptLangIsUserSet*, an integer-boolean that describes whether the user set
 an *intl.accept_languages* preference.
 
+The search counts measurement is now at version 5, which indicates that
+non-partner searches are recorded. You'll see identifiers like "other-Foo Bar"
+rather than "other".
+
 Other notable differences from Version 2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
