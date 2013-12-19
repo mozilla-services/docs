@@ -441,13 +441,13 @@ running the **build** command:
 
 We maintain two repositories :
 
-1. a private mirror for PyPI at http://pypi.build.mtv1.svc.mozilla.com/simple
-2. a directory that can contain extra packages at http://pypi.build.mtv1.svc.mozilla.com/extras
+1. a private mirror for PyPI at http://pypi.services.mozilla.com/simple
+2. a directory that can contain extra packages at http://pypi.services.mozilla.com/extras
 
 
 Example of usage::
 
-    $ make build PYPI=http://pypi.build.mtv1.svc.mozilla.com/simple PYPIEXTRAS=http://pypi.build.mtv1.svc.mozilla.com/extras PYPISTRICT=1
+    $ make build PYPI=http://pypi.services.mozilla.com/simple PYPIEXTRAS=http://pypi.services.mozilla.com/extras PYPISTRICT=1
     ...
     Link to http://virtualenv.openplans.org ***BLOCKED*** by --allow-hosts
     ...
@@ -459,10 +459,10 @@ the Mozilla intranet: your application will get built with no external
 resources.
 
 If you need to upload an extra archive that does not exists at PyPI (thus is
-not mirrored), make sure you have the rights to access the build box with
+not mirrored), make sure you have the rights to access the mirror box with
 your SSH key and do a scp::
 
-    $ scp archive.tgz pypi.build.mtv1.svc.mozilla.com:/var/lib/pypi/mirror/web/extras
+    $ scp archive.tgz pypi.services.mozilla.com:/var/lib/pypi/mirror/web/extras
 
 By uploading your package to this location, make build will find it as long
 as **PYPIEXTRAS** is used.
