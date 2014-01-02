@@ -3,7 +3,6 @@ addon
 Addon
 addons
 admin
-AitC
 api
 app
 appid

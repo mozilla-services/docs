@@ -23,7 +23,7 @@ Token Server API v1.0
 
     Example for Browser-Id::
 
-        GET /1.0/sync/2.0
+        GET /1.0/sync/1.2
         Host: token.services.mozilla.com
         Authorization: Browser-ID <assertion>
 
@@ -61,7 +61,7 @@ client.  The server will answer with a HTTP 403 "Need
 to accept conditions" containing a json dict with the conditions that need to
 be accepted. This can be something like::
 
-    > GET /1.0/aitc/1.0
+    > GET /1.0/sync/1.2
       Authorization: Browser-ID <assertion>
 
     < 403 Forbidden
@@ -77,7 +77,7 @@ be accepted. This can be something like::
 On the next call, the client needs to include the 'X-Conditions-Accepted' HTTP
 header to indicate acceptance of the terms::
 
-    > GET /1.0/aitc/1.0
+    > GET /1.0/sync/1.2
       Authorization: Browser-ID <assertion>
       X-Conditions-Accepted: True
 
