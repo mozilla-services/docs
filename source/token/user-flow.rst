@@ -2,12 +2,12 @@
 User Flow
 =========
 
-Here's the proposed two-step flow (with Browser ID):
+Here's the proposed two-step flow (with BrowserID/FxA assertions):
 
-1. the client trades a browser id assertion for an :term:`Auth token` and
+1. the client trades a BrowserID assertion for an :term:`Auth token` and
    corresponding secret
 2. the client uses the auth token to sign subsequent requests using
-   :term:`MAC Access Auth`.
+   :term:`Hawk Auth`.
 
 
 Getting an :term:`Auth token`:
@@ -46,7 +46,7 @@ Detailed steps:
      Host: token.services.mozilla.com
      Authorization: Browser-ID <assertion>
 
-- the :term:`Login Server` checks the browser id assertion [2] **this step will be
+- the :term:`Login Server` checks the BrowserID assertion [2] **this step will be
   done locally without calling an external browserid server -- but this could
   potentially happen** (we can use PyBrowserID + use the BID.org certificate)
 
@@ -77,26 +77,26 @@ Detailed steps:
      'api_endpoint': 'https://example.com/app/1.0/users/12345',
     }
 
-- the client saves the node location and macauth parameters to use in subsequent
+- the client saves the node location and hawkauth parameters to use in subsequent
   requests. [6]
 
 - for each subsequent request to the :term:`Service`, the client calculates a
-  special Authorization header using :term:`MAC Access Auth` [7] and sends
+  special Authorization header using :term:`Hawk Auth` [7] and sends
   the request to the allocated node location [8]::
 
     POST /request HTTP/1.1
     Host: some.node.services.mozilla.com
-    Authorization: MAC id=<auth-token>
-                       ts="137131201",   (client timestamp)
-                       nonce="7d8f3e4a",
-                       mac="bYT5CMsGcbgUdFHObYMEfcx6bsw="
+    Authorization: Hawk id=<auth-token>
+                        ts="137131201",   (client timestamp)
+                        nonce="7d8f3e4a",
+                        mac="bYT5CMsGcbgUdFHObYMEfcx6bsw="
 
 - the node uses the :term:`Signing Secret` to validate the :term:`Auth Token` [9].  If invalid
   or expired then the node returns a 401
 
 - the node calculates the :term:`Token Secret` from its :term:`Master Secret` and the
   :term:`Auth Token`, and checks whether the signature in the Authorization header is
-  valid [10]. If it's an invalid then the node returns a 401
+  valid [10]. If it is invalid then the node returns a 401
 
 - the node processes the request as defined by the :term:`Service` [11]
 

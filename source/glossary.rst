@@ -38,12 +38,12 @@ Glossary
 
       See https://tools.ietf.org/html/rfc5869
 
-   Mac Access Auth
+   Hawk Auth
       An HTTP authentication method using a message authentication code
       (MAC) algorithm to provide cryptographic verification of portions of
       HTTP requests.
 
-      See https://tools.ietf.org/html/draft-ietf-oauth-v2-http-mac-01
+      See https://github.com/hueniverse/hawk/
 
    Auth Token
       Used to identify the user after starting a session.  Contains the
