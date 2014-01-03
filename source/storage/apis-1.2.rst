@@ -564,6 +564,22 @@ Response Headers
     the amount of storage space remaining for the user (in KB).  It will
     not be returned if quotas are not enabled on the server.
 
+**X-Weave-Alert**
+
+    This header may be returned in response to any request, and contains
+    potential warning messages, information, or other alerts.
+
+    If the first character of the header is not "{" then it is intended to
+    be a human-readable string that may be included in logs.
+
+    If the first character of the header is "{" then it is a JSON object
+    signalling impending shutdown of the service.  It will contain the
+    following fields:
+
+        * **code:** one of the strings "soft-eol" or "hard-eol".
+        * **message:** a human-readable message that may be included in logs.
+        * **url:** a URL at which more information is available.
+
 
 HTTP status codes
 =================
@@ -661,6 +677,20 @@ protocol.
     another sync for the number of seconds specified in the header value.
     The response body may contain a JSON string describing the server's status
     or error.
+
+**513 Is This Even A Real Code?**
+
+    Indicates that the service has been terminated, and presumably replaced
+    with a new and better service using some as-yet-undesigned protocol.
+    This response will include an *X-Weave-Alert* header whose value is a
+    JSON object with the following fields:
+
+        * **code:** the string "hard-eol".
+        * **message:** a human-readable message that may be included in logs.
+        * **url:** a URL at which more information is available.
+
+    The client should display an appropriate message to the user and cease
+    any further attempts to use the service.
 
 
 .. _syncstorage_concurrency:
