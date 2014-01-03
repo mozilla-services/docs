@@ -21,7 +21,7 @@ A **Weave Basic Object (WBO)** is the generic JSON wrapper around all
 items passed into and out of the SyncStorage server. Like all JSON documents,
 WBOs are composed of unicode character data rather than raw bytes and must
 be encoded for transmission over the network.  The SyncStorage service always
-encodes WBOs in UTF-8.
+encodes WBOs in UTF8.
 
 Weave Basic Objects have the following fields:
 
@@ -203,7 +203,7 @@ authenticated user.
 
     Possible HTTP status codes:
 
-    - **304 Not Modified:**  the current last-modified timen is less than or equal
+    - **304 Not Modified:**  the current last-modified time is less than or equal
       to the value specified in the *X-If-Modified-Since* header.
 
 
@@ -777,7 +777,7 @@ Example: creating a WBO only if it does not exist
 -------------------------------------------------
 
 To specify that a WBO should be created only if it does not already exist,
-use the **X-If-Unodified-Since** header with the special value of 0::
+use the **X-If-Unmodified-Since** header with the special value of 0::
 
     headers = {"X-If-Unmodified-Since": "0"}
     r = server.put("/collection/item", data, headers)
@@ -837,14 +837,14 @@ The following is a summary of protocol changes from
 +===========================================+===================================================+
 | Authentication is now performed using     | This supports authentication via Firefox Accounts |
 | the Sagrada TokenServer flow and HAWK     | and allows us to iterate the details of that      |
-| Access Authentication.                    | flow without chaning the sync protocol.           |
+| Access Authentication.                    | flow without changing the sync protocol.          |
 +-------------------------------------------+---------------------------------------------------+
 | The structure of the endpoint URL is      | This was unnecessary coupling and clients do      |
 | no longer specified, and should be        | not need to change/configure components of the    |
 | considered an implementation detail.      | endpoint URL.  URL handling must change already   |
 |                                           | to support TokenServer-based authentication.      |
 +-------------------------------------------+---------------------------------------------------+
-| The datatypes and defaults of WBO         | This reflects current server behaviour, and seems |
+| The datatypes and defaults of WBO         | This reflects current server behavior, and seems  |
 | fields are more precisely specified.      | prudent to specify more explicitly.               |
 +-------------------------------------------+---------------------------------------------------+
 | The WBO fields "parentid" and             | These were deprecated in version 1.1 and are not  |
@@ -868,7 +868,7 @@ The following is a summary of protocol changes from
 +-------------------------------------------+---------------------------------------------------+
 | **GET /storage/collection** no longer     | These are not in active use in current versions   |
 | accepts 'older', 'index_above',           | of Firefox, and impose additional requirements on |
-| 'index_below' or 'sort=oldest'.           | the server that may limit operational flexibilty. |
+| 'index_below' or 'sort=oldest'.           | the server that may limit operational flexibility.|
 +-------------------------------------------+---------------------------------------------------+
 | **DELETE /storage/collection** no longer  | These are not in active use in current versions   |
 | accepts query parameters other than 'ids' | of Firefox, are not all implemented correctly in  |
