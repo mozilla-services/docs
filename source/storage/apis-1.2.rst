@@ -56,6 +56,9 @@ Basic Storage Objects have the following fields:
 |               |           | positive,  | this item will no longer be returned in response to any       |
 |               |           | 9 digits   | request, and it may be pruned from the database.  If not      |
 |               |           |            | specified or null, the record will not expire.                |
+|               |           |            |                                                               |
+|               |           |            | This field may be set on write, but is not returned by the    |
+|               |           |            | server.                                                       |
 +---------------+-----------+------------+---------------------------------------------------------------+
 
 
