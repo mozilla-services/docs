@@ -264,7 +264,7 @@ collection.
 **PUT** **https://<endpoint-url>/storage/<collection>/<id>**
 
     Creates or updates a specific BSO within a collection.
-    The request body must be a JSON object giving new data for the BSO.
+    The request body must be a JSON object containing new data for the BSO.
 
     If the target BSO already exists then it will be updated with the data
     from the request body.  Fields that are not provided in the request body
