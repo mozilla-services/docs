@@ -75,7 +75,7 @@ Example::
 Collections
 -----------
 
-Each BSO is assigned to a collection with other related BSO. Collection names
+Each BSO is assigned to a collection with other related BSOs. Collection names
 may be up to 32 characters long, and must contain only characters from the
 urlsafe-base64 alphaebet (i.e. alphanumeric characters, underscore and hyphen)
 and the period.
@@ -158,11 +158,6 @@ the user's data store as a whole.
 
     Returns an object mapping collection names associated with the account to
     the last-modified time for each collection.
-
-    Possible HTTP status codes:
-
-    - **304 Not Modified:**  the current last-modified time is less than or equal
-      to the value specified in the *X-If-Modified-Since* header.
 
 
 **GET** **https://<endpoint-url>/info/quota**
@@ -251,7 +246,7 @@ collection.
     - **application/newlines**: the output contains each record on a separate
       line, as either a string id or a full JSON object.
 
-    Possible HTTP status codes:
+    Potential HTTP error responses include:
 
     - **400 Bad Request:**  too many ids were included in the query parameter.
 
