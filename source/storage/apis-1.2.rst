@@ -391,11 +391,10 @@ Request Headers
 
 **X-If-Modified-Since**
 
-    This header may be added to any GET request, set to a timestamp with two
-    decimal places of precision. If the last-modified time of the target
-    resource is less than or equal to the time given in this header, then a
-    **304 Not Modified** response will be returned and re-transmission of
-    the unchanged data will be avoided.
+    This header may be added to any GET request, set to a decimal timestamp.
+    If the last-modified time of the target resource is less than or equal to
+    the time given in this header, then a **304 Not Modified** response will
+    be returned and re-transmission of the unchanged data will be avoided.
 
     It is similar to the standard HTTP **If-Modified-Since** header, but the
     value is a decimal timestamp rather than a HTTP-format date.
@@ -408,9 +407,9 @@ Request Headers
 **X-If-Unmodified-Since**
 
     This header may be added to any request to a collection or item, set to a
-    timestamp with two decimal places of precision.  If the last-modified time
-    of the target resource is greater than the time given, the request will fail
-    with a **412 Precondition Failed** response.
+    decimal timestamp.  If the last-modified time of the target resource is
+    greater than the time given, the request will fail with a
+    **412 Precondition Failed** response.
 
     It is similar to the standard HTTP **If-Unmodified-Since** header, but the
     value is a decimal timestamp rather than a HTTP-format date.
