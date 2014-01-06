@@ -232,8 +232,9 @@ collection.
        - 'newest' - orders by last-modified time, largest first
        - 'index' - orders by the sortindex, highest weight first
 
-    The response will include an *X-Weave-Records* header indicating the
-    total number of records to expect in the body.
+    The response may include an *X-Weave-Records* header indicating the
+    total number of records to expect in the body, if the server can
+    efficiently provide this information.
 
     If the request included a **limit** parameter and there were more than
     that many items matching the query, the response will include an
