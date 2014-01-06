@@ -76,8 +76,9 @@ Collections
 -----------
 
 Each BSO is assigned to a collection with other related BSO. Collection names
-may only contain characters from the urlsafe-base64 alphabet (i.e. alphanumeric
-characters, underscore and hyphen) and the period.
+may be up to 32 characters long, and must contain only characters from the
+urlsafe-base64 alphaebet (i.e. alphanumeric characters, underscore and hyphen)
+and the period.
 
 Collections are created implicitly when a BSO is stored in them for the first
 time.  They continue to exist until they are explicitly deleted, even if they
