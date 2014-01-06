@@ -5,35 +5,35 @@ SyncStorage API v1.2
 ====================
 
 The SyncStorage API defines a HTTP web service used to store and retrieve
-simple objects called **Weave Basic Objects** (**WBOs**), which are organized
+simple objects called **Basic Storage Objects** (**BSOs**), which are organized
 into named **collections**.
 
 
 Concepts
 ========
 
-.. _syncstorage_wbo:
+.. _syncstorage_bso:
 
-Weave Basic Object
-------------------
+Basic Storage Object
+--------------------
 
-A **Weave Basic Object (WBO)** is the generic JSON wrapper around all
+A **Basic Storage Object (BSO)** is the generic JSON wrapper around all
 items passed into and out of the SyncStorage server. Like all JSON documents,
-WBOs are composed of unicode character data rather than raw bytes and must
+BSOs are composed of unicode character data rather than raw bytes and must
 be encoded for transmission over the network.  The SyncStorage service always
-encodes WBOs in UTF8.
+encodes BSOs in UTF8.
 
-Weave Basic Objects have the following fields:
+Basic Storage Objects have the following fields:
 
 
 +---------------+-----------+------------+---------------------------------------------------------------+
 | Parameter     | Default   | Type/Max   |  Description                                                  |
 +===============+===========+============+===============================================================+
 | id            | required  |  string,   | An identifying string. For a user, the id must be unique for  |
-|               |           |  64        | a WBO within a collection, though objects in different        |
+|               |           |  64        | a BSO within a collection, though objects in different        |
 |               |           |            | collections may have the same ID.                             |
 |               |           |            |                                                               |
-|               |           |            | WBO ids *must* only contain characters from the urlsafe-base64|
+|               |           |            | BSO ids *must* only contain characters from the urlsafe-base64|
 |               |           |            | alphabet (i.e. alphanumerics, underscore and hyphen).  They   |
 |               |           |            | *should* be exactly 12 characters; while this isn't enforced  |
 |               |           |            | by the server, the Firefox client expects it in most cases.   |
@@ -48,7 +48,7 @@ Weave Basic Objects have the following fields:
 |               |           | 9 digits   |                                                               |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | payload       | empty     | string,    | A string containing the data of the record. The structure of  |
-|               | string    | 256k       | this string is defined separately for each WBO type. This     |
+|               | string    | 256k       | this string is defined separately for each BSO type. This     |
 |               |           |            | spec makes no requirements for its format. In practice,       |
 |               |           |            | JSONObjects are common.                                       |
 +---------------+-----------+------------+---------------------------------------------------------------+
@@ -72,13 +72,13 @@ Example::
 Collections
 -----------
 
-Each WBO is assigned to a collection with other related WBOs. Collection names
+Each BSO is assigned to a collection with other related BSO. Collection names
 may only contain characters from the urlsafe-base64 alphabet (i.e. alphanumeric
 characters, underscore and hyphen) and the period.
 
-Collections are created implicitly when a WBO is stored in them for the first
+Collections are created implicitly when a BSO is stored in them for the first
 time.  They continue to exist until they are explicitly deleted, even if they
-no longer contain any WBOs.
+no longer contain any BSOs.
 
 The default collections used by Firefox to store sync data are:
 
@@ -113,7 +113,7 @@ The last-modified time is tracked at three levels of nesting:
     * Each collection has a **last-modified time** that is updated whenever an item
       in that collection is modified or deleted. It will always be less than or
       equal to the overall last-modified time.
-    * Each WBO has a **last-modified time** that is updated whenever that specific
+    * Each BSO has a **last-modified time** that is updated whenever that specific
       item is modified.   It will always be less than or equal to the last-modified
       time of the containing collection.
 
@@ -215,11 +215,11 @@ collection.
 
 **GET** **https://<endpoint-url>/storage/<collection>**
 
-    Returns a list of the WBOs contained in a collection.  For example::
+    Returns a list of the BSOs contained in a collection.  For example::
 
         ["GXS58IDC_12", "GXS58IDC_13", "GXS58IDC_15"]
 
-    By default only the WBO ids are returned, but full objects can be requested
+    By default only the BSO ids are returned, but full objects can be requested
     using the **full** parameter.
 
     This request has additional optional query parameters:
@@ -231,7 +231,7 @@ collection.
       strictly greater than this value will be returned.
 
     - **full**: any value.  If provided then the response will be a list of
-      full WBO objects rather than a list of ids.
+      full BSO objects rather than a list of ids.
 
     - **limit**: a positive integer. At most that many objects will be
       returned. If more than that many objects matched the query, an
@@ -275,7 +275,7 @@ collection.
 
 **GET** **https://<endpoint-url>/storage/<collection>/<id>**
 
-    Returns the WBO in the collection corresponding to the requested id
+    Returns the BSO in the collection corresponding to the requested id
 
     Possible HTTP error responses:
 
@@ -289,17 +289,17 @@ collection.
 
 **PUT** **https://<endpoint-url>/storage/<collection>/<id>**
 
-    Creates or updates a specific WBO within a collection.
-    The request body must be a JSON object giving new data for the WBO.
+    Creates or updates a specific BSO within a collection.
+    The request body must be a JSON object giving new data for the BSO.
 
-    If the target WBO already exists then it will be updated with the data
+    If the target BSO already exists then it will be updated with the data
     from the request body.  Fields that are not provided in the request body
     will not be overwritten, so it is possible to e.g. update the `ttl` field
-    of a WBO without re-submitting its `payload`.  Fields that are explicitly
+    of a BSO without re-submitting its `payload`.  Fields that are explicitly
     set to `null` in the request body will be set to their default value
     by the server.
 
-    If the target WBO does not exist, then fields that are not provided in
+    If the target BSO does not exist, then fields that are not provided in
     the request body will be set to their default value by the server.
 
     This request may include the *X-If-Unmodified-Since* header to
@@ -310,7 +310,7 @@ collection.
     giving the new last-modified time for the collection.
 
     Note that the server may impose a limit on the amount of data submitted
-    for storage in a single WBO.
+    for storage in a single BSO.
 
     Possible HTTP error responses:
 
@@ -327,21 +327,21 @@ collection.
 
 **POST** **https://<endpoint-url>/storage/<collection>**
 
-    Takes a list of WBOs in the request body and iterates over them,
+    Takes a list of BSOs in the request body and iterates over them,
     effectively doing a series of individual PUTs with the same timestamp.
 
-    Each WBO record in the request body must include an "id" field, and the
-    corresponding WBO will be created or updated according to the semantics
+    Each BSO record in the request body must include an "id" field, and the
+    corresponding BSO will be created or updated according to the semantics
     of a **PUT** request targeting that specific record.  In particular,
     this means that fields not provided in the request body will not be
-    overwritten on WBOs that already exist.
+    overwritten on BSOs that already exist.
 
     Successful responses will contain a JSON object with details of success
-    or failure for each WBO.  It will have the following keys:
+    or failure for each BSO.  It will have the following keys:
 
     - **modified:** the new last-modified time for the updated items.
-    - **success:** a list of ids of WBOs that were successfully stored.
-    - **failed:** an object whose keys are the ids of WBOs that were not
+    - **success:** a list of ids of BSOs that were successfully stored.
+    - **failed:** an object whose keys are the ids of BSOs that were not
       stored successfully, and whose values are lists of strings
       describing possible reasons for the failure.
 
@@ -355,22 +355,22 @@ collection.
                     "GXS58IDC_14": ["invalid sortindex"]}
         }
 
-    Posted WBOs whose ids do not appear in either "success" or "failed"
+    Posted BSOs whose ids do not appear in either "success" or "failed"
     should be treated as having failed for an unspecified reason.
 
     Two input formats are available for multiple record POST requests,
     selected by the *Content-Type* header of the request:
 
     - **application/json**: the input is a JSON list of objects, one for
-      for each WBO in the request.
+      for each BSO in the request.
 
-    - **application/newlines**: each WBO is sent as a separate JSON object
+    - **application/newlines**: each BSO is sent as a separate JSON object
       on its own line.
 
     Note that the server may impose a limit on the total amount of data
     included in the request, and/or may decline to process more than a certain
-    number of WBOs in a single request.  The default limit on the number
-    of WBOs per request is 100.
+    number of BSOs in a single request.  The default limit on the number
+    of BSOs per request is 100.
 
     Possible HTTP error responses:
 
@@ -405,16 +405,16 @@ collection.
 
 **DELETE** **https://<endpoint-url>/storage/<collection>?ids=<ids>**
 
-    Deletes multiple WBOs from a collection with a single request.
+    Deletes multiple BSOs from a collection with a single request.
 
     This request takes a parameter to select which items to delete:
 
-    - **ids**: deletes WBOs from the collection whose ids that are in
+    - **ids**: deletes BSOs from the collection whose ids that are in
       the provided comma-separated list.  A maximum of 100 ids may be
       provided.
 
     The collection itself will still exist on the server after executing
-    this request.  Even if all the WBOs in the collection are deleted, it
+    this request.  Even if all the BSOs in the collection are deleted, it
     will receive an updated last-modified time, appear in the output of
     **GET /info/collections**, and be readable via **GET /storage/<collection>**
 
@@ -433,7 +433,7 @@ collection.
 
 **DELETE** **https://<endpoint-url>/storage/<collection>/<id>**
 
-    Deletes the WBO at the given location.
+    Deletes the BSO at the given location.
 
     Possible HTTP error responses:
 
@@ -525,7 +525,7 @@ Response Headers
     as seen during processing of the request, and will be included in all
     success responses (200, 201, 204).  When given in response to a write
     request, this will be equal to the server's current time and to the new
-    last-modified time of any WBOs created or changed by the request.
+    last-modified time of any BSOs created or changed by the request.
 
     It is similar to the standard HTTP **Last-Modified** header, but the value
     is a decimal timestamp rather than a HTTP-format date.
@@ -534,7 +534,7 @@ Response Headers
 
     This header will be sent back with all responses, indicating the current
     timestamp on the server.  When given in response to a write request, this
-    will be equal to the new timestamp value of any WBOs created or changed
+    will be equal to the new timestamp value of any BSOs created or changed
     by that request.
 
     It is similar to the standard HTTP **Date** header, but the value is
@@ -678,9 +678,9 @@ protocol.
     The response body may contain a JSON string describing the server's status
     or error.
 
-**513 Is This Even A Real Code?**
+**513 Service Decommissioned**
 
-    Indicates that the service has been terminated, and presumably replaced
+    Indicates that the service has been decommissioned, and presumably replaced
     with a new and better service using some as-yet-undesigned protocol.
     This response will include an *X-Weave-Alert* header whose value is a
     JSON object with the following fields:
@@ -707,7 +707,7 @@ as **X-Last-Modified** and **X-If-Unmodified-Since**.
 The server guarantees a strictly consistent and monotonically-increasing
 timestamp across the user's stored data.  Any request that alters the
 contents of a collection will cause the last-modified time to increase.
-Any WBOs added or modified by such a request will have their "modified" field
+Any BSOs added or modified by such a request will have their "modified" field
 set to the updated timestamp.
 
 Conceptually, each write request will perform the following operations as
@@ -715,11 +715,11 @@ an atomic unit:
 
   * Read the current time `T`, and check that it's greater than the overall
     last-modified time for the user's data.  If not then return a **409 Conflict**.
-  * Create any new WBOs as specified by the request, setting their "modified"
+  * Create any new BSOs as specified by the request, setting their "modified"
     field to `T`.
-  * Modify any existing WBOs as specified by the request, setting their
+  * Modify any existing BSOs as specified by the request, setting their
     "modified" field to `T`.
-  * Delete any WBOs as specified by the request.
+  * Delete any BSOs as specified by the request.
   * Set the last-modified time for the collection to `T`.
   * Set the overall last-modified time for the user's data to `T`.
   * Generate a **200 OK** response with the **X-Last-Modified** and
@@ -742,10 +742,10 @@ To avoid overwriting changes made by others, clients should set the
 Examples
 ========
 
-Example: polling for changes to a WBO
+Example: polling for changes to a BSO
 -------------------------------------
 
-To efficiently check for changes to an individual WBO, use
+To efficiently check for changes to an individual BSO, use
 **GET /storage/<collection>/<id>** with the **X-If-Modified-Since**
 header set to the last known value of **X-Last-Modified** for that
 item. This will return the updated item if it has been changed since the last
@@ -766,7 +766,7 @@ Example: polling for changes to a collection
 To efficiently poll the server for changes within a collection, use
 **GET /storage/<collection>** with the **newer** parameter set to the last
 known value of **X-Last-Modified** for that collection.  This will
-return only the WBOs that have been added or changed since the last request::
+return only the BSOs that have been added or changed since the last request::
 
     last_modified = 0
     while True:
@@ -789,24 +789,24 @@ a **412 Precondition Failed** response::
     r = server.get("/collection")
     last_modified = r.headers["X-Last-Modified"]
 
-    wbos = generate_changes_to_the_collection()
+    bsos = generate_changes_to_the_collection()
 
     headers = {"X-If-Unmodified-Since": last_modified}
-    r = server.post("/collection", wbos, headers)
+    r = server.post("/collection", bsos, headers)
     if r.status == 412:
         print "WRITE FAILED DUE TO CONCURRENT EDITS"
 
 The client may choose to abort the write, or to merge the changes from the
 server and re-try with an updated value of **X-Last-Modified**.
 
-A similar technique can be used to safely update a single WBO using
+A similar technique can be used to safely update a single BSO using
 **PUT /storage/<collection>/<id>**.
 
 
-Example: creating a WBO only if it does not exist
+Example: creating a BSO only if it does not exist
 -------------------------------------------------
 
-To specify that a WBO should be created only if it does not already exist,
+To specify that a BSO should be created only if it does not already exist,
 use the **X-If-Unmodified-Since** header with the special value of 0::
 
     headers = {"X-If-Unmodified-Since": "0"}
@@ -874,10 +874,10 @@ The following is a summary of protocol changes from
 | considered an implementation detail.      | endpoint URL.  URL handling must change already   |
 |                                           | to support TokenServer-based authentication.      |
 +-------------------------------------------+---------------------------------------------------+
-| The datatypes and defaults of WBO         | This reflects current server behavior, and seems  |
+| The datatypes and defaults of BSO         | This reflects current server behavior, and seems  |
 | fields are more precisely specified.      | prudent to specify more explicitly.               |
 +-------------------------------------------+---------------------------------------------------+
-| The WBO fields "parentid" and             | These were deprecated in version 1.1 and are not  |
+| The BSO fields "parentid" and             | These were deprecated in version 1.1 and are not  |
 | "predecessorid" have been removed along   | in active use in current versions of Firefox.     |
 | with any related query parameters.        |                                                   |
 +-------------------------------------------+---------------------------------------------------+
