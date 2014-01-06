@@ -308,9 +308,10 @@ collection.
     or failure for each BSO.  It will have the following keys:
 
     - **modified:** the new last-modified time for the updated items.
-    - **success:** a list of ids of BSOs that were successfully stored.
-    - **failed:** an object whose keys are the ids of BSOs that were not
-      stored successfully, and whose values are lists of strings
+    - **success:** a (possibly empty) list of ids of BSOs that were
+      successfully stored.
+    - **failed:** a (possibly empty) object whose keys are the ids of BSOs
+      that were not stored successfully, and whose values are lists of strings
       describing possible reasons for the failure.
 
     For example::
