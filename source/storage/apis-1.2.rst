@@ -169,7 +169,7 @@ the user's data store as a whole.
 
     Returns a two-item list giving the user's current usage and quota
     (in KB).  The second item will be null if the server does not enforce
-    quotes.
+    quotas.
 
     Note that usage numbers may be approximate.
 
