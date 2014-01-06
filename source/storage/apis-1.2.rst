@@ -173,11 +173,6 @@ the user's data store as a whole.
 
     Note that usage numbers may be approximate.
 
-    Possible HTTP status codes:
-
-    - **304 Not Modified:**  the current last-modified time is less than or equal
-      to the value specified in the *X-If-Modified-Since* header.
-
 
 **GET** **https://<endpoint-url>/info/collection_usage**
 
@@ -188,31 +183,16 @@ the user's data store as a whole.
     detailed and accurate usage information than the request to
     **/info/quota**.
 
-    Possible HTTP status codes:
-
-    - **304 Not Modified:**  the current last-modified time is less than or equal
-      to the value specified in the *X-If-Modified-Since* header.
-
 
 **GET** **https://<endpoint-url>/info/collection_counts**
 
     Returns an object mapping collection names associated with the account to
     the total number of items in each collection.
 
-    Possible HTTP status codes:
-
-    - **304 Not Modified:**  the current last-modified time is less than or equal
-      to the value specified in the *X-If-Modified-Since* header.
-
 
 **DELETE** **https://<endpoint-url>/storage**
 
     Deletes all records for the user.
-
-    Possible HTTP error responses:
-
-    - **409 Conflict:**  another client has made (or is currently making)
-      changes that may conflict with the requested operation.
 
 
 Individual Collection Interaction
@@ -272,27 +252,12 @@ collection.
 
     Possible HTTP status codes:
 
-    - **304 Not Modified:**  the last-modified time of the collection
-      is less than or equal to the value in the *X-If-Modified-Since* header.
     - **400 Bad Request:**  too many ids where included in the query parameter.
-    - **404 Not Found:**  the user has no such collection.
-    - **412 Precondition Failed:**  the last-modified time of the collection
-      is greater than the value in the *X-If-Unmodified-Since* header.
-      
 
 
 **GET** **https://<endpoint-url>/storage/<collection>/<id>**
 
     Returns the BSO in the collection corresponding to the requested id
-
-    Possible HTTP error responses:
-
-    - **304 Not Modified:**  the last-modified time of the item is
-      less than or equal to the value in the *X-If-Modified-Since* header.
-    - **404 Not Found:**  the user has no such collection, or it contains
-      no such object.
-    - **412 Precondition Failed:**  the last-modified time of the item
-      is greater than the value in the *X-If-Unmodified-Since* header.
 
 
 **PUT** **https://<endpoint-url>/storage/<collection>/<id>**
@@ -320,17 +285,11 @@ collection.
     Note that the server may impose a limit on the amount of data submitted
     for storage in a single BSO.
 
-    Possible HTTP error responses:
+    Potential HTTP error responses include:
 
     - **400 Bad Request:**  the user has exceeded their storage quota.
-    - **409 Conflict:**  another client has made (or is currently making)
-      changes that may conflict with the requested operation.
-    - **412 Precondition Failed:**  the last-modified time  of the item
-      is greater than the value in the *X-If-Unmodified-Since* header.
     - **413 Request Entity Too Large:**  the object is larger than the
       server is willing to store.
-    - **415 Unsupported Media Type:**  the request had a Content-Type other
-      than **application/json**.
 
 
 **POST** **https://<endpoint-url>/storage/<collection>**
@@ -380,17 +339,11 @@ collection.
     number of BSOs in a single request.  The default limit on the number
     of BSOs per request is 100.
 
-    Possible HTTP error responses:
+    Potential HTTP error responses include:
 
     - **400 Bad Request:**  the user has exceeded their storage quota.
-    - **409 Conflict:**  another client has made (or is currently making)
-      changes that may conflict with the requested operation.
-    - **412 Precondition Failed:**  the last-modified time of the collection is greater
-      than the value in the *X-If-Unmodified-Since* header.
     - **413 Request Entity Too Large:**  the request contains more data than the
       server is willing to process in a single batch.
-    - **415 Unsupported Media Type:**  the request had a Content-Type other
-      than **application/json** or **application/newlines**.
 
 
 **DELETE** **https://<endpoint-url>/storage/<collection>**
@@ -401,14 +354,6 @@ collection.
     in the output of **GET /info/collections** and calls to
     **GET /storage/<collection>** will generate a **404 Not Found**
     response.
-
-    Possible HTTP error responses:
-
-    - **404 Not Found:**  the user has no such collection.
-    - **409 Conflict:**  another client has made (or is currently making)
-      changes that may conflict with the requested operation.
-    - **412 Precondition Failed:**  the last-modified time of the collection
-      is greater than the value in the *X-If-Unmodified-Since* header.
 
 
 **DELETE** **https://<endpoint-url>/storage/<collection>?ids=<ids>**
@@ -429,28 +374,14 @@ collection.
     Successful responses will have a JSON object body with field "modified"
     giving the new last-modified time for the collection.
 
-    Possible HTTP error responses:
+    Potential HTTP error responses include:
 
     - **400 Bad Request:**  too many ids where included in the query parameter.
-    - **404 Not Found:**  the user has no such collection.
-    - **409 Conflict:**  another client has made (or is currently making)
-      changes that may conflict with the requested operation.
-    - **412 Precondition Failed:**  the last-modified time of the collection is
-      greater than the value in the *X-If-Unmodified-Since* header.
 
 
 **DELETE** **https://<endpoint-url>/storage/<collection>/<id>**
 
     Deletes the BSO at the given location.
-
-    Possible HTTP error responses:
-
-    - **404 Not Found:**  the user has no such collection, or it contains
-      no such object.
-    - **409 Conflict:**  another client has made (or is currently making)
-      changes that may conflict with the requested operation.
-    - **412 Precondition Failed:**  the last-modified time of the item
-      is greater than the value in the *X-If-Unmodified-Since* header.
 
 
 Request Headers
