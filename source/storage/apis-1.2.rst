@@ -253,7 +253,7 @@ collection.
 
     Possible HTTP status codes:
 
-    - **400 Bad Request:**  too many ids where included in the query parameter.
+    - **400 Bad Request:**  too many ids were included in the query parameter.
 
 
 **GET** **https://<endpoint-url>/storage/<collection>/<id>**
@@ -377,7 +377,7 @@ collection.
 
     Potential HTTP error responses include:
 
-    - **400 Bad Request:**  too many ids where included in the query parameter.
+    - **400 Bad Request:**  too many ids were included in the query parameter.
 
 
 **DELETE** **https://<endpoint-url>/storage/<collection>/<id>**
