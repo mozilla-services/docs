@@ -1,7 +1,7 @@
-.. _server_syncstorage_api_12
+.. _server_syncstorage_api_15
 
 ====================
-SyncStorage API v1.2
+SyncStorage API v1.5
 ====================
 
 The SyncStorage API defines a HTTP web service used to store and retrieve
@@ -33,10 +33,10 @@ Basic Storage Objects have the following fields:
 |               |           |  64        | a BSO within a collection, though objects in different        |
 |               |           |            | collections may have the same ID.                             |
 |               |           |            |                                                               |
-|               |           |            | BSO ids *must* only contain characters from the urlsafe-base64|
-|               |           |            | alphabet (i.e. alphanumerics, underscore and hyphen).  They   |
-|               |           |            | *should* be exactly 12 characters; while this isn't enforced  |
-|               |           |            | by the server, the Firefox client expects it in most cases.   |
+|               |           |            | BSO ids *must* only contain printable ASCII characters.  They |
+|               |           |            | *should* be exactly 12 base64-urlsafe characters; while this  |
+|               |           |            | isn't enforced by the server, the Firefox client expects it   |
+|               |           |            | in most cases.                                                |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | modified      | none      | float,     | The timestamp at which this object was last modified, in      |
 |               |           | 2 decimal  | seconds since UNIX epoch (1970-01-01 00:00:00 UTC).           |
