@@ -19,11 +19,12 @@ Token Server API v1.0
     - **app_version** is the specific version number of the api that you want
       to access.
 
-    The first /1.0/ in the URL defines the version of the Sagrada token.
+    The first /1.0/ in the URL defines the version of the authentication
+    token itself.
 
     Example for Browser-Id::
 
-        GET /1.0/sync/1.2
+        GET /1.0/sync/1.5
         Host: token.services.mozilla.com
         Authorization: Browser-ID <assertion>
 
@@ -44,7 +45,7 @@ Token Server API v1.0
         {'id': <token>,
          'key': <derived-secret>,
          'uid': 12345,
-         'api_endpoint': 'https://example.com/app/1.0/users/12345',
+         'api_endpoint': 'https://db42.sync.services.mozilla.com/1.5/12345',
          'duration': 300,
         }
 
@@ -61,7 +62,7 @@ client.  The server will answer with a HTTP 403 "Need
 to accept conditions" containing a json dict with the conditions that need to
 be accepted. This can be something like::
 
-    > GET /1.0/sync/1.2
+    > GET /1.0/sync/1.5
       Authorization: Browser-ID <assertion>
 
     < 403 Forbidden
@@ -77,7 +78,7 @@ be accepted. This can be something like::
 On the next call, the client needs to include the 'X-Conditions-Accepted' HTTP
 header to indicate acceptance of the terms::
 
-    > GET /1.0/sync/1.2
+    > GET /1.0/sync/1.5
       Authorization: Browser-ID <assertion>
       X-Conditions-Accepted: True
 
@@ -106,6 +107,11 @@ Status codes and error codes:
 - **401** : authentication failed or protocol not supported.
   The response in that case will contain WWW-Authenticate headers
   (one per supported scheme)
+- **403** : authentication refused despite valid credentials.  Possible
+  reasons:
+
+  - missing X-Conditions-Accepted header
+
 - **405** : unsupported method
 - **406** : unacceptable - the client asked for an Accept we don't support
 - **503** : service unavailable (ldap or snode backends may be down)
