@@ -806,6 +806,7 @@ The following is a summary of protocol changes from
 +-------------------------------------------+---------------------------------------------------+
 | The previously-undocumented               | This actually *is* used so we better document it. |
 | *X-Weave-Quota-Remaining* header has been |                                                   |
+| documented.                               |                                                   |
 +-------------------------------------------+---------------------------------------------------+
 | The *X-Confirm-Delete* header has been    | This is sent unconditionally by current client    |
 | removed.                                  | code, and is therefore useless.  Existing client  |
