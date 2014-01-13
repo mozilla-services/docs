@@ -786,8 +786,8 @@ The following is a summary of protocol changes from
 | What Changed                              | Why                                               |
 +===========================================+===================================================+
 | Authentication is now performed using     | This supports authentication via Firefox Accounts |
-| the Sagrada TokenServer flow and HAWK     | and allows us to iterate the details of that      |
-| Access Authentication.                    | flow without changing the sync protocol.          |
+| a BrowserID-based tokenserver flow and    | and allows us to iterate the details of that      |
+| HAWK Access Authentication.               | flow without changing the sync protocol.          |
 +-------------------------------------------+---------------------------------------------------+
 | The structure of the endpoint URL is      | This was unnecessary coupling and clients do      |
 | no longer specified, and should be        | not need to change/configure components of the    |
