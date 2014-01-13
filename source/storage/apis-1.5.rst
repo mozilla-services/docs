@@ -844,7 +844,7 @@ The following is a summary of protocol changes from
 |                                           | Existing client code doesn't need to change.      |
 +-------------------------------------------+---------------------------------------------------+
 | The *X-If-Modified-Since* header has been | Existing client code doesn't need to change, but  |
-| added and can be used on all GET request. | will allow future client code to avoid            |
+| added and can be used on all GET requests.| will allow future client code to avoid            |
 |                                           | transmission of redundant data.                   |
 +-------------------------------------------+---------------------------------------------------+
 | The *X-If-Unmodified-Since* header can be | Existing client code doesn't need to change, but  |
