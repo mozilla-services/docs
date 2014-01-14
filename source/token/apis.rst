@@ -88,6 +88,29 @@ header to indicate acceptance of the terms::
       { ... token details ... }
 
 
+
+Response Headers
+================
+
+**Retry-After**
+
+    When sent together with an HTTP 503 status code, this header signifies that
+    the server is undergoing maintenance. The client should not attempt any
+    further requests to the server for the number of seconds specified in
+    the header value.
+
+**X-Backoff**
+
+    This header may be sent to indicate that the server is under heavy load
+    but is still capable of servicing requests.  Unlike the **Retry-After**
+    header, **X-Backoff** may be included with any type of response, including
+    a **200 OK**.
+
+    Clients should avoid unnecessary requests to the server for the number of seconds
+    specified in the header value.  For example, clients may avoid pre-emptively
+    refreshing token if an X-Backoff header was recently seen.
+
+
 Errors
 ======
 
