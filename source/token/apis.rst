@@ -88,29 +88,55 @@ header to indicate acceptance of the terms::
       { ... token details ... }
 
 
-Errors
-======
+Response Headers
+================
 
-All errors are also returned as json responses, following the
+**X-Timestamp**
+
+    This header will be included with all "200" and "401" responses, giving
+    the current POSIX timestamp as seen by the server, in seconds.  It may
+    be useful for client to adjust their local clock when generating BrowserID
+    assertions.
+
+
+Error Responses
+===============
+
+All errors are also returned, wherever possible, as json responses following the
 structure `described in Cornice
-<http://cornice.readthedocs.org/en/latest/validation.html#dealing-with-errors>`_
+<http://cornice.readthedocs.org/en/latest/validation.html#dealing-with-errors>`_.
 
-Status codes and error codes:
+In cases where generating such a response is not possible (e.g. when a request
+if so malformed as to be unparsable) then the resulting error response will
+have a *Content-Type* that is not **application/json**.
+
+The top-level JSON object in the response will always contain a key named
+`status`, which maps to a string identifying the cause of the error.  Unexpected
+errors will have a `status` string of "error"; errors expected as part of
+the protocol flow will have a specific `status` string as detailed below.
+
+Error status codes and their corresponding output are:
 
 - **404** : unknown URL, or unsupported application.
-- **400** : malformed request. Possible reasons:
-
- - missing option
- - bad values
- - malformed json
-
+- **400** : malformed request. Possible causes include a missing
+  option, bad values or malformed json.
 - **401** : authentication failed or protocol not supported.
   The response in that case will contain WWW-Authenticate headers
-  (one per supported scheme)
-- **403** : authentication refused despite valid credentials.  Possible
-  reasons:
+  (one per supported scheme) and may report the following `status`
+  strings:
 
-  - missing X-Conditions-Accepted header
+    - **"invalid-credentials"**: authentication failed due to invalid
+      credentials e.g. a bad signature on the BrowserID assertion.
+    - **"invalid-timestamp"**: authentication failed because the included
+      timestamp differed too greatly from the server's current time.
+    - **"invalid-generation"**:  authentication failed because the server
+      has seen credentials with a more recent generation number.
+
+- **403** : authentication refused despite valid credentials.  The response
+  may report the following `status` strings:
+
+    - **"conditions-reqiured"**: the X-Conditions-Accepted header must
+      be provided in order to use the requested server.
 
 - **405** : unsupported method
 - **406** : unacceptable - the client asked for an Accept we don't support

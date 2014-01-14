@@ -46,17 +46,30 @@ Detailed steps:
      Host: token.services.mozilla.com
      Authorization: Browser-ID <assertion>
 
-- the :term:`Login Server` checks the BrowserID assertion [2] **this step will be
+- The :term:`Login Server` checks the BrowserID assertion [2] **this step will be
   done locally without calling an external browserid server -- but this could
   potentially happen** (we can use PyBrowserID + use the BID.org certificate)
 
-- the :term:`Login Server` asks the Users DB if the user is already allocated to a
-  :term:`Node` [3]
+  The user's email address is extracted, along with any :term:`Generation Number`
+  associated with the BrowserID certificate.
 
-- If the user is not allocated to a :term:`Node`, the :term:`Login Server` asks a
-  new one to the :term:`Node Assignment Server` [4]
+- The :term:`Login Server` asks the Users DB for an existing record matching the
+  users' email address.
 
-- the :term:`Login Server` creates a response with an :term:`Auth Token` and
+  If so, the allocated :term:`Node` and previously-seen :term:`Generation Number`
+  are returned.
+
+- If the submitted :term:`Generation Number` is smaller than the recorded one,
+  the :term:`Login Server` returns an error as the client's BrowserID credentials
+  are out of date.
+
+  If the submitted :term:`Generation Number` is larger than the recorded one,
+  the :term:`Login Server` updates the Users DB with the new value.
+
+- If the user is not allocated to a :term:`Node`, the :term:`Login Server` asks
+  for a new one from the :term:`Node Assignment Server` [4]
+
+- The :term:`Login Server` creates a response with an :term:`Auth Token` and
   corresponding :term:`Token Secret` [5] and sends it back to the user.
 
   The :term:`Auth Token` contains the user id and a timestamp, and is signed
@@ -77,10 +90,10 @@ Detailed steps:
      'api_endpoint': 'https://example.com/app/1.0/users/12345',
     }
 
-- the client saves the node location and hawkauth parameters to use in subsequent
+- The client saves the node location and hawkauth parameters to use in subsequent
   requests. [6]
 
-- for each subsequent request to the :term:`Service`, the client calculates a
+- For each subsequent request to the :term:`Service`, the client calculates a
   special Authorization header using :term:`Hawk Auth` [7] and sends
   the request to the allocated node location [8]::
 
@@ -91,12 +104,12 @@ Detailed steps:
                         nonce="7d8f3e4a",
                         mac="bYT5CMsGcbgUdFHObYMEfcx6bsw="
 
-- the node uses the :term:`Signing Secret` to validate the :term:`Auth Token` [9].  If invalid
+- The node uses the :term:`Signing Secret` to validate the :term:`Auth Token` [9].  If invalid
   or expired then the node returns a 401
 
-- the node calculates the :term:`Token Secret` from its :term:`Master Secret` and the
+- The node calculates the :term:`Token Secret` from its :term:`Master Secret` and the
   :term:`Auth Token`, and checks whether the signature in the Authorization header is
   valid [10]. If it is invalid then the node returns a 401
 
-- the node processes the request as defined by the :term:`Service` [11]
+- The node processes the request as defined by the :term:`Service` [11]
 
