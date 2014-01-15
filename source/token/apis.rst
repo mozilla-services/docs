@@ -12,7 +12,7 @@ Token Server API v1.0
 
     Asks for new token given some credentials in the Authorization header.
 
-    By default, the authentication scheme is Browser ID but other schemes can
+    By default, the authentication scheme is BrowserID but other schemes can
     potentially be used if supported by the login server.
 
     - **app_name** is the name of the application to access, like **sync**.
@@ -22,11 +22,11 @@ Token Server API v1.0
     The first /1.0/ in the URL defines the version of the authentication
     token itself.
 
-    Example for Browser-Id::
+    Example for BrowserID::
 
         GET /1.0/sync/1.5
         Host: token.services.mozilla.com
-        Authorization: Browser-ID <assertion>
+        Authorization: BrowserID <assertion>
 
     This API returns several values in a json mapping:
 
@@ -48,6 +48,28 @@ Token Server API v1.0
          'api_endpoint': 'https://db42.sync.services.mozilla.com/1.5/12345',
          'duration': 300,
         }
+
+    If the **X-Client-State** header is included in the request, the
+    server will compare the submitted value to any previously-seen value.
+    If it has changed then a new uid and api_endpoint are generated, in
+    effect "resetting" the node allocation for this user.
+
+
+Request Headers
+===============
+
+
+**X-Client-State**
+
+    An optional base64-urlsafe string, up to 32 characters long, that
+    can be sent to identity a unique configuration of client-side state.
+    A change in the value of this header will cause the user's node
+    allocation to be reset.  Clients should include any client-side state
+    that is necessary for accessing the selected app.
+
+    For example, clients accessing :ref:`server_storage_api_15` might
+    include a hash  of the encryption key in this header, since a change
+    in the encryption key will make any existing data unreadable.
 
 
 Response Headers
@@ -110,7 +132,8 @@ Error status codes and their corresponding output are:
     - **"invalid-timestamp"**: authentication failed because the included
       timestamp differed too greatly from the server's current time.
     - **"invalid-generation"**:  authentication failed because the server
-      has seen credentials with a more recent generation number.
+    - **"invalid-client-state"**:  authentication failed because the server
+      has seen an updated value of the *X-Client-State* header.
 
 - **405** : unsupported method
 - **406** : unacceptable - the client asked for an Accept we don't support
