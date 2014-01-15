@@ -50,44 +50,6 @@ Token Server API v1.0
         }
 
 
-Conditions to use the service
-=============================
-
-If the service needs the user to accept some terms of service, privacy policy,
-etc, the client needs to send a special flag saying that these terms of
-service had been effectively signed. Here is the intended client/server flow:
-
-On the first call, the URLs that the user has to agree on are not known by the
-client.  The server will answer with a HTTP 403 "Need
-to accept conditions" containing a json dict with the conditions that need to
-be accepted. This can be something like::
-
-    > GET /1.0/sync/1.5
-      Authorization: Browser-ID <assertion>
-
-    < 403 Forbidden
-      Content-Type: application/json
-
-      { 'status': 'error',
-         'errors': [{'location': 'header',
-                     'name': 'X-Conditions-Accepted',
-                     'description': 'Need to Accept conditions'},
-                     'condition_urls': {'tos': 'http://url-to-tos'}],
-      }
-
-On the next call, the client needs to include the 'X-Conditions-Accepted' HTTP
-header to indicate acceptance of the terms::
-
-    > GET /1.0/sync/1.5
-      Authorization: Browser-ID <assertion>
-      X-Conditions-Accepted: True
-
-    < HTTP/1.1 200 OK
-      Content-Type: application/json
-
-      { ... token details ... }
-
-
 Response Headers
 ================
 
@@ -149,12 +111,6 @@ Error status codes and their corresponding output are:
       timestamp differed too greatly from the server's current time.
     - **"invalid-generation"**:  authentication failed because the server
       has seen credentials with a more recent generation number.
-
-- **403** : authentication refused despite valid credentials.  The response
-  may report the following `status` strings:
-
-    - **"conditions-reqiured"**: the X-Conditions-Accepted header must
-      be provided in order to use the requested server.
 
 - **405** : unsupported method
 - **406** : unacceptable - the client asked for an Accept we don't support
