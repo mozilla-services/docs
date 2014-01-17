@@ -275,8 +275,8 @@ collection.
     avoid overwriting the data if it has been changed since the client
     fetched it.
 
-    Successful responses will have a JSON object body with field "modified"
-    giving the new last-modified time for the collection.
+    Successful responses will return the new last-modified time for the
+    collection.
 
     Note that the server may impose a limit on the amount of data submitted
     for storage in a single BSO.
@@ -330,6 +330,9 @@ collection.
 
     - **application/newlines**: each BSO is sent as a separate JSON object
       on its own line.
+
+    For backwards-compatibility with existing clients, the server will also
+    treat **text/plain** input as JSON.
 
     Note that the server may impose a limit on the total amount of data
     included in the request, and/or may decline to process more than a certain
