@@ -132,6 +132,7 @@ Error status codes and their corresponding output are:
     - **"invalid-timestamp"**: authentication failed because the included
       timestamp differed too greatly from the server's current time.
     - **"invalid-generation"**:  authentication failed because the server
+      has seen credentials with a more recent generation number.
     - **"invalid-client-state"**:  authentication failed because the server
       has seen an updated value of the *X-Client-State* header.
 
