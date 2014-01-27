@@ -1,4 +1,4 @@
-.. _server_syncstorage_api_15
+.. _server_syncstorage_api_15:
 
 ====================
 SyncStorage API v1.5
