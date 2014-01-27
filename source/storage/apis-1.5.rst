@@ -203,7 +203,8 @@ collection.
         ["GXS58IDC_12", "GXS58IDC_13", "GXS58IDC_15"]
 
     By default only the BSO ids are returned, but full objects can be requested
-    using the **full** parameter.
+    using the **full** parameter.  If the collection does not exist, an empty
+    list is returned.
 
     This request has additional optional query parameters:
 
@@ -352,8 +353,7 @@ collection.
 
     After executing this request, the collection will not appear 
     in the output of **GET /info/collections** and calls to
-    **GET /storage/<collection>** will generate a **404 Not Found**
-    response.
+    **GET /storage/<collection>** will return an empty list.
 
 
 **DELETE** **https://<endpoint-url>/storage/<collection>?ids=<ids>**
@@ -548,7 +548,8 @@ protocol.
 **404 Not Found**
 
     The requested resource could not be found. This may be returned for **GET**
-    and **DELETE** requests, for non-existent records and empty collections.
+    and **DELETE** requests on non-existent items.  Non-existent collections
+    do not trigger a **404 Not Found** for backwards-compatibility reasons.
 
 
 **405 Method Not Allowed**
