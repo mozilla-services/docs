@@ -22,7 +22,7 @@ Documentation content
 
    apis-1.0
    apis-1.1
-   apis-1.2
+   apis-1.5
    history
 
 Resources
