@@ -159,6 +159,10 @@ the user's data store as a whole.
     Returns an object mapping collection names associated with the account to
     the last-modified time for each collection.
 
+    The server may allow requests to this endpoint to be authenticated with
+    an expired token, so that clients can check for server-side changes before
+    fetching an updated token from the :ref:`tokenserver`.
+
 
 **GET** **https://<endpoint-url>/info/quota**
 
