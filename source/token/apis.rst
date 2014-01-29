@@ -61,15 +61,18 @@ Request Headers
 
 **X-Client-State**
 
-    An optional base64-urlsafe string, up to 32 characters long, that
-    can be sent to identity a unique configuration of client-side state.
+    An optional string that can be sent to identity a unique configuration
+    of client-side state.  It may be up to 32 characters long, and must
+    contain only characters from the urlsafe-base64 alphaebet (i.e.
+    alphanumeric characters, underscore and hyphen) and the period.
+    
     A change in the value of this header will cause the user's node
     allocation to be reset.  Clients should include any client-side state
     that is necessary for accessing the selected app.
 
     For example, clients accessing :ref:`server_storage_api_15` might
-    include a hash  of the encryption key in this header, since a change
-    in the encryption key will make any existing data unreadable.
+    include a hex-encoded hash  of the encryption key in this header, since
+    a change in the encryption key will make any existing data unreadable.
 
 
 Response Headers
