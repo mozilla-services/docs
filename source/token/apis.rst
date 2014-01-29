@@ -70,7 +70,7 @@ Request Headers
     allocation to be reset.  Clients should include any client-side state
     that is necessary for accessing the selected app.
 
-    For example, clients accessing :ref:`server_storage_api_15` might
+    For example, clients accessing :ref:`server_syncstorage_api_15` might
     include a hex-encoded hash  of the encryption key in this header, since
     a change in the encryption key will make any existing data unreadable.
 
