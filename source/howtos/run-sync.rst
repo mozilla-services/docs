@@ -9,6 +9,13 @@ The easiest way to install a Sync Server is to checkout our repository
 and run a build in-place. Once this is done, Sync can be run behind
 any Web Server that supports the :term:`WSGI` protocol.
 
+.. note:: These instructions are for the sync server protocol used by Firefox
+   28 and earlier.  Firefox 29 will include a `new sync service
+   <https://wiki.mozilla.org/User_Services/Sync>`_ that is incompatible with
+   this server.  Host-your-own-sync-server instructions for Firefox 29 and
+   later will be available soon.
+   
+
 
 Prerequisites
 =============
