@@ -248,8 +248,8 @@ collection.
 
     - **application/json**: the output is a JSON list of the request records,
       as either string ids or full JSON objects.
-    - **application/newlines**: the output contains each record on a separate
-      line, as either a string id or a full JSON object.
+    - **application/newlines**: the output contains each individual record
+      followed by a newline, as either a string id or a full JSON object.
 
     Potential HTTP error responses include:
 
@@ -334,7 +334,7 @@ collection.
       for each BSO in the request.
 
     - **application/newlines**: each BSO is sent as a separate JSON object
-      on its own line.
+      followed by a newline.
 
     For backwards-compatibility with existing clients, the server will also
     treat **text/plain** input as JSON.
