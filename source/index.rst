@@ -31,6 +31,8 @@ let us know in the* `mailing list <https://mail.mozilla.org/listinfo/services-de
    :maxdepth: 1
 
    howtos/run-sync
+   howtos/run-sync-1.5
+   howtos/run-fxa
 
 
 Services
@@ -45,6 +47,7 @@ jump to the detailed documentation for each service:
 .. toctree::
    :maxdepth: 1
 
+   fxa/index
    storage/index
    reg/index
    keyexchange/index

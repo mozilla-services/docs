@@ -131,5 +131,5 @@ doctest:
 
 spelling:
 	$(SPHINXBUILD) -b spelling $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
-	@echo "Spell checking of docs is finished.the"
+	@echo "Spell checking of docs is finished."
 

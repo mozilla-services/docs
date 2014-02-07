@@ -63,7 +63,7 @@ Request Headers
 
     An optional string that can be sent to identity a unique configuration
     of client-side state.  It may be up to 32 characters long, and must
-    contain only characters from the urlsafe-base64 alphaebet (i.e.
+    contain only characters from the urlsafe-base64 alphabet (i.e.
     alphanumeric characters, underscore and hyphen) and the period.
     
     A change in the value of this header will cause the user's node

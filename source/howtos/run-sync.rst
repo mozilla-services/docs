@@ -1,6 +1,8 @@
-========================
-Run your own Sync Server
-========================
+.. _howto_run_sync11:
+
+============================
+Run your own Sync-1.1 Server
+============================
 
 The Firefox Sync Server is deployed on our systems using RPM packaging,
 and we don't provide any other packaging or publish official RPMs yet.
@@ -287,7 +289,7 @@ for acess control::
     ErrorLog  /var/log/apache2/example.com-error.log
   </VirtualHost>
 
-We provide a **sync.wsgi** file for you convenience in the repository.
+We provide a **sync.wsgi** file for your convenience in the repository.
 Before running Apache, edit the file and check that it loads the the right
 .ini file with its full path.
 
@@ -482,5 +484,5 @@ Can't get it to work
 
 Ask for help:
 
-- in our Mailing List: https://mail.mozilla.org/listinfo/services-dev
 - on IRC (irc.mozilla.org) in the #sync channel
+- in our Mailing List: https://mail.mozilla.org/listinfo/services-dev
