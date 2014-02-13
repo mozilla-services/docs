@@ -44,8 +44,7 @@ Basic Storage Objects have the following fields:
 |               |           |            | clock; any client-supplied value for this field is ignored.   |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | sortindex     | none      | integer,   | An integer indicating the relative importance of this item in |
-|               |           | positive,  | the collection.                                               |
-|               |           | 9 digits   |                                                               |
+|               |           | 9 digits   | the collection.                                               |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | payload       | empty     | string,    | A string containing the data of the record. The structure of  |
 |               | string    | 256k       | this string is defined separately for each BSO type. This     |
