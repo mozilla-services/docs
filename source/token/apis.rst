@@ -35,7 +35,7 @@ Token Server API v1.0
     - **key** -- a secret derived from the shared secret
     - **uid** -- the user id for this service
     - **api_endpoint** -- the root URL for the user for the service.
-    - **duration** -- the validity duration of the issued token
+    - **duration** -- the validity duration of the issued token, in seconds.
 
     Example::
 
