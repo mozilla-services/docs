@@ -181,6 +181,12 @@ more frequently.
 * **type** *string*: type of the client: "desktop" or "mobile"
 * **commands** *array*: commands to be executed upon next sync
 
+In Protocol 1.5, client records additionally include:
+
+* **version** *string*: a version indicator for this client, such as "29.0a1". Optional.
+* **protocols** *array*: an array of Sync protocol versions supported by this client, such as ["1.1", "1.5"]. Optional.
+
+
 Version 2
 ---------
 

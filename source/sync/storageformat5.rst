@@ -294,6 +294,16 @@ The payload of this record is a JSON string that deserializes to an object
   contain *version* and *syncID* fields, which behave like the *storageVersion*
   and *syncID* fields on this record, but on a per-engine level.
 
+In Protocol 1.5, an additional field is present:
+
+- **declined**: engines that are not present in **engines**, and are not present
+  in this array, can be presumed to be neither enabled nor explicitly declined.
+  If a user has explicitly declined an engine, rather than e.g., not having the
+  option due to missing functionality on the client, then it should be added to
+  this list in the uploaded meta/global record.
+  No engine should be present in both **engines** and **declined**; if an error
+  results in this situation, **engines** takes precedent.
+
 Example
 -------
 
@@ -308,9 +318,9 @@ Example
         "forms":     {"version":1,"syncID":"lLnCTaQM3SPR"},
         "tabs":      {"version":1,"syncID":"G1nU87H-7jdl"},
         "history":   {"version":1,"syncID":"9Tvy_Vlb44b2"},
-        "passwords": {"version":1,"syncID":"yfBi2v7PpFO2"},
         "prefs":     {"version":2,"syncID":"8eONx16GXAlp"}
-      }
+      },
+      "declined": ["passwords"]
     }
 
 Semantics and Behavior
