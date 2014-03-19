@@ -190,6 +190,13 @@ the user's data store as a whole.
 
 **DELETE** **https://<endpoint-url>/storage**
 
+    Deletes all records for the user.  This is URL is provided for backwards-
+    compatibility with the previous version of the syncstorage API; new clients
+    should use **DELETE https://<endpoint-url>**.
+
+
+**DELETE** **https://<endpoint-url>**
+
     Deletes all records for the user.
 
 
