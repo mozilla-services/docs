@@ -54,6 +54,7 @@ jump to the detailed documentation for each service:
    sreg/index
    token/index
    heka/index
+   loop/index
 
 
 Server-side development guide
