@@ -68,11 +68,21 @@ Request Headers
     
     A change in the value of this header will cause the user's node
     allocation to be reset.  Clients should include any client-side state
-    that is necessary for accessing the selected app.
+    that is necessary for accessing the selected app.  For example, clients
+    accessing :ref:`server_syncstorage_api_15` would include a hex-encoded
+    hash of the encryption key in this header, since a change in the encryption
+    key will make any existing data unreadable.
 
-    For example, clients accessing :ref:`server_syncstorage_api_15` might
-    include a hex-encoded hash  of the encryption key in this header, since
-    a change in the encryption key will make any existing data unreadable.
+    Updated values of the **X-Client-State** will be rejected with an error
+    status of **"invalid-client-state"** if:
+
+      * The proposed new value is in the server's list of previously-seen
+        client-state values for that user.
+      * The client-state is missing or empty, but the server has previously
+        seen a non-empty client-state for that user.
+      * The user's IdP provides generation numbers in their identity
+        certificates, and the changed client-state value does not correspond
+        to an increase in generation number.
 
 
 Response Headers
