@@ -1,9 +1,8 @@
 # Makefile for Sphinx documentation
-#
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
+SPHINXBUILD   = ./venv/bin/sphinx-build
 PAPER         =
 BUILDDIR      = build
 
@@ -12,7 +11,7 @@ PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
-.PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest
+.PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest venv build
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -133,3 +132,10 @@ spelling:
 	$(SPHINXBUILD) -b spelling $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
 	@echo "Spell checking of docs is finished."
 
+build: venv/bin/sphinx-build html
+
+venv/bin/sphinx-build:
+	virtualenv --no-site-packages --distribute ./venv
+	 ./venv/bin/pip install Distribute
+	 ./venv/bin/pip install pip sphinx
+	 ./venv/bin/pip install sphinxcontrib-seqdiag sphinxcontrib-spelling

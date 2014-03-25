@@ -6,3 +6,4 @@ include
 .git
 .hg
 *.swp
+venv
