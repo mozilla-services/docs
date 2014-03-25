@@ -28,9 +28,6 @@ Documentation content
 Resources
 =========
 
-- Original wiki pages:
-
- - https://wiki.mozilla.org/Services/Sync/Server/API/Storage/1.0
-
-- Server (v1): https://hg.mozilla.org/services/server-storage
+- Server (v1.1): https://hg.mozilla.org/services/server-storage
+- Server (v1.5): https://github.com/mozilla-services/server-syncstorage
 - Client: Firefox 4, Firefox Home
