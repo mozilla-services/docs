@@ -17,15 +17,23 @@ APIs
 
 **GET** **/**
 
-    Displays version information, for instance::
+    Displays version information, for instance:
 
+    .. code-block:: http
+
+        GET / HTTP/1.1
+        Accept: */*
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json; charset=utf-8
         {
-          "name": "mozilla-loop-server",
-          "description": "The Mozilla Loop (WebRTC App) server",
-          "version": "0.2.0-DEV",
-          "homepage": "https://github.com/mozilla-services/loop-server/",
-          "endpoint": "http://loop.services.mozilla.com"
-        }  
+            "description": "The Mozilla Loop (WebRTC App) server",
+            "endpoint": "http://localhost:5000",
+            "homepage": "https://github.com/mozilla/loop-server/",
+            "name": "mozilla-loop-server",
+            "version": "0.2.0-DEV"
+        }
+
 
 **POST** **/registration**
 
@@ -42,10 +50,24 @@ APIs
     - **simple_push_url**, the simple push endpoint url as defined in
       https://wiki.mozilla.org/WebAPI/SimplePush#Definitions
 
-    Example::
+    Example (when requesting a session cookie):
 
-        POST /registration
-        {'simple_push_url': 'https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyu'}
+    .. code-block:: http
+
+        POST /registration HTTP/1.1
+        Accept: application/json
+        Content-Type: application/json; charset=utf-8
+        {
+            "simple_push_url": "https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyuverbo"
+        }
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json; charset=utf-8
+        Set-Cookie: loop-session=<session-cookie>; path=/; expires=Tue, 20 Jan 2015 09:18:55 GMT;
+        "ok"
+
+    Alternatively, if you set a cookie in the request, with the `Cookie`
+    header, you will not be given a cookie in the response.
 
     Server should aknowledge your request and answer with a status code of
     **200, OK**.
@@ -73,12 +95,24 @@ APIs
     The server should answer this with a 200 status code and a JSON object
     with a "call_url" property.
 
-    Example::
+    Example:
 
-        > POST /call-url
-        > data = {'callerId': 'alexis@mozilla.com'}
-        < Status 200 OK
-        < Body: {"call_url": "http://loop.services.mozilla.com/calls/af123f343" }
+    .. code-block:: http
+
+        POST /call-url HTTP/1.1
+        Accept: application/json
+        Content-Type: application/json; charset=utf-8
+        Cookie: loop-session=<session-cookie>
+        {
+            "callerId": "alexis"
+        }
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json; charset=utf-8
+
+        {
+            "call_url": "http://localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP"
+        }
 
     (note that the token had been truncated here for brievity purposes)
 
@@ -90,15 +124,23 @@ APIs
 **GET**  **/calls/{token}**
 
     Redirects to the application webapp (for the caller)
-    
+
     - *token* is the token returned by the **POST** on **/call-url**.
 
     Server should return an "HTTP 302" with the new location.
-    Example::
 
-        > GET /calls/af123f343
-        < Status 302
-        < Location: "http://loop-webapp.services.mozilla.com/#call?token=af123f343" }
+    Example:
+
+    .. code-block:: http
+
+        GET /calls/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
+        Accept: application/json
+        Cookie: loop-session=<session-cookie>
+
+        HTTP/1.1 302 Moved Temporarily
+        Content-Length: 0
+        Location: http://localhost:3000/static/#call/FfzMMm2hSl9FqeYUqNO2XuNzJP
+        Vary: Accept
 
     Potential HTTP error responses include:
 
@@ -111,11 +153,32 @@ APIs
 
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
-    
+
     - **uuid**, an unique identifier for the call;
     - **sessionId**, the provider session identifier;
     - **sessionToken**, the provider session token (for the caller);
     - **apiKey**, the provider public api Key.
+
+    Example:
+
+    .. code-block:: http
+
+        POST /calls/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
+        Accept: */*
+
+        HTTP/1.1 200 OK
+        Access-Control-Allow-Methods: GET,POST
+        Access-Control-Allow-Origin: http://localhost:3000
+        Content-Type: application/json; charset=utf-8
+
+        {
+            "apiKey": "44700952",
+            "sessionId": "2_MX40NDcwMDk1Mn5-V2VkIE1hciA",
+            "sessionToken": "T1==cGFydG5lcl9pZD00NDcwMD",
+            "uuid": "1afeb4340d995938248ce7b3e953fe80"
+        }
+
+    (note that return values have been truncated for readability purposes.)
 
     Potential HTTP error responses include:
 
@@ -128,10 +191,20 @@ APIs
     Delete a previously created call url. You need to be the user
     who generated this link in order to delete it.
 
+    Example:
+
+    .. code-block:: http
+
+        DELETE /calls/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
+        Accept: application/json
+        Cookie: loop-session=<session-cookie>
+
+        HTTP/1.1 204 No Content
+
     Potential HTTP error responses include:
 
     - **400 Bad Request:**  The token you passed is not valid or expired.
-    
+
 
 **GET** **/calls?version=<version>**
 
@@ -152,16 +225,33 @@ APIs
     - **sessionId**, the provider session identifier for the callee;
     - **calleeToken**, the provider callee token.
 
-    Example::
+    Example:
 
-        > GET /calls?version=1234
-        < Body: {"calls": [{"uuid": "b7aa8022e384b8f5f97160f2c2d52255",
-                            "apiKey": "12345",
-                            "sessionId": "af32408e"
-                            "calleeToken": "e430fd2"},
-                           {"apiKey": "67890",
-                            "sessionId": "ae3240de"
-                            "calleeToken": "f430ff2"}]}
+    .. code-block:: http
+
+        GET /calls?version=1234 HTTP/1.1
+        Accept: application/json
+        Cookie: loop-session=<session-cookie>
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json; charset=utf-8
+
+        {
+            "calls": [
+                {
+                    "apiKey": "13245678",
+                    "sessionId": "2_MX40NDcwMDk1Mn5",
+                    "sessionToken": "T1==cGFydG5lcl",
+                    "uuid": "1afeb4340d995938248ce7b3e953fe80"
+                },
+                {
+                    "apiKey": "34159876",
+                    "sessionId": "3_XZ40NDcwMDk1Mn5",
+                    "sessionToken": "T2==cFGydG5lcl",
+                    "uuid": "938248ce7b3e953fe801afeb4340d995"
+                }
+            ]
+        }
 
     Potential HTTP error responses include:
 
@@ -170,12 +260,24 @@ APIs
 **GET** **/calls/id/{uuid}**
 
     Checks the status of the given call, by looking at its uuid.
-    
+
     Parameters:
 
         - **uuid** (in the url) is the unique identifier of the
           call.
-    
+
+    Example:
+
+    .. code-block:: http
+
+        GET /calls/id/1afeb4340d995938248ce7b3e953fe80 HTTP/1.1
+        Accept: application/json
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json; charset=utf-8
+
+        "ok"
+
     Server can answer with:
 
     - "200 OK", meaning that the call exists (but may be not
@@ -183,17 +285,27 @@ APIs
     - "404 Not Found" if the given call doesn't exist or had been
       declined.
 
-**DELETE **/calls/id/{uuid}**
+**DELETE** **/calls/id/{uuid}**
 
     **Requires authentication**
 
     Reject a given call. This is to be used by the callee in order
     to reject a call.
-    
+
     Parameters:
 
         - **uuid** (in the url) is the unique identifier of the
           call.
+
+    Example:
+
+    .. code-block:: http
+
+        DELETE /calls/id/1afeb4340d995938248ce7b3e953fe80 HTTP/1.1
+        Accept: application/json
+        Cookie: loop-session=<session-cookie>
+
+        HTTP/1.1 204 No Content
 
     Server can answer with:
 
