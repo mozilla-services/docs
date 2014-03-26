@@ -5,7 +5,12 @@ Loop Server API v1.0
 .. note::
 
     Unless stated otherwise, all APIs are using application/json for the requests
-    and responses content types.
+    and responses content types. Parameters for the GET requests are form
+    encoded (?key=value&key2=value2)
+
+To ease testing, you can use `httpie <https://github.com/jkbr/httpie>`_ in
+order to make requests. You can find the httpie requests for reference in the
+examples.
 
 Authentication
 ==============
@@ -17,7 +22,9 @@ APIs
 
 **GET** **/**
 
-    Displays version information, for instance:
+    Displays version information, for instance::
+
+       http GET localhost:5000 --verbose 
 
     .. code-block:: http
 
@@ -39,7 +46,7 @@ APIs
 
     Associates a Simple Push Endpoint (URL) with the authenticated user.
 
-    **can requires authentication (read below)**
+    **May require authentication**
 
     If you aren't authenticated when doing this registration step, then you'll
     be given back a session cookie that you'll need to pass along for the
@@ -50,7 +57,9 @@ APIs
     - **simple_push_url**, the simple push endpoint url as defined in
       https://wiki.mozilla.org/WebAPI/SimplePush#Definitions
 
-    Example (when requesting a session cookie):
+    Example (when requesting a session cookie)::
+
+        http --session loop POST localhost:5000/registration simple_push_url=https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyuverbo --verbose
 
     .. code-block:: http
 
@@ -69,8 +78,8 @@ APIs
     Alternatively, if you set a cookie in the request, with the `Cookie`
     header, you will not be given a cookie in the response.
 
-    Server should aknowledge your request and answer with a status code of
-    **200, OK**.
+    Server should acknowledge your request and answer with a status code of
+    **200 OK**.
 
     Potential HTTP error responses include:
 
@@ -95,7 +104,9 @@ APIs
     The server should answer this with a 200 status code and a JSON object
     with a "call_url" property.
 
-    Example:
+    Example::
+
+        http --session loop POST localhost:5000/call-url callerId=alexis --verbose
 
     .. code-block:: http
 
@@ -129,7 +140,9 @@ APIs
 
     Server should return an "HTTP 302" with the new location.
 
-    Example:
+    Example::
+
+        http GET localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP --verbose
 
     .. code-block:: http
 
@@ -159,7 +172,9 @@ APIs
     - **sessionToken**, the provider session token (for the caller);
     - **apiKey**, the provider public api Key.
 
-    Example:
+    Example::
+
+        http POST localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP --verbose
 
     .. code-block:: http
 
@@ -191,7 +206,9 @@ APIs
     Delete a previously created call url. You need to be the user
     who generated this link in order to delete it.
 
-    Example:
+    Example::
+
+        http --session=loop DELETE localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP --verbose
 
     .. code-block:: http
 
@@ -225,7 +242,9 @@ APIs
     - **sessionId**, the provider session identifier for the callee;
     - **calleeToken**, the provider callee token.
 
-    Example:
+    Example::
+
+        http --session=loop GET localhost:5000/calls\?version=1234 --verbose
 
     .. code-block:: http
 
@@ -266,7 +285,9 @@ APIs
         - **uuid** (in the url) is the unique identifier of the
           call.
 
-    Example:
+    Example::
+
+        http GET localhost:5000/calls/id/1afeb4340d995938248ce7b3e953fe80 --verbose
 
     .. code-block:: http
 
@@ -297,7 +318,9 @@ APIs
         - **uuid** (in the url) is the unique identifier of the
           call.
 
-    Example:
+    Example::
+
+        http --session=loop DELETE localhost:5000/calls/id/1afeb4340d995938248ce7b3e953fe80 --verbose
 
     .. code-block:: http
 

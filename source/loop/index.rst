@@ -7,9 +7,8 @@ Loop Server
 Goal of the Service
 ===================
 
-Loop server handles interaction with provider servers (which are doing all the
-WebRTC discovery). It provides a way for logged-in users to call other users,
-or to be called by other people by giving them a link.
+Loop server allows firefox users to call each others via WebRTC. It is
+a rendez-vous API built on top of a signaling and NAT traversal provider.
 
 Assumptions
 ===========
