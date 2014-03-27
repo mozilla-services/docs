@@ -2,6 +2,10 @@
 Loop Server API v1.0
 ====================
 
+This document is based on the current status of the server. All the examples are
+working ones. It doesn't reflect any future implementation and tries to stick
+with the currently deployed version.
+
 .. note::
 
     Unless stated otherwise, all APIs are using application/json for the requests
@@ -15,7 +19,10 @@ examples.
 Authentication
 ==============
 
-Loop server supports authentication with cookie sessions.
+Loop server only supports authentication with cookie sessions as of now.
+
+It may support authentication using FxA assertions in the future, but that's
+**not** the case right now.
 
 APIs
 ====
@@ -44,7 +51,8 @@ APIs
 
 **POST** **/registration**
 
-    Associates a Simple Push Endpoint (URL) with the authenticated user.
+    Associates a Simple Push Endpoint (URL) with a user, creating a cookie
+    session if none is provided.
 
     **May require authentication**
 
@@ -76,7 +84,8 @@ APIs
         "ok"
 
     Alternatively, if you set a cookie in the request, with the `Cookie`
-    header, you will not be given a cookie in the response.
+    header, you will not be given a cookie in the response (but the push URL
+    will be associated with the authenticated user).
 
     Server should acknowledge your request and answer with a status code of
     **200 OK**.
@@ -97,7 +106,7 @@ APIs
     Body parameters:
 
     - **callerId**, the caller (the person you will give the link to)
-      identifier.
+      identifier. The callerId is supposed to be a valid email address.
 
     Response from the server:
 
@@ -130,7 +139,8 @@ APIs
     Potential HTTP error responses include:
 
     - **400 Bad Request:**  You forgot to pass the `callerId`, or it's not
-      valid.
+      valid;
+    - **401 Unauthorized**: You need to authenticate to call this URL.
 
 **GET**  **/calls/{token}**
 
@@ -147,13 +157,10 @@ APIs
     .. code-block:: http
 
         GET /calls/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
-        Accept: application/json
-        Cookie: loop-session=<session-cookie>
+        Accept: */* 
 
         HTTP/1.1 302 Moved Temporarily
-        Content-Length: 0
         Location: http://localhost:3000/static/#call/FfzMMm2hSl9FqeYUqNO2XuNzJP
-        Vary: Accept
 
     Potential HTTP error responses include:
 
@@ -179,7 +186,7 @@ APIs
     .. code-block:: http
 
         POST /calls/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
-        Accept: */*
+        Accept: application/json
 
         HTTP/1.1 200 OK
         Access-Control-Allow-Methods: GET,POST
@@ -240,7 +247,7 @@ APIs
       to reject a call.
     - **apiKey**, the provider apiKey to use;
     - **sessionId**, the provider session identifier for the callee;
-    - **calleeToken**, the provider callee token.
+    - **sessionToken**, the provider callee token.
 
     Example::
 
@@ -358,6 +365,9 @@ Error status codes and their corresponding output are:
 - **404** : unknown URL, or unsupported application.
 - **400** : malformed request. Possible causes include a missing
   option, bad values or malformed json.
+- **401** : you need to be authenticated
+- **403** : you are authenticated but don't have access to the resource you are
+            requesting.
 - **405** : unsupported method
 - **406** : unacceptable - the client asked for an Accept we don't support
 - **503** : service unavailable (provider or database backends may be down)
