@@ -12,11 +12,10 @@ and run a build in-place. Once this is done, Sync can be run behind
 any Web Server that supports the :term:`WSGI` protocol.
 
 .. note:: These instructions are for the sync server protocol used by Firefox
-   28 and earlier.  Firefox 29 will include a `new sync service
+   28 and earlier.  Firefox 29 and later include a `new sync service
    <https://wiki.mozilla.org/User_Services/Sync>`_ that is incompatible with
-   this server.  Host-your-own-sync-server instructions for Firefox 29 and
-   later will be available soon.
-   
+   this server.  For a server compatible with Firefox 29 and later, see
+   :ref:`howto_run_sync15`.
 
 
 Prerequisites
