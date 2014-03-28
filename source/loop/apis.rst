@@ -2,9 +2,9 @@
 Loop Server API v1.0
 ====================
 
-This document is based on the current status of the server. All the examples are
-working ones. It doesn't reflect any future implementation and tries to stick
-with the currently deployed version.
+This document is based on the current status of the server. All the examples
+had been done with real calls. It doesn't reflect any future implementation and
+tries to stick with the currently deployed version.
 
 .. note::
 
@@ -13,8 +13,7 @@ with the currently deployed version.
     encoded (?key=value&key2=value2)
 
 To ease testing, you can use `httpie <https://github.com/jkbr/httpie>`_ in
-order to make requests. You can find the httpie requests for reference in the
-examples.
+order to make requests. You can find an httpie with each example.
 
 Authentication
 ==============
@@ -142,6 +141,30 @@ APIs
       valid;
     - **401 Unauthorized**: You need to authenticate to call this URL.
 
+**DELETE** **/call-url/{token}**
+
+    **Requires authentication**
+
+    Delete a previously created call url. You need to be the user
+    who generated this link in order to delete it.
+
+    Example::
+
+        http --session=loop DELETE localhost:5000/call-url/FfzMMm2hSl9FqeYUqNO2XuNzJP --verbose
+
+    .. code-block:: http
+
+        DELETE /call-url/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
+        Accept: application/json
+        Cookie: loop-session=<session-cookie>
+
+        HTTP/1.1 204 No Content
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  The token you passed is not valid or expired.
+
+
 **GET**  **/calls/{token}**
 
     Redirects to the application webapp (for the caller)
@@ -174,7 +197,7 @@ APIs
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
 
-    - **uuid**, an unique identifier for the call;
+    - **callId**, an unique identifier for the call;
     - **sessionId**, the provider session identifier;
     - **sessionToken**, the provider session token (for the caller);
     - **apiKey**, the provider public api Key.
@@ -197,33 +220,10 @@ APIs
             "apiKey": "44700952",
             "sessionId": "2_MX40NDcwMDk1Mn5-V2VkIE1hciA",
             "sessionToken": "T1==cGFydG5lcl9pZD00NDcwMD",
-            "uuid": "1afeb4340d995938248ce7b3e953fe80"
+            "callId": "1afeb4340d995938248ce7b3e953fe80"
         }
 
     (note that return values have been truncated for readability purposes.)
-
-    Potential HTTP error responses include:
-
-    - **400 Bad Request:**  The token you passed is not valid or expired.
-
-**DELETE** **/calls/{token}**
-
-    **Requires authentication**
-
-    Delete a previously created call url. You need to be the user
-    who generated this link in order to delete it.
-
-    Example::
-
-        http --session=loop DELETE localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP --verbose
-
-    .. code-block:: http
-
-        DELETE /calls/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
-        Accept: application/json
-        Cookie: loop-session=<session-cookie>
-
-        HTTP/1.1 204 No Content
 
     Potential HTTP error responses include:
 
@@ -241,9 +241,10 @@ APIs
     - **version**, the version simple push gave to the client when waking it
       up. Only calls that happened since this version will be returned.
 
-    Server should answer with a status of 200 and a list of calls in its body. Each call has the following attributes:
+    Server should answer with a status of 200 and a list of calls in its body.
+    Each call has the following attributes:
 
-    - **uuid**, the unique identifier of the call, which can be used
+    - **callId**, the unique identifier of the call, which can be used
       to reject a call.
     - **apiKey**, the provider apiKey to use;
     - **sessionId**, the provider session identifier for the callee;
@@ -268,13 +269,13 @@ APIs
                     "apiKey": "13245678",
                     "sessionId": "2_MX40NDcwMDk1Mn5",
                     "sessionToken": "T1==cGFydG5lcl",
-                    "uuid": "1afeb4340d995938248ce7b3e953fe80"
+                    "callId": "1afeb4340d995938248ce7b3e953fe80"
                 },
                 {
                     "apiKey": "34159876",
                     "sessionId": "3_XZ40NDcwMDk1Mn5",
                     "sessionToken": "T2==cFGydG5lcl",
-                    "uuid": "938248ce7b3e953fe801afeb4340d995"
+                    "callId": "938248ce7b3e953fe801afeb4340d995"
                 }
             ]
         }
@@ -283,13 +284,13 @@ APIs
 
     - **400 Bad Request:**  The version you passed is not valid.
 
-**GET** **/calls/id/{uuid}**
+**GET** **/calls/id/{callId}**
 
-    Checks the status of the given call, by looking at its uuid.
+    Checks the status of the given call, by looking at its callId.
 
     Parameters:
 
-        - **uuid** (in the url) is the unique identifier of the
+        - **callId** (in the url) is the unique identifier of the
           call.
 
     Example::
@@ -313,16 +314,14 @@ APIs
     - "404 Not Found" if the given call doesn't exist or had been
       declined.
 
-**DELETE** **/calls/id/{uuid}**
+**DELETE** **/calls/id/{callId}**
 
-    **Requires authentication**
-
-    Reject a given call. This is to be used by the callee in order
-    to reject a call.
+    Rejects a given call. This is to be used by the callee in order
+    to reject a call, or by the caller in order to hang-up.
 
     Parameters:
 
-        - **uuid** (in the url) is the unique identifier of the
+        - **callId** (in the url) is the unique identifier of the
           call.
 
     Example::
@@ -333,7 +332,6 @@ APIs
 
         DELETE /calls/id/1afeb4340d995938248ce7b3e953fe80 HTTP/1.1
         Accept: application/json
-        Cookie: loop-session=<session-cookie>
 
         HTTP/1.1 204 No Content
 

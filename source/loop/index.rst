@@ -8,7 +8,8 @@ Goal of the Service
 ===================
 
 Loop server allows firefox users to call each others via WebRTC. It is
-a rendez-vous API built on top of a signaling and NAT traversal provider.
+a rendezvous API built on top of an external service provider for NAT traversal
+and supplementary services.
 
 Assumptions
 ===========
