@@ -138,4 +138,4 @@ venv/bin/sphinx-build:
 	virtualenv --no-site-packages --distribute ./venv
 	 ./venv/bin/pip install Distribute
 	 ./venv/bin/pip install pip sphinx
-	 ./venv/bin/pip install sphinxcontrib-seqdiag sphinxcontrib-spelling
+	 ./venv/bin/pip install -r requirements.txt
