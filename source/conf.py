@@ -30,7 +30,6 @@ release = ''
 exclude_patterns = []
 pygments_style = 'sphinx'
 
-html_theme = 'sphinxdoc'
 html_title = "Mozilla Services"
 html_static_path = []
 
