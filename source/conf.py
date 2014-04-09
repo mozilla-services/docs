@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import sys, os
+import os
 from datetime import datetime
+import mdn_theme
 
 extensions = [
     'sphinx.ext.graphviz',
@@ -20,6 +21,8 @@ blockdiag_antialias = True
 seqdiag_antialias = True
 
 templates_path = ['_templates']
+html_theme_path = [mdn_theme.get_theme_dir()]
+html_theme = 'mdn'
 source_suffix = '.rst'
 master_doc = 'index'
 project = u'Mozilla Services'
