@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import sys, os
+import os
 from datetime import datetime
+import mozilla_sphinx_theme
+
 
 extensions = [
     'sphinx.ext.graphviz',
@@ -20,6 +22,8 @@ blockdiag_antialias = True
 seqdiag_antialias = True
 
 templates_path = ['_templates']
+html_theme_path = [os.path.dirname(mozilla_sphinx_theme.__file__)]
+html_theme = 'mozilla'
 source_suffix = '.rst'
 master_doc = 'index'
 project = u'Mozilla Services'
@@ -30,7 +34,6 @@ release = ''
 exclude_patterns = []
 pygments_style = 'sphinx'
 
-html_theme = 'sphinxdoc'
 html_title = "Mozilla Services"
 html_static_path = []
 
