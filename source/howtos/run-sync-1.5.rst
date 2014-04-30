@@ -163,7 +163,7 @@ Here's an example of an Apache 2.2 setup that uses mod_wsgi::
     ServerName example.com
     DocumentRoot /path/to/syncserver
     WSGIProcessGroup sync
-    WSGIDaemonProcess sync user=sync group=sync processes=2 threads=25
+    WSGIDaemonProcess sync user=sync group=sync processes=2 threads=25 python-path=/path/to/syncserver/local/lib/python2.7/site-packages/
     WSGIPassAuthorization On
     WSGIScriptAlias / /path/to/syncserver/sync.wsgi
     CustomLog /var/log/apache2/example.com-access.log combined
@@ -181,7 +181,7 @@ for access control::
     ServerName example.com
     DocumentRoot /path/to/syncserver
     WSGIProcessGroup sync
-    WSGIDaemonProcess sync user=sync group=sync processes=2 threads=25
+    WSGIDaemonProcess sync user=sync group=sync processes=2 threads=25 python-path=/path/to/syncserver/local/lib/python2.7/site-packages/
     WSGIPassAuthorization On
     WSGIScriptAlias / /path/to/syncserver/sync.wsgi
     CustomLog /var/log/apache2/example.com-access.log combined
