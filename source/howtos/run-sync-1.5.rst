@@ -71,7 +71,7 @@ The server is configured using an ini-like file to specify various runtime
 settings.  The file "syncserver.ini" will provide a useful starting point.
 
 There is one setting that you *must* specify before running the server: the
-client-visible URL for the service.  Open "etc/sync.conf" and locate the
+client-visible URL for the service.  Open "./syncserver.ini" and locate the
 following lines::
 
     [syncserver]
@@ -165,7 +165,7 @@ Here's an example of an Apache 2.2 setup that uses mod_wsgi::
     WSGIProcessGroup sync
     WSGIDaemonProcess sync user=sync group=sync processes=2 threads=25 python-path=/path/to/syncserver/local/lib/python2.7/site-packages/
     WSGIPassAuthorization On
-    WSGIScriptAlias / /path/to/syncserver/sync.wsgi
+    WSGIScriptAlias / /path/to/syncserver/syncserver.wsgi
     CustomLog /var/log/apache2/example.com-access.log combined
     ErrorLog  /var/log/apache2/example.com-error.log
   </VirtualHost>
@@ -183,7 +183,7 @@ for access control::
     WSGIProcessGroup sync
     WSGIDaemonProcess sync user=sync group=sync processes=2 threads=25 python-path=/path/to/syncserver/local/lib/python2.7/site-packages/
     WSGIPassAuthorization On
-    WSGIScriptAlias / /path/to/syncserver/sync.wsgi
+    WSGIScriptAlias / /path/to/syncserver/syncserver.wsgi
     CustomLog /var/log/apache2/example.com-access.log combined
     ErrorLog  /var/log/apache2/example.com-error.log
   </VirtualHost>
