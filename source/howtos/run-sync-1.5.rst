@@ -159,7 +159,7 @@ Here's an example of an Apache 2.2 setup that uses mod_wsgi::
     Allow from all
   </Directory>
 
-  <VirtualHost \*:80>
+  <VirtualHost *:80>
     ServerName example.com
     DocumentRoot /path/to/syncserver
     WSGIProcessGroup sync
@@ -177,7 +177,7 @@ for access control::
     Require all granted
   </Directory>
 
-  <VirtualHost \*:80>
+  <VirtualHost *:80>
     ServerName example.com
     DocumentRoot /path/to/syncserver
     WSGIProcessGroup sync
