@@ -7,9 +7,9 @@ Run your own Firefox Accounts Server
 The Firefox Accounts server is deployed on our systems using RPM packaging,
 and we don't provide any other packaging or publish official builds yet.
 
-.. note:: This guide is preliminary and vastly incomplete.  It will be fleshed
-   out as development progresses and as the first Firefox-Accounts-enabled
-   version of Firefox moves closer to stable release.
+.. note:: This guide is preliminary and vastly incomplete. If you have any
+   questions or find any bugs, please don't hesitate to drop by the IRC channel 
+   or mailing list and let us know.
 
 
 The Firefox Accounts server is hosted in **git** and requires **nodejs**.

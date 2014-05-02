@@ -16,9 +16,9 @@ any Web Server that supports the :term:`WSGI` protocol.
    Firefox 29 and later.  For a server compatible with earlier versions of
    Firefox, see :ref:`howto_run_sync11`.
 
-.. note:: This guide is preliminary and vastly incomplete.  It will be fleshed
-      out as development progresses and as the first Firefox-Accounts-enabled
-   version of Firefox moves closer to stable release.
+.. note:: This guide is quite preliminary.  If you have any questions or
+   find any bugs, please don't hesitate to drop by the IRC channel or mailing
+   list and let us know.
 
 
 Prerequisites
