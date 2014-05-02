@@ -113,6 +113,38 @@ its value to the URL of your server with a path of "token/1.0/sync/1.5":
   - services.sync.tokenServerURI:  http://sync.example.com/token/1.0/sync/1.5
 
 
+Further Configuration
+=====================
+
+Once the server is running and Firefox is syncing successfully, there are
+further configuration options you can tweak in the "syncserver.ini" file.
+
+The "secret" setting is used by the server to generate cryptographically-signed
+authentication tokens.  It is blank by default, which means the server will
+randomly generate a new secret at startup.  For long-lived server installations
+this should be set to a persistent value, generated from a good soure of
+randomness.  An easy way to generate such a value on posix-style systems
+is to do:
+
+    $  head -c 20 /dev/urandom | sha1sum
+    db8a203aed5fe3e4594d4b75990acb76242efd35  -
+
+Then copy-paste the value into the config file like so::
+
+    [syncserver]
+    ...other settings...
+    secret = db8a203aed5fe3e4594d4b75990acb76242efd35
+
+The "allow_new_users" setting controls whether the server will accept
+requests from previously-unseen users.  It is allowed by default, but once
+you have configured Firefox and successfully synced with your user account,
+additional users can be disabled by setting::
+
+    [syncserver]
+    ...other settings...
+    allow_new_users = false
+
+
 Updating the server
 ===================
 
