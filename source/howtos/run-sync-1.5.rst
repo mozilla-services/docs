@@ -232,8 +232,8 @@ Tested with debian stable/squeeze
 
 1. First install gunicorn in the syncserver python environment
 
-        $ cd /usr/src/syncserver
-        $ bin/easy_install gunicorn
+    $ cd /usr/src/syncserver
+    $ local/bin/easy_install gunicorn
 
 2. Then enable gunicorn in the **syncserver.ini** file::
 
