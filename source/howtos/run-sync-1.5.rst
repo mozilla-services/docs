@@ -11,14 +11,25 @@ The easiest way to install a Sync Server is to checkout our repository
 and run a build in-place. Once this is done, Sync can be run behind
 any Web Server that supports the :term:`WSGI` protocol.
 
-.. note:: These instructions are for the sync-1.5 server protocol used by
-   the `new sync service <https://wiki.mozilla.org/User_Services/Sync>`_  in
-   Firefox 29 and later.  For a server compatible with earlier versions of
-   Firefox, see :ref:`howto_run_sync11`.
+Important Notes
+===============
 
-.. note:: This guide is quite preliminary.  If you have any questions or
-   find any bugs, please don't hesitate to drop by the IRC channel or mailing
-   list and let us know.
+These instructions are for the sync-1.5 server protocol used by the
+the `new sync service <https://wiki.mozilla.org/User_Services/Sync>`_  in
+Firefox 29 and later.  For a server compatible with earlier versions of
+Firefox, see :ref:`howto_run_sync11`.
+
+The new sync service uses `Firefox Accounts <https://wiki.mozilla.org/Identity/FirefoxAccounts>`_ for user authentication, which is a separate service and is
+not covered by this guide.
+
+You can safely use the Mozilla-hosted Firefox Accounts server in combination
+with a self-hosted sync storage server.  The authentication and encryption
+protocols are designed so that the account server does not know the user's
+plaintext password, and therefore cannot access their stored sync data.
+
+Alternatively, you can also :ref:`howto_run_fxa` to control all aspects of the
+system.  The process for doing so is currently very experimental and not well
+documented.
 
 
 Prerequisites
@@ -113,6 +124,12 @@ its value to the URL of your server with a path of "token/1.0/sync/1.5":
   - services.sync.tokenServerURI:  http://sync.example.com/token/1.0/sync/1.5
 
 
+.. note:: Firefox for Android currently does not offer a way to change this
+          setting without recompiling from source; further details and updates
+          may be found in `Bug 1003877 <https://bugzilla.mozilla.org/show_bug.cgi?id=1003877>`_.
+
+
+
 Further Configuration
 =====================
 
@@ -122,7 +139,7 @@ further configuration options you can tweak in the "syncserver.ini" file.
 The "secret" setting is used by the server to generate cryptographically-signed
 authentication tokens.  It is blank by default, which means the server will
 randomly generate a new secret at startup.  For long-lived server installations
-this should be set to a persistent value, generated from a good soure of
+this should be set to a persistent value, generated from a good source of
 randomness.  An easy way to generate such a value on posix-style systems
 is to do:
 
@@ -269,8 +286,8 @@ Tested with debian stable/squeeze
    sync server behind your nginx installation
 
 
-Things that stil need to be Documented
-======================================
+Things that still need to be Documented
+=======================================
 
 * how to restrict new-user signups
 * how to interoperate with a self-hosted accounts server
