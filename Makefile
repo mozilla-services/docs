@@ -134,8 +134,9 @@ spelling:
 
 build: venv/bin/sphinx-build html
 
-venv/bin/sphinx-build:
+venv/bin/sphinx-build: requirements.txt
 	virtualenv --no-site-packages --distribute ./venv
 	 ./venv/bin/pip install Distribute
 	 ./venv/bin/pip install pip sphinx
 	 ./venv/bin/pip install -r requirements.txt
+	touch ./venv/bin/sphinx-build

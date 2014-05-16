@@ -484,4 +484,4 @@ Can't get it to work
 Ask for help:
 
 - on IRC (irc.mozilla.org) in the #sync channel
-- in our Mailing List: https://mail.mozilla.org/listinfo/services-dev
+- in our Mailing List: https://mail.mozilla.org/listinfo/sync-dev
