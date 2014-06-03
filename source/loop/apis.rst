@@ -13,15 +13,48 @@ tries to stick with the currently deployed version.
     encoded (?key=value&key2=value2)
 
 To ease testing, you can use `httpie <https://github.com/jkbr/httpie>`_ in
-order to make requests. You can find an httpie with each example.
+order to make requests. Examples of use with httpie are provided when possible.
 
 Authentication
 ==============
 
-Loop server only supports authentication with cookie sessions as of now.
+To deal with authentication, the Loop server uses `Hawk
+<https://github.com/hueniverse/hawk>`_ sessions. When you
+register, you can do so with different authentications schemes, but you are
+always given an hawk session back, that you should use when requesting the
+endpoints which need authentication.
 
-It may support authentication using FxA assertions in the future, but that's
-**not** the case right now.
+Derive hawk credentials from the hawk session token?
+----------------------------------------------------
+
+When authenticating using the `/register` endpoint, you will be given an hawk
+session token in the `Hawk-Session-Token` header.
+
+In order to get the hawk credentials to use on the client you will need to:
+
+1. Do an `HKDF derivation <http://en.wikipedia.org/wiki/HKDF>`_ on the given
+   session token. You'll need to use the following parameters:
+
+   key_material = HKDF(hawk_session, "", 'identity.mozilla.com/picl/v1/sessionToken', 32*3)
+
+2. The key material you'll get out of the HKDF need to be separated into two
+   parts, the first 32 bits are the hawk id, and the next 32 ones are the hawk
+   key.
+
+   Credentials::
+
+        credentials = {
+            'id': keyMaterial[:32]
+            'key': keyMaterial[32:64]
+            'algorithm': 'sha256'
+        }
+
+If you are writting a client, you might find these resources useful:
+
+- With javascript:
+  https://mxr.mozilla.org/mozilla-central/source/services/fxaccounts/FxAccountsClient.jsm#309
+- Wtih python:
+  https://github.com/mozilla-services/loop-server/blob/master/loadtests/loadtest.py#L99-L122
 
 APIs
 ====
@@ -50,23 +83,27 @@ APIs
 
 **POST** **/registration**
 
-    Associates a Simple Push Endpoint (URL) with a user, creating a cookie
-    session if none is provided.
+    Associates a Simple Push Endpoint (URL) with a user.
+    Always return an hawk session token in the `Hawk-Session-Token` header.
 
     **May require authentication**
 
-    If you aren't authenticated when doing this registration step, then you'll
-    be given back a session cookie that you'll need to pass along for the
-    other requests.
+    You don't *need* to be authenticated to register. In case you don't
+    register with a Firefox Accounts assertion or a valid hawk session, you'll
+    be given an hawk session token.
+
+    You can currently authenticate by sending a valid Firefox Accounts
+    assertion or a valid Hawk session.
+
 
     Body parameters:
 
     - **simple_push_url**, the simple push endpoint url as defined in
       https://wiki.mozilla.org/WebAPI/SimplePush#Definitions
 
-    Example (when requesting a session cookie)::
+    Example (when not authenticated)::
 
-        http --session loop POST localhost:5000/registration simple_push_url=https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyuverbo --verbose
+        http POST localhost:5000/registration simple_push_url=https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyu --verbose
 
     .. code-block:: http
 
@@ -79,12 +116,9 @@ APIs
 
         HTTP/1.1 200 OK
         Content-Type: application/json; charset=utf-8
-        Set-Cookie: loop-session=<session-cookie>; path=/; expires=Tue, 20 Jan 2015 09:18:55 GMT;
-        "ok"
+        Hawk-Session-Token: fab7e901695316eb9d0056a209213985dd2786c8929c8fb922336a530fb30e01
 
-    Alternatively, if you set a cookie in the request, with the `Cookie`
-    header, you will not be given a cookie in the response (but the push URL
-    will be associated with the authenticated user).
+        "ok"
 
     Server should acknowledge your request and answer with a status code of
     **200 OK**.
@@ -111,10 +145,6 @@ APIs
 
     The server should answer this with a 200 status code and a JSON object
     with a "call_url" property.
-
-    Example::
-
-        http --session loop POST localhost:5000/call-url callerId=alexis --verbose
 
     .. code-block:: http
 
@@ -147,10 +177,6 @@ APIs
 
     Delete a previously created call url. You need to be the user
     who generated this link in order to delete it.
-
-    Example::
-
-        http --session=loop DELETE localhost:5000/call-url/FfzMMm2hSl9FqeYUqNO2XuNzJP --verbose
 
     .. code-block:: http
 
@@ -249,10 +275,6 @@ APIs
     - **apiKey**, the provider apiKey to use;
     - **sessionId**, the provider session identifier for the callee;
     - **sessionToken**, the provider callee token.
-
-    Example::
-
-        http --session=loop GET localhost:5000/calls\?version=1234 --verbose
 
     .. code-block:: http
 
