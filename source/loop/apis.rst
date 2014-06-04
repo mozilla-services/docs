@@ -38,13 +38,13 @@ In order to get the hawk credentials to use on the client you will need to:
    key_material = HKDF(hawk_session, "", 'identity.mozilla.com/picl/v1/sessionToken', 32*3)
 
 2. The key material you'll get out of the HKDF need to be separated into two
-   parts, the first 32 bits are the hawk id, and the next 32 ones are the hawk
+   parts, the first 32 hex caracters are the hawk id, and the next 32 ones are the hawk
    key.
 
    Credentials::
 
         credentials = {
-            'id': keyMaterial[:32]
+            'id': keyMaterial[0:32]
             'key': keyMaterial[32:64]
             'algorithm': 'sha256'
         }
@@ -91,7 +91,7 @@ APIs
 
     You don't *need* to be authenticated to register. In case you don't
     register with a Firefox Accounts assertion or a valid hawk session, you'll
-    be given an hawk session token.
+    be given an hawk session token and be connected as an anonymous user.
 
     You can currently authenticate by sending a valid Firefox Accounts
     assertion or a valid Hawk session.
