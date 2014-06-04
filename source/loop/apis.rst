@@ -24,8 +24,8 @@ register, you can do so with different authentications schemes, but you are
 always given an hawk session back, that you should use when requesting the
 endpoints which need authentication.
 
-Derive hawk credentials from the hawk session token?
-----------------------------------------------------
+Derive hawk credentials from the hawk session token
+---------------------------------------------------
 
 When authenticating using the `/register` endpoint, you will be given an hawk
 session token in the `Hawk-Session-Token` header.
@@ -141,11 +141,13 @@ APIs
 
     - **callerId**, the caller (the person you will give the link to)
       identifier. The callerId is supposed to be a valid email address.
+    - **expiresIn**, the number of hours the call-url will be valid for.
 
     Response from the server:
 
     The server should answer this with a 200 status code and a JSON object
-    with a "call_url" property.
+    with a "call_url" and an "expiresAt" property, which contains the date when
+    the url will expire.
 
     .. code-block:: http
 
@@ -154,14 +156,16 @@ APIs
         Content-Type: application/json; charset=utf-8
         Cookie: loop-session=<session-cookie>
         {
-            "callerId": "alexis"
+            "callerId": "alexis",
+            "expiresIn": 5
         }
 
         HTTP/1.1 200 OK
         Content-Type: application/json; charset=utf-8
 
         {
-            "call_url": "http://localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP"
+            "call_url": "http://localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP",
+            "expiresAt": 390135
         }
 
     (note that the token had been truncated here for brievity purposes)
