@@ -119,7 +119,6 @@ POST /registration
         }
 
         HTTP/1.1 200 OK
-        Content-Type: application/json; charset=utf-8
         Hawk-Session-Token: fab7e901695316eb9d0056a209213985dd2786c8929c8fb922336a530fb30e01
 
         "ok"
@@ -156,7 +155,6 @@ DELETE /registration
         }
 
         HTTP/1.1 204 No Content
-        Content-Type: application/json; charset=utf-8
 
     Server should acknowledge your request and answer with a status code of
     **204 No Content**.
@@ -198,7 +196,6 @@ POST /call-url
         }
 
         HTTP/1.1 200 OK
-        Content-Type: application/json; charset=utf-8
 
         {
             "call_url": "http://localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP",
