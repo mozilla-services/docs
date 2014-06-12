@@ -60,7 +60,8 @@ If you are writting a client, you might find these resources useful:
 APIs
 ====
 
-**GET** **/**
+GET /
+-----
 
     Displays version information, for instance::
 
@@ -78,11 +79,13 @@ APIs
             "endpoint": "http://localhost:5000",
             "homepage": "https://github.com/mozilla/loop-server/",
             "name": "mozilla-loop-server",
-            "version": "0.2.0-DEV"
+            "version": "0.6.0"
+            "fakeTokBox": false,
         }
 
 
-**POST** **/registration**
+POST /registration
+------------------
 
     Associates a Simple Push Endpoint (URL) with a user.
     Always return an hawk session token in the `Hawk-Session-Token` header.
@@ -130,7 +133,8 @@ APIs
       not a valid URL.
 
 
-**POST** **/call-url**
+POST /call-url
+--------------
 
     **Requires authentication**
 
@@ -154,7 +158,6 @@ APIs
         POST /call-url HTTP/1.1
         Accept: application/json
         Content-Type: application/json; charset=utf-8
-        Cookie: loop-session=<session-cookie>
         {
             "callerId": "alexis",
             "expiresIn": 5
@@ -176,7 +179,8 @@ APIs
       valid;
     - **401 Unauthorized**: You need to authenticate to call this URL.
 
-**DELETE** **/call-url/{token}**
+DELETE /call-url/{token}
+------------------------
 
     **Requires authentication**
 
@@ -187,7 +191,6 @@ APIs
 
         DELETE /call-url/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
         Accept: application/json
-        Cookie: loop-session=<session-cookie>
 
         HTTP/1.1 204 No Content
 
@@ -220,7 +223,8 @@ APIs
 
     - **400 Bad Request:**  The token you passed is not valid or expired.
 
-**POST /calls/{token}**
+POST /calls/{token}
+-------------------
 
     Creates a new incoming call, gets tokens and session from the provider and
     does a simple push notification, then returns caller tokens.
@@ -261,7 +265,8 @@ APIs
     - **400 Bad Request:**  The token you passed is not valid or expired.
 
 
-**GET** **/calls?version=<version>**
+GET /calls?version=<version>
+----------------------------
 
     **Requires authentication**
 
@@ -311,7 +316,8 @@ APIs
 
     - **400 Bad Request:**  The version you passed is not valid.
 
-**GET** **/calls/id/{callId}**
+GET /calls/id/{callId}
+----------------------
 
     Checks the status of the given call, by looking at its callId.
 
@@ -341,7 +347,8 @@ APIs
     - "404 Not Found" if the given call doesn't exist or had been
       declined.
 
-**DELETE** **/calls/id/{callId}**
+DELETE /calls/id/{callId}
+-------------------------
 
     Rejects a given call. This is to be used by the callee in order
     to reject a call, or by the caller in order to hang-up.
@@ -353,7 +360,7 @@ APIs
 
     Example::
 
-        http --session=loop DELETE localhost:5000/calls/id/1afeb4340d995938248ce7b3e953fe80 --verbose
+        http DELETE localhost:5000/calls/id/1afeb4340d995938248ce7b3e953fe80 --verbose
 
     .. code-block:: http
 
