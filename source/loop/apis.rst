@@ -132,6 +132,40 @@ POST /registration
     - **400 Bad Request:**  You forgot to pass the simple_push_url, or it's
       not a valid URL.
 
+DELETE /registration
+--------------------
+
+    **Requires authentication**
+
+    Unregister a given simple push url from the loop server.
+
+    Body parameters:
+
+    - **simple_push_url**, the simple push endpoint url as defined in
+      https://wiki.mozilla.org/WebAPI/SimplePush#Definitions
+
+    Example:
+
+    .. code-block:: http
+
+        DELETE /registration HTTP/1.1
+        Accept: application/json
+        Content-Type: application/json; charset=utf-8
+        {
+            "simple_push_url": "https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyuverbo"
+        }
+
+        HTTP/1.1 204 No Content
+        Content-Type: application/json; charset=utf-8
+
+    Server should acknowledge your request and answer with a status code of
+    **204 No Content**.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  You forgot to pass the simple_push_url, or it's
+      not a valid URL.
+
 
 POST /call-url
 --------------
