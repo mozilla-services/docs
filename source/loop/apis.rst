@@ -257,8 +257,9 @@ DELETE /call-url/{token}
 POST /calls/{token}
 -------------------
 
-    Creates a new incoming call, gets tokens and session from the provider and
-    does a simple push notification, then returns caller tokens.
+    Creates a new incoming call for the given token. Gets tokens and session
+    from the provider and does a simple push notification, then returns caller
+    tokens.
 
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
@@ -293,7 +294,59 @@ POST /calls/{token}
 
     Potential HTTP error responses include:
 
-    - **400 Bad Request:**  The token you passed is not valid or expired.
+    - **400 Bad Request:**  The token you passed is not valid.
+    - **410 Gone:** The token expired.
+
+POST /calls
+-----------
+
+    **Requires authentication**
+
+    Similar to *POST /calls/{token}*, it creates a new incoming call to a known
+    identity. Gets tokens and session from the provider and does a simple push
+    notification, then returns caller tokens. 
+
+    Body parameters:
+
+    - **calleeId**, array of strings containing the identities of the
+      receiver(s) of the call. These identities should be one of the valid Loop
+      identities (Firefox Accounts email or MSISDN) and can belong to none, an
+      unique or multiple Loop users.
+
+    Server should answer with a status of 200 and the following information in
+    its body (json encoded):
+
+    - **callId**, an unique identifier for the call;
+    - **sessionId**, the provider session identifier;
+    - **sessionToken**, the provider session token (for the caller);
+    - **apiKey**, the provider public api Key.
+
+    Example:
+
+    .. code-block:: http
+
+        POST /calls HTTP/1.1
+        Accept: application/json
+        Content-Type: application/json; charset=utf-8
+        {
+            "calleeId": ["alexis@mozilla.com", "+34123456789"],
+        }
+
+        HTTP/1.1 200 OK
+
+        {
+            "apiKey": "44700952",
+            "sessionId": "2_MX40NDcwMDk1Mn5-V2VkIE1hciA",
+            "sessionToken": "T1==cGFydG5lcl9pZD00NDcwMD",
+            "callId": "1afeb4340d995938248ce7b3e953fe80"
+        }
+
+    (note that return values have been truncated for readability purposes.)
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  You forgot to pass `calleeId` or is not valid.
+    - **401 Unauthorized**: You need to authenticate to call this URL.
 
 
 GET /calls?version=<version>
