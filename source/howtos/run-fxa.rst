@@ -52,6 +52,14 @@ Since the Mozilla-hosted sync servers will not trust assertions issued by
 third-party accounts servers, you will also need to :ref:`run your own
 sync-1.5 server <howto_run_sync15>`.
 
+Please note that the fxa-content-server repository includes graphics and
+other assets that make use of Mozilla trademarks.  If you are doing anything
+other than running unmodified copies of the software for personal use, please
+review the Mozilla Trademark Policy and Mozilla Branding Guidelines:
+
+  - https://www.mozilla.org/en-US/foundation/trademarks/policy/
+  - http://www.mozilla.org/en-US/styleguide/identity/mozilla/branding/
+
 You can ask for help:
 
 - on IRC (irc.mozilla.org) in the #fxa channel
