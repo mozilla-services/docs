@@ -178,6 +178,7 @@ POST /call-url
     - **callerId**, the caller (the person you will give the link to)
       identifier. The callerId is supposed to be a valid email address.
     - **expiresIn**, the number of hours the call-url will be valid for.
+    - **issuer**, The call-url issuer friendly name (optional)
 
     Response from the server:
 
@@ -192,7 +193,8 @@ POST /call-url
         Content-Type: application/json; charset=utf-8
         {
             "callerId": "alexis",
-            "expiresIn": 5
+            "expiresIn": 5,
+            "issuer": "Manolo Escobar"
         }
 
         HTTP/1.1 200 OK
@@ -313,6 +315,7 @@ GET /calls?version=<version>
 
     - **callId**, the unique identifier of the call, which can be used
       to reject a call.
+    - **callerId**, the friendly name of the user that initiated the call;
     - **apiKey**, the provider apiKey to use;
     - **sessionId**, the provider session identifier for the callee;
     - **sessionToken**, the provider callee token.
@@ -333,12 +336,14 @@ GET /calls?version=<version>
                     "sessionId": "2_MX40NDcwMDk1Mn5",
                     "sessionToken": "T1==cGFydG5lcl",
                     "callId": "1afeb4340d995938248ce7b3e953fe80"
+                    "callerId": "Manolo Escobar"
                 },
                 {
                     "apiKey": "34159876",
                     "sessionId": "3_XZ40NDcwMDk1Mn5",
                     "sessionToken": "T2==cFGydG5lcl",
                     "callId": "938248ce7b3e953fe801afeb4340d995"
+                    "callerId": "El fari"
                 }
             ]
         }
