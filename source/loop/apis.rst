@@ -376,6 +376,9 @@ GET /calls?version=<version>
     - **apiKey**, the provider apiKey to use;
     - **sessionId**, the provider session identifier for the callee;
     - **sessionToken**, the provider callee token.
+    - **callType**, the type of call `audio` or `audio-video`
+    - **callUrl**, the callUrl from which the caller is calling from. (optional)
+    - **urlDate**, the date the callUrl was generated. (optional)
 
     .. code-block:: http
 
@@ -389,16 +392,22 @@ GET /calls?version=<version>
         {
             "calls": [
                 {
+                    "callId": "1afeb4340d995938248ce7b3e953fe80",
                     "apiKey": "13245678",
                     "sessionId": "2_MX40NDcwMDk1Mn5",
                     "sessionToken": "T1==cGFydG5lcl",
-                    "callId": "1afeb4340d995938248ce7b3e953fe80"
+                    "callType": "audio-video",
+                    "callUrl": "https://call.mozilla.com/#call/RPPG8IfaFjQ",
+                    "urlDate": 1404139878
                 },
                 {
+                    "callId": "938248ce7b3e953fe801afeb4340d995",
                     "apiKey": "34159876",
                     "sessionId": "3_XZ40NDcwMDk1Mn5",
                     "sessionToken": "T2==cFGydG5lcl",
-                    "callId": "938248ce7b3e953fe801afeb4340d995"
+                    "callType": "audio-video",
+                    "callUrl": "https://call.mozilla.com/#call/mgetq1U_tPM"
+                    "urlDate": 1404140154
                 }
             ]
         }
