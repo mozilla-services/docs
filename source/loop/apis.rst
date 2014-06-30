@@ -261,6 +261,11 @@ POST /calls/{token}
     from the provider and does a simple push notification, then returns caller
     tokens.
 
+    Body parameters:
+
+    - **callType**, Specifies the type of media the remote party intends to
+      send. Valid values are "audio" or "audio-video". 
+
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
 
@@ -312,6 +317,8 @@ POST /calls
       receiver(s) of the call. These identities should be one of the valid Loop
       identities (Firefox Accounts email or MSISDN) and can belong to none, an
       unique or multiple Loop users.
+    - **callType**, Specifies the type of media the remote party intends to
+      send. Valid values are "audio" or "audio-video". 
 
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
