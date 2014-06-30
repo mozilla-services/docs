@@ -372,13 +372,15 @@ GET /calls?version=<version>
     Each call has the following attributes:
 
     - **callId**, the unique identifier of the call, which can be used
-      to reject a call.
+      to reject a call;
     - **apiKey**, the provider apiKey to use;
     - **sessionId**, the provider session identifier for the callee;
-    - **sessionToken**, the provider callee token.
-    - **callType**, the type of call `audio` or `audio-video`
-    - **callUrl**, the callUrl from which the caller is calling from. (optional)
-    - **urlDate**, the date the callUrl was generated. (optional)
+    - **sessionToken**, the provider callee token;
+    - **callType**, the type of call `audio` or `audio-video`;
+    - **callerId**, the name of the caller;
+	- **state**, the current state of the call;
+    - **callUrl**, the callUrl from which the caller is calling from (only for url originated calls);
+    - **urlDate**, the date the callUrl was generated (only for url originated calls);
 
     .. code-block:: http
 
@@ -397,6 +399,7 @@ GET /calls?version=<version>
                     "sessionId": "2_MX40NDcwMDk1Mn5",
                     "sessionToken": "T1==cGFydG5lcl",
                     "callType": "audio-video",
+					"state": "connected",
                     "callUrl": "https://call.mozilla.com/#call/RPPG8IfaFjQ",
                     "urlDate": 1404139878
                 },
@@ -406,6 +409,7 @@ GET /calls?version=<version>
                     "sessionId": "3_XZ40NDcwMDk1Mn5",
                     "sessionToken": "T2==cFGydG5lcl",
                     "callType": "audio-video",
+					"state": "init",
                     "callUrl": "https://call.mozilla.com/#call/mgetq1U_tPM"
                     "urlDate": 1404140154
                 }
