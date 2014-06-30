@@ -372,10 +372,18 @@ GET /calls?version=<version>
     Each call has the following attributes:
 
     - **callId**, the unique identifier of the call, which can be used
-      to reject a call.
+      to reject a call;
     - **apiKey**, the provider apiKey to use;
     - **sessionId**, the provider session identifier for the callee;
-    - **sessionToken**, the provider callee token.
+    - **sessionToken**, the provider callee token;
+    - **callType**, the type of call `audio` or `audio-video`;
+    - **callerId**, the friendly-name or identifier of the caller;
+    - **state**, the current state of the call (one of "init", "alerting",
+      "connecting", "half-connected" and "connected").
+    - **callUrl**, the callUrl from which the caller is calling from (only for
+      url originated calls);
+    - **urlCreationDate**, the date the call-url was generated (only for
+      url-originated calls);
 
     .. code-block:: http
 
@@ -389,16 +397,24 @@ GET /calls?version=<version>
         {
             "calls": [
                 {
+                    "callId": "1afeb4340d995938248ce7b3e953fe80",
                     "apiKey": "13245678",
                     "sessionId": "2_MX40NDcwMDk1Mn5",
                     "sessionToken": "T1==cGFydG5lcl",
-                    "callId": "1afeb4340d995938248ce7b3e953fe80"
+                    "callType": "audio-video",
+                    "state": "connected",
+                    "callUrl": "https://call.mozilla.com/#call/RPPG8IfaFjQ",
+                    "urlCreationDate": 1404139878
                 },
                 {
+                    "callId": "938248ce7b3e953fe801afeb4340d995",
                     "apiKey": "34159876",
                     "sessionId": "3_XZ40NDcwMDk1Mn5",
                     "sessionToken": "T2==cFGydG5lcl",
-                    "callId": "938248ce7b3e953fe801afeb4340d995"
+                    "callType": "audio-video",
+                    "state": "init",
+                    "callUrl": "https://call.mozilla.com/#call/mgetq1U_tPM"
+                    "urlCreationDate": 1404140154
                 }
             ]
         }
@@ -470,8 +486,8 @@ DELETE /calls/id/{callId}
 Error Responses
 ===============
 
-All errors are also returned, wherever possible, as json responses following the
-structure `described in Cornice
+All errors are also returned, wherever possible, as json responses following
+the structure `described in Cornice
 <http://cornice.readthedocs.org/en/latest/validation.html#dealing-with-errors>`_.
 
 In cases where generating such a response is not possible (e.g. when a request
@@ -479,9 +495,11 @@ if so malformed as to be unparsable) then the resulting error response will
 have a *Content-Type* that is not **application/json**.
 
 The top-level JSON object in the response will always contain a key named
-`status`, which maps to a string identifying the cause of the error.  Unexpected
-errors will have a `status` string of "error"; errors expected as part of
-the protocol flow will have a specific `status` string as detailed below.
+`status`, which maps to a string identifying the cause of the error.
+
+Unexpected errors will have a `status` string of "error"; errors expected as
+part of the protocol flow will have a specific `status` string as detailed
+below.
 
 Error status codes and their corresponding output are:
 
