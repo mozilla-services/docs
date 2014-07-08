@@ -470,20 +470,10 @@ DELETE /calls/id/{callId}
 Error Responses
 ===============
 
-All errors are also returned, wherever possible, as json responses following the
-structure `described in Cornice
-<http://cornice.readthedocs.org/en/latest/validation.html#dealing-with-errors>`_.
+All errors are also returned, wherever possible, as json responses
+with a code, errno and error message.
 
-In cases where generating such a response is not possible (e.g. when a request
-if so malformed as to be unparsable) then the resulting error response will
-have a *Content-Type* that is not **application/json**.
-
-The top-level JSON object in the response will always contain a key named
-`status`, which maps to a string identifying the cause of the error.  Unexpected
-errors will have a `status` string of "error"; errors expected as part of
-the protocol flow will have a specific `status` string as detailed below.
-
-Error status codes and their corresponding output are:
+Error status codes and codes and their corresponding outputs are:
 
 - **404** : unknown URL, or unsupported application.
 - **400** : malformed request. Possible causes include a missing
@@ -494,3 +484,14 @@ Error status codes and their corresponding output are:
 - **405** : unsupported method
 - **406** : unacceptable - the client asked for an Accept we don't support
 - **503** : service unavailable (provider or database backends may be down)
+
+Also the associated errno can be one of:
+
+- **105 INVALID_TOKEN**: This come with a 404 on a wrong call-url token;
+- **106 BADJSON**: This come with a 406 if the sent JSON is not parsable;
+- **107 INVALID_PARAMETERS**: This come with a 400 and describe invalid parameters with a reason;
+- **108 MISSING_PARAMETERS**: This come with a 400 and list all missing parameters;
+- **110 INVALID_AUTH_TOKEN**: This come with a 401 and define a problem during Auth;
+- **111 EXPIRED**: This come with a 410 and define a EXPIRE ressource;
+- **113 REQUEST_TOO_LARGE**: This come with a 400 and define a too large request;
+- **201 BACKEND**: This come with a 503 when a third party is not available at the moment.
