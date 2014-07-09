@@ -182,8 +182,11 @@ POST /call-url
     Response from the server:
 
     The server should answer this with a 200 status code and a JSON object
-    with a "call_url" and an "expiresAt" property, which contains the date when
-    the url will expire (the unix epoch, in seconds).
+    with the following properties:
+    - **callUrl** The call url;
+    - **callToken** The call token;
+    - **expiresAt** The date when the url will expire (the unix epoch, in
+      seconds).
 
     .. code-block:: http
 
@@ -198,7 +201,8 @@ POST /call-url
         HTTP/1.1 200 OK
 
         {
-            "call_url": "http://localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP",
+            "callUrl": "http://localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP",
+            "callToken": "FfzMMm2hSl9FqeYUqNO2XuNzJP",
             "expiresAt": 1407486992
         }
 
@@ -375,7 +379,9 @@ GET /calls?version=<version>
       to reject a call.
     - **apiKey**, the provider apiKey to use;
     - **sessionId**, the provider session identifier for the callee;
-    - **sessionToken**, the provider callee token.
+    - **sessionToken**, the provider callee token;
+    - **callToken**, the call token used for this call, if any;
+    - **callUrl**, the call url used for this call, if any.
 
     .. code-block:: http
 
@@ -392,13 +398,17 @@ GET /calls?version=<version>
                     "apiKey": "13245678",
                     "sessionId": "2_MX40NDcwMDk1Mn5",
                     "sessionToken": "T1==cGFydG5lcl",
-                    "callId": "1afeb4340d995938248ce7b3e953fe80"
+                    "callId": "1afeb4340d995938248ce7b3e953fe80",
+                    "callToken": "FfzMMm2hSl9FqeYUqNO2XuNzJP"
+                    "callUrl": "http://localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP",
                 },
                 {
                     "apiKey": "34159876",
                     "sessionId": "3_XZ40NDcwMDk1Mn5",
                     "sessionToken": "T2==cFGydG5lcl",
-                    "callId": "938248ce7b3e953fe801afeb4340d995"
+                    "callId": "938248ce7b3e953fe801afeb4340d995",
+                    "callToken": "FMm2hSl9FqeYUqNO2XuNzJ45iP",
+                    "callUrl": "http://localhost:5000/calls/FMm2hSl9FqeYUqNO2XuNzJ45iP"
                 }
             ]
         }
