@@ -183,7 +183,7 @@ POST /call-url
 
     The server should answer this with a 200 status code and a JSON object
     with a "call_url" and an "expiresAt" property, which contains the date when
-    the url will expire.
+    the url will expire (the unix epoch, in seconds).
 
     .. code-block:: http
 
@@ -199,7 +199,7 @@ POST /call-url
 
         {
             "call_url": "http://localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP",
-            "expiresAt": 390135
+            "expiresAt": 1407486992
         }
 
     (note that the token had been truncated here for brievity purposes)
