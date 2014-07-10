@@ -57,8 +57,8 @@ If you are writting a client, you might find these resources useful:
 - Wtih python:
   https://github.com/mozilla-services/loop-server/blob/master/loadtests/loadtest.py#L99-L122
 
-APIs
-====
+HTTP APIs
+=========
 
 GET /
 -----
@@ -417,65 +417,6 @@ GET /calls?version=<version>
 
     - **400 Bad Request:**  The version you passed is not valid.
 
-GET /calls/id/{callId}
-----------------------
-
-    Checks the status of the given call, by looking at its callId.
-
-    Parameters:
-
-        - **callId** (in the url) is the unique identifier of the
-          call.
-
-    Example::
-
-        http GET localhost:5000/calls/id/1afeb4340d995938248ce7b3e953fe80 --verbose
-
-    .. code-block:: http
-
-        GET /calls/id/1afeb4340d995938248ce7b3e953fe80 HTTP/1.1
-        Accept: application/json
-
-        HTTP/1.1 200 OK
-        Content-Type: application/json; charset=utf-8
-
-        "ok"
-
-    Server can answer with:
-
-    - "200 OK", meaning that the call exists (but may be not
-      answered),
-    - "404 Not Found" if the given call doesn't exist or had been
-      declined.
-
-DELETE /calls/id/{callId}
--------------------------
-
-    Rejects a given call. This is to be used by the callee in order
-    to reject a call, or by the caller in order to hang-up.
-
-    Parameters:
-
-        - **callId** (in the url) is the unique identifier of the
-          call.
-
-    Example::
-
-        http DELETE localhost:5000/calls/id/1afeb4340d995938248ce7b3e953fe80 --verbose
-
-    .. code-block:: http
-
-        DELETE /calls/id/1afeb4340d995938248ce7b3e953fe80 HTTP/1.1
-        Accept: application/json
-
-        HTTP/1.1 204 No Content
-
-    Server can answer with:
-
-    - "204 No Content", meaning that the call had been rejected
-      successfully.
-    - "404 Not Found" if the given call doesn't exist (that can be
-      the case if the call had already been rejected).
 
 Error Responses
 ===============
