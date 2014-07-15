@@ -6,6 +6,11 @@ This document is based on the current status of the server. All the examples
 had been done with real calls. It doesn't reflect any future implementation and
 tries to stick with the currently deployed version.
 
+This document describes the HTTP API and the Websockets API.
+
+HTTP APIs
+=========
+
 .. note::
 
     Unless stated otherwise, all APIs are using application/json for the requests
@@ -16,7 +21,7 @@ To ease testing, you can use `httpie <https://github.com/jkbr/httpie>`_ in
 order to make requests. Examples of use with httpie are provided when possible.
 
 Authentication
-==============
+--------------
 
 To deal with authentication, the Loop server uses `Hawk
 <https://github.com/hueniverse/hawk>`_ sessions. When you
@@ -25,7 +30,7 @@ always given an hawk session back, that you should use when requesting the
 endpoints which need authentication.
 
 Derive hawk credentials from the hawk session token
----------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When authenticating using the `/register` endpoint, you will be given an hawk
 session token in the `Hawk-Session-Token` header.
@@ -58,10 +63,10 @@ If you are writting a client, you might find these resources useful:
   https://github.com/mozilla-services/loop-server/blob/master/loadtests/loadtest.py#L99-L122
 
 APIs
-====
+----
 
 GET /
------
+~~~~~
 
     Displays version information, for instance::
 
@@ -85,7 +90,7 @@ GET /
 
 
 POST /registration
-------------------
+~~~~~~~~~~~~~~~~~~
 
     Associates a Simple Push Endpoint (URL) with a user.
     Always return an hawk session token in the `Hawk-Session-Token` header.
@@ -132,7 +137,7 @@ POST /registration
       not a valid URL.
 
 DELETE /registration
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
     **Requires authentication**
 
@@ -166,7 +171,7 @@ DELETE /registration
 
 
 POST /call-url
---------------
+~~~~~~~~~~~~~~
 
     **Requires authentication**
 
@@ -215,7 +220,7 @@ POST /call-url
     - **401 Unauthorized**: You need to authenticate to call this URL.
 
 DELETE /call-url/{token}
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Requires authentication**
 
@@ -234,7 +239,8 @@ DELETE /call-url/{token}
     - **400 Bad Request:**  The token you passed is not valid or expired.
 
 
-**GET**  **/calls/{token}**
+GET /calls/{token}
+~~~~~~~~~~~~~~~~~~
 
     Redirects to the application webapp (for the caller)
 
@@ -259,7 +265,7 @@ DELETE /call-url/{token}
     - **400 Bad Request:**  The token you passed is not valid or expired.
 
 POST /calls/{token}
--------------------
+~~~~~~~~~~~~~~~~~~~
 
     Creates a new incoming call for the given token. Gets tokens and session
     from the provider and does a simple push notification, then returns caller
@@ -307,7 +313,7 @@ POST /calls/{token}
     - **410 Gone:** The token expired.
 
 POST /calls
------------
+~~~~~~~~~~~
 
     **Requires authentication**
 
@@ -361,7 +367,7 @@ POST /calls
 
 
 GET /calls?version=<version>
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Requires authentication**
 
@@ -418,7 +424,7 @@ GET /calls?version=<version>
     - **400 Bad Request:**  The version you passed is not valid.
 
 GET /calls/id/{callId}
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
     Checks the status of the given call, by looking at its callId.
 
@@ -449,7 +455,7 @@ GET /calls/id/{callId}
       declined.
 
 DELETE /calls/id/{callId}
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
     Rejects a given call. This is to be used by the callee in order
     to reject a call, or by the caller in order to hang-up.
@@ -478,7 +484,7 @@ DELETE /calls/id/{callId}
       the case if the call had already been rejected).
 
 Error Responses
-===============
+---------------
 
 All errors are also returned, wherever possible, as json responses
 with a code, errno and error message.
@@ -505,3 +511,7 @@ Also the associated errno can be one of:
 - **111 EXPIRED**: This come with a 410 and define a EXPIRE ressource;
 - **113 REQUEST_TOO_LARGE**: This come with a 400 and define a too large request;
 - **201 BACKEND**: This come with a 503 when a third party is not available at the moment.
+
+
+Websockets APIs
+===============
