@@ -909,7 +909,7 @@ from the server and considers the call failed.
 Media Setup Timer
 """""""""""""""""
 
-After sending a "media-up" action, the client sets a timer for 5 seconds. If
+After sending a "media-up" action, the client sets a timer for 10 seconds. If
 the server does not indicate that the call setup has entered the "connected"
 state before the timer expires, the client disconnects from the server and
 considers the call failed.
