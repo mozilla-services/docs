@@ -1,4 +1,4 @@
-====================
+/===================
 Loop Server API v1.0
 ====================
 
@@ -19,6 +19,8 @@ HTTP APIs
 
 To ease testing, you can use `httpie <https://github.com/jkbr/httpie>`_ in
 order to make requests. Examples of use with httpie are provided when possible.
+In order to authenticate with hawk, you'll need to install the `requests-hawk
+module <https://github.com/mozilla-services/requests-hawk>`_
 
 Authentication
 --------------
@@ -57,7 +59,7 @@ In order to get the hawk credentials to use on the client you will need to:
 If you are writting a client, you might find these resources useful:
 
 - With javascript:
-  https://mxr.mozilla.org/mozilla-central/source/services/fxaccounts/FxAccountsClient.jsm#309 & 
+  https://mxr.mozilla.org/mozilla-central/source/services/fxaccounts/FxAccountsClient.jsm#309 &
   https://github.com/mozilla/gecko-projects/blob/elm/browser/components/loop/content/shared/libs/token.js#L55-L77
 - Wtih python:
   https://github.com/mozilla-services/loop-server/blob/master/loadtests/loadtest.py#L99-L122
@@ -70,22 +72,32 @@ GET /
 
     Displays version information, for instance::
 
-       http GET localhost:5000 --verbose 
+       http GET localhost:5000 --verbose
 
     .. code-block:: http
 
         GET / HTTP/1.1
         Accept: */*
+        Accept-Encoding: gzip, deflate
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
 
         HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 247
         Content-Type: application/json; charset=utf-8
+        Date: Wed, 16 Jul 2014 12:57:13 GMT
+        ETag: W/"f7-762153207"
+        Timestamp: 1405515433478
+
         {
             "description": "The Mozilla Loop (WebRTC App) server",
             "endpoint": "http://localhost:5000",
-            "homepage": "https://github.com/mozilla/loop-server/",
-            "name": "mozilla-loop-server",
-            "version": "0.6.0"
             "fakeTokBox": false,
+            "homepage": "https://github.com/mozilla-services/loop-server/",
+            "name": "mozilla-loop-server",
+            "version": "0.9.0"
         }
 
 
@@ -101,9 +113,11 @@ POST /registration
     register with a Firefox Accounts assertion or a valid hawk session, you'll
     be given an hawk session token and be connected as an anonymous user.
 
+    This hawk session token should be derived by the client and used for
+    subsequent requests.
+
     You can currently authenticate by sending a valid Firefox Accounts
     assertion or a valid Hawk session.
-
 
     Body parameters:
 
@@ -118,13 +132,24 @@ POST /registration
 
         POST /registration HTTP/1.1
         Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Content-Length: 35
         Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
         {
-            "simple_push_url": "https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyuverbo"
+            "simple_push_url": "https://test"
         }
 
         HTTP/1.1 200 OK
-        Hawk-Session-Token: fab7e901695316eb9d0056a209213985dd2786c8929c8fb922336a530fb30e01
+        Access-Control-Expose-Headers: Hawk-Session-Token
+        Connection: keep-alive
+        Content-Length: 4
+        Content-Type: application/json; charset=utf-8
+        Date: Wed, 16 Jul 2014 12:58:56 GMT
+        Hawk-Session-Token: c7ee533a75a4f3b8a2a44b0b417eec15295ad43ff2b402776078ec87abb31cd9
+        Timestamp: 1405515536831
 
         "ok"
 
@@ -135,31 +160,44 @@ POST /registration
 
     - **400 Bad Request:**  You forgot to pass the simple_push_url, or it's
       not a valid URL.
+    - **401 Unauthorized:** The credentials you passed aren't valid.
 
 DELETE /registration
 ~~~~~~~~~~~~~~~~~~~~
 
     **Requires authentication**
 
-    Unregister a given simple push url from the loop server.
+    Unregister a given simple push-url from the loop server.
 
     Body parameters:
 
-    - **simple_push_url**, the simple push endpoint url as defined in
+    - **simple_push_url**, the simple-push endpoint url as defined in
       https://wiki.mozilla.org/WebAPI/SimplePush#Definitions
 
-    Example:
+    Example::
+
+      http DELETE localhost:5000/registration simple_push_url=https://test --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
 
         DELETE /registration HTTP/1.1
         Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <Stripped>
+        Content-Length: 35
         Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
         {
-            "simple_push_url": "https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyuverbo"
+            "simple_push_url": "https://test"
         }
 
         HTTP/1.1 204 No Content
+        Connection: keep-alive
+        Date: Wed, 16 Jul 2014 13:03:39 GMT
+        Server-Authorization: <stripped>
+
 
     Server should acknowledge your request and answer with a status code of
     **204 No Content**.
@@ -168,6 +206,7 @@ DELETE /registration
 
     - **400 Bad Request:**  You forgot to pass the simple_push_url, or it's
       not a valid URL.
+    - **401 Unauthorized:** The credentials you passed aren't valid.
 
 
 POST /call-url
@@ -183,6 +222,7 @@ POST /call-url
     - **callerId**, the caller (the person you will give the link to)
       identifier. The callerId is supposed to be a valid email address.
     - **expiresIn**, the number of hours the call-url will be valid for.
+    - **issuer**, The friendly name of the issuer of the token.
 
     Response from the server:
 
@@ -194,31 +234,102 @@ POST /call-url
     - **expiresAt** The date when the url will expire (the unix epoch, in
       seconds).
 
+    Example::
+
+       http POST localhost:5000/call-url callerId=Remy expiresIn=5 issuer=Alexis --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
     .. code-block:: http
 
         POST /call-url HTTP/1.1
         Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 40
         Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
         {
-            "callerId": "alexis",
-            "expiresIn": 5
+            "callerId": "Remy",
+            "expiresIn": "5",
+            "issuer": "Alexis"
         }
 
         HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 186
+        Content-Type: application/json; charset=utf-8
+        Date: Wed, 16 Jul 2014 13:09:40 GMT
+        Server-Authorization: <stripped>
+        Timestamp: 1405516180573
 
         {
-            "callUrl": "http://localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP",
-            "callToken": "FfzMMm2hSl9FqeYUqNO2XuNzJP",
-            "expiresAt": 1407486992
+            "callToken": "_nxD4V4FflQ",
+            "callUrl": "http://localhost:3000/static/#call/_nxD4V4FflQ",
+            "expiresAt": 1405534180
         }
 
-    (note that the token had been truncated here for brievity purposes)
 
     Potential HTTP error responses include:
 
     - **400 Bad Request:**  You forgot to pass the `callerId`, or it's not
       valid;
     - **401 Unauthorized**: You need to authenticate to call this URL.
+
+
+PUT /call-url/{token}
+~~~~~~~~~~~~~~~~~~~~~
+
+    **Requires authentication**
+
+    Updates data associated with an already created call-url.
+
+    Body parameters:
+
+    - **callerId**, the caller (the person you will give the link to)
+      identifier. The callerId is supposed to be a valid email address.
+    - **expiresIn**, the number of hours the call-url will be valid for.
+    - **issuer**, The friendly name of the issuer of the token.
+
+    Response from the server:
+
+    The server should answer this with a 200 status code and a JSON object
+    with the following properties:
+
+    - **expiresAt** The date when the url will expire (the unix epoch, in
+      seconds).
+
+    Example::
+
+        http PUT localhost:5000/call-url/B65nvlGh8iM issuer=Adam --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'                                                                                                    PUT /call-url/B65nvlGh8iM HTTP/1.1
+
+    .. code-block:: http
+
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 18
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "issuer": "Adam"
+        }
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 29
+        Content-Type: application/json; charset=utf-8
+        Date: Wed, 16 Jul 2014 14:16:54 GMT
+        Server-Authorization: <stripped>
+        Timestamp: 1405520214861
+
+        {
+            "expiresAt": 1408112214
+        }
+
+
 
 DELETE /call-url/{token}
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -228,42 +339,78 @@ DELETE /call-url/{token}
     Delete a previously created call url. You need to be the user
     who generated this link in order to delete it.
 
+    Example::
+
+        http DELETE localhost:5000/call-url/_nxD4V4FflQ --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+
     .. code-block:: http
 
-        DELETE /call-url/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
-        Accept: application/json
+        DELETE /call-url/_nxD4V4FflQ HTTP/1.1
+        Accept: */*
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 0
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+
 
         HTTP/1.1 204 No Content
+        Connection: keep-alive
+        Date: Wed, 16 Jul 2014 13:12:46 GMT
+        Server-Authorization: <stripped>
+
 
     Potential HTTP error responses include:
 
     - **400 Bad Request:**  The token you passed is not valid or expired.
+    - **404 Not Found:**  The token you passed doesn't exist.
 
 
 GET /calls/{token}
 ~~~~~~~~~~~~~~~~~~
 
-    Redirects to the application webapp (for the caller)
+    Returns information about the token.
 
     - *token* is the token returned by the **POST** on **/call-url**.
 
-    Server should return an "HTTP 302" with the new location.
+    Response from the server:
+
+    The server should answer this with a 200 status code and a JSON object
+    with the following properties:
+
+    - **calleeFriendlyName** the friendly name the creator of the call-url gave.
 
     Example::
 
-        http GET localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP --verbose
+        http GET localhost:5000/calls/3jKS_Els9IU --verbose
 
     .. code-block:: http
 
-        GET /calls/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
-        Accept: */* 
+        GET /calls/3jKS_Els9IU HTTP/1.1
+        Accept: */*
+        Accept-Encoding: gzip, deflate
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
 
-        HTTP/1.1 302 Moved Temporarily
-        Location: http://localhost:3000/static/#call/FfzMMm2hSl9FqeYUqNO2XuNzJP
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 30
+        Content-Type: application/json; charset=utf-8
+        Date: Wed, 16 Jul 2014 13:23:04 GMT
+        ETag: W/"1e-2896316483"
+        Timestamp: 1405516984348
+
+        {
+            "calleeFriendlyName": "Alexis"
+        }
 
     Potential HTTP error responses include:
 
     - **400 Bad Request:**  The token you passed is not valid or expired.
+
 
 POST /calls/{token}
 ~~~~~~~~~~~~~~~~~~~
@@ -275,35 +422,50 @@ POST /calls/{token}
     Body parameters:
 
     - **callType**, Specifies the type of media the remote party intends to
-      send. Valid values are "audio" or "audio-video". 
+      send. Valid values are "audio" or "audio-video".
 
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
 
+    - **apiKey**, the provider public api Key.
     - **callId**, an unique identifier for the call;
+    - **progressURL**, the location to reach for websockets;
     - **sessionId**, the provider session identifier;
     - **sessionToken**, the provider session token (for the caller);
-    - **apiKey**, the provider public api Key.
+    - **websocketToken**, the token to use when authenticating to the websocket.
 
     Example::
 
-        http POST localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP --verbose
+        http POST localhost:5000/calls/QzBbvGmIZWU callType="audio-video" --verbose
 
     .. code-block:: http
 
-        POST /calls/FfzMMm2hSl9FqeYUqNO2XuNzJP HTTP/1.1
+        POST /calls/QzBbvGmIZWU HTTP/1.1
         Accept: application/json
-
-        HTTP/1.1 200 OK
-        Access-Control-Allow-Methods: GET,POST
-        Access-Control-Allow-Origin: http://localhost:3000
+        Accept-Encoding: gzip, deflate
+        Content-Length: 27
         Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
 
         {
-            "apiKey": "44700952",
-            "sessionId": "2_MX40NDcwMDk1Mn5-V2VkIE1hciA",
-            "sessionToken": "T1==cGFydG5lcl9pZD00NDcwMD",
-            "callId": "1afeb4340d995938248ce7b3e953fe80"
+            "callType": "audio-video"
+        }
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 614
+        Content-Type: application/json; charset=utf-8
+        Date: Wed, 16 Jul 2014 13:37:39 GMT
+        Timestamp: 1405517859772
+
+        {
+            "apiKey": "44669102",
+            "callId": "35e7c3a511f424d3b1d6fba442b3a9a5",
+            "progressURL": "ws://localhost:5000/websocket",
+            "sessionId": "1_MX40NDY2OTEwMn5-V2VkIEp1bCAxNiAwNjo",
+            "sessionToken": "T1==cGFydG5lcl9pZD00NDY2OTEwMiZzaW",
+            "websocketToken": "44ee04b9694ae121c03a1db685cfad6d"
         }
 
     (note that return values have been truncated for readability purposes.)
@@ -320,7 +482,7 @@ POST /calls
 
     Similar to *POST /calls/{token}*, it creates a new incoming call to a known
     identity. Gets tokens and session from the provider and does a simple push
-    notification, then returns caller tokens. 
+    notification, then returns caller tokens.
 
     Body parameters:
 
@@ -329,34 +491,51 @@ POST /calls
       identities (Firefox Accounts email or MSISDN) and can belong to none, an
       unique or multiple Loop users.
     - **callType**, Specifies the type of media the remote party intends to
-      send. Valid values are "audio" or "audio-video". 
+      send. Valid values are "audio" or "audio-video".
 
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
 
+    - **apiKey**, the provider public api Key.
     - **callId**, an unique identifier for the call;
+    - **progressURL**, the location to reach for websockets;
     - **sessionId**, the provider session identifier;
     - **sessionToken**, the provider session token (for the caller);
-    - **apiKey**, the provider public api Key.
+    - **websocketToken**, the token to use when authenticating to the websocket.
 
-    Example:
+    Example::
+
+        http POST localhost:5000/calls calleeId=alexis callType="audio-video" --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
 
         POST /calls HTTP/1.1
         Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Content-Length: 27
         Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
         {
+            "callType": "audio-video"
             "calleeId": ["alexis@mozilla.com", "+34123456789"],
         }
 
         HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 614
+        Content-Type: application/json; charset=utf-8
+        Date: Wed, 16 Jul 2014 13:37:39 GMT
+        Timestamp: 1405517859772
 
         {
-            "apiKey": "44700952",
-            "sessionId": "2_MX40NDcwMDk1Mn5-V2VkIE1hciA",
-            "sessionToken": "T1==cGFydG5lcl9pZD00NDcwMD",
-            "callId": "1afeb4340d995938248ce7b3e953fe80"
+            "apiKey": "44669102",
+            "callId": "35e7c3a511f424d3b1d6fba442b3a9a5",
+            "progressURL": "ws://localhost:5000/websocket",
+            "sessionId": "1_MX40NDY2OTEwMn5-V2VkIEp1bCAxNiAwNjo",
+            "sessionToken": "T1==cGFydG5lcl9pZD00NDY2OTEwMiZzaW",
+            "websocketToken": "44ee04b9694ae121c03a1db685cfad6d"
         }
 
     (note that return values have been truncated for readability purposes.)
@@ -382,107 +561,86 @@ GET /calls?version=<version>
     Server should answer with a status of 200 and a list of calls in its body.
     Each call has the following attributes:
 
-    - **callId**, the unique identifier of the call, which can be used
-      to reject a call.
-    - **apiKey**, the provider apiKey to use;
-    - **sessionId**, the provider session identifier for the callee;
-    - **sessionToken**, the provider callee token;
+    - **apiKey**, the provider public api Key.
+    - **callId**, an unique identifier for the call;
+    - **progressURL**, the location to reach for websockets;
+    - **sessionId**, the provider session identifier;
+    - **sessionToken**, the provider session token (for the caller);
+    - **websocketToken**, the token to use when authenticating to the websocket.
     - **callToken**, the call token used for this call, if any;
     - **callUrl**, the call url used for this call, if any.
+    - **urlCreationDate**, the unix timestamp when the url was created.
+    - **callType**, the call type ("audio" or "audio-video").
 
     .. code-block:: http
 
-        GET /calls?version=1234 HTTP/1.1
-        Accept: application/json
-        Cookie: loop-session=<session-cookie>
+        GET /calls?version=0 HTTP/1.1
+        Accept: */*
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        0b874f653f1284342de75b9e35c45e83bbdb02cc94", ts="1405519838", nonce="xU8bjv"
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
 
         HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 1785
         Content-Type: application/json; charset=utf-8
+        Date: Wed, 16 Jul 2014 14:10:38 GMT
+        ETag: W/"6f9-2990115590"
+        Server-Authorization: <stripped>
+        Timestamp: 1405519838213
 
         {
             "calls": [
                 {
-                    "apiKey": "13245678",
-                    "sessionId": "2_MX40NDcwMDk1Mn5",
-                    "sessionToken": "T1==cGFydG5lcl",
-                    "callId": "1afeb4340d995938248ce7b3e953fe80",
-                    "callToken": "FfzMMm2hSl9FqeYUqNO2XuNzJP"
-                    "callUrl": "http://localhost:5000/calls/FfzMMm2hSl9FqeYUqNO2XuNzJP",
-                },
-                {
-                    "apiKey": "34159876",
-                    "sessionId": "3_XZ40NDcwMDk1Mn5",
-                    "sessionToken": "T2==cFGydG5lcl",
-                    "callId": "938248ce7b3e953fe801afeb4340d995",
-                    "callToken": "FMm2hSl9FqeYUqNO2XuNzJ45iP",
-                    "callUrl": "http://localhost:5000/calls/FMm2hSl9FqeYUqNO2XuNzJ45iP"
+                    "apiKey": "44669102",
+                    "callId": "6744b8919d7d74e8c0b39590aa183565",
+                    "callToken": "QzBbvGmIZWU",
+                    "callUrl": "http://localhost:3000/static/#call/QzBbvGmIZWU",
+                    "call_url": "http://localhost:3000/static/#call/QzBbvGmIZWU",
+                    "callerId": "alexis",
+                    "progressURL": "ws://localhost:5000/websocket",
+                    "sessionId": "2_MX40NDY2OTEwMn5-V2VkIEp1bCAxNiAwNzoxMDoyMCBQRFQgMjAxNH4wLj",
+                    "sessionToken": "T1==cGFydG5lcl9pZD00NDY2OTEwMiZzaWc9NzMyMGVmZjY1YWU0ZmFkZTY1NmU0",
+                    "urlCreationDate": 1405517546,
+                    "websocketToken": "a2fc1ee029169b62b08a4ba87c328d71"
                 }
             ]
         }
+
 
     Potential HTTP error responses include:
 
     - **400 Bad Request:**  The version you passed is not valid.
 
-GET /calls/id/{callId}
-~~~~~~~~~~~~~~~~~~~~~~
+DELETE /account
+~~~~~~~~~~~~~~~
 
-    Checks the status of the given call, by looking at its callId.
+    **Requires authentication**
 
-    Parameters:
-
-        - **callId** (in the url) is the unique identifier of the
-          call.
+    Deletes the current account and all data associated to it.
 
     Example::
 
-        http GET localhost:5000/calls/id/1afeb4340d995938248ce7b3e953fe80 --verbose
+        http DELETE localhost:5000/account --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
 
-        GET /calls/id/1afeb4340d995938248ce7b3e953fe80 HTTP/1.1
-        Accept: application/json
-
-        HTTP/1.1 200 OK
-        Content-Type: application/json; charset=utf-8
-
-        "ok"
-
-    Server can answer with:
-
-    - "200 OK", meaning that the call exists (but may be not
-      answered),
-    - "404 Not Found" if the given call doesn't exist or had been
-      declined.
-
-DELETE /calls/id/{callId}
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    Rejects a given call. This is to be used by the callee in order
-    to reject a call, or by the caller in order to hang-up.
-
-    Parameters:
-
-        - **callId** (in the url) is the unique identifier of the
-          call.
-
-    Example::
-
-        http DELETE localhost:5000/calls/id/1afeb4340d995938248ce7b3e953fe80 --verbose
-
-    .. code-block:: http
-
-        DELETE /calls/id/1afeb4340d995938248ce7b3e953fe80 HTTP/1.1
-        Accept: application/json
+        DELETE /account HTTP/1.1
+        Accept: */*
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 0
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
 
         HTTP/1.1 204 No Content
+        Connection: keep-alive
+        Date: Wed, 16 Jul 2014 13:03:39 GMT
+        Server-Authorization: <stripped>
 
-    Server can answer with:
-
-    - "204 No Content", meaning that the call had been rejected
-      successfully.
-    - "404 Not Found" if the given call doesn't exist (that can be
-      the case if the call had already been rejected).
 
 Error Responses
 ---------------
