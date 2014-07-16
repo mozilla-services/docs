@@ -512,6 +512,7 @@ POST /calls
         POST /calls HTTP/1.1
         Accept: application/json
         Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
         Content-Length: 27
         Content-Type: application/json; charset=utf-8
         Host: localhost:5000
@@ -527,6 +528,7 @@ POST /calls
         Content-Length: 614
         Content-Type: application/json; charset=utf-8
         Date: Wed, 16 Jul 2014 13:37:39 GMT
+        Server-Authorization: <stripped>
         Timestamp: 1405517859772
 
         {
@@ -578,7 +580,6 @@ GET /calls?version=<version>
         Accept: */*
         Accept-Encoding: gzip, deflate
         Authorization: <stripped>
-        0b874f653f1284342de75b9e35c45e83bbdb02cc94", ts="1405519838", nonce="xU8bjv"
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
@@ -867,7 +868,7 @@ is cleaned up in a timely fashion.
 Supervisory Timer
 """""""""""""""""
 
-After responding to a <tt>POST /call/{token}</tt> or <tt>POST /call/user</tt>
+After responding to a ```POST /call/{token}``` or ```POST /call/user```
 message, the server starts a supervisory timer of 10 seconds.
 
 * If the calling user does not connect and send a "hello" in this time period,
