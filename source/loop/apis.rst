@@ -89,7 +89,7 @@ GET /
         Content-Type: application/json; charset=utf-8
         Date: Wed, 16 Jul 2014 12:57:13 GMT
         ETag: W/"f7-762153207"
-        Timestamp: 1405515433478
+        Timestamp: 1405515433
 
         {
             "description": "The Mozilla Loop (WebRTC App) server",
@@ -149,7 +149,7 @@ POST /registration
         Content-Type: application/json; charset=utf-8
         Date: Wed, 16 Jul 2014 12:58:56 GMT
         Hawk-Session-Token: c7ee533a75a4f3b8a2a44b0b417eec15295ad43ff2b402776078ec87abb31cd9
-        Timestamp: 1405515536831
+        Timestamp: 1405515536
 
         "ok"
 
@@ -261,7 +261,7 @@ POST /call-url
         Content-Type: application/json; charset=utf-8
         Date: Wed, 16 Jul 2014 13:09:40 GMT
         Server-Authorization: <stripped>
-        Timestamp: 1405516180573
+        Timestamp: 1405516180
 
         {
             "callToken": "_nxD4V4FflQ",
@@ -323,7 +323,7 @@ PUT /call-url/{token}
         Content-Type: application/json; charset=utf-8
         Date: Wed, 16 Jul 2014 14:16:54 GMT
         Server-Authorization: <stripped>
-        Timestamp: 1405520214861
+        Timestamp: 1405520214
 
         {
             "expiresAt": 1408112214
@@ -401,7 +401,7 @@ GET /calls/{token}
         Content-Type: application/json; charset=utf-8
         Date: Wed, 16 Jul 2014 13:23:04 GMT
         ETag: W/"1e-2896316483"
-        Timestamp: 1405516984348
+        Timestamp: 1405516984
 
         {
             "calleeFriendlyName": "Alexis"
@@ -457,7 +457,7 @@ POST /calls/{token}
         Content-Length: 614
         Content-Type: application/json; charset=utf-8
         Date: Wed, 16 Jul 2014 13:37:39 GMT
-        Timestamp: 1405517859772
+        Timestamp: 1405517859
 
         {
             "apiKey": "44669102",
@@ -529,7 +529,7 @@ POST /calls
         Content-Type: application/json; charset=utf-8
         Date: Wed, 16 Jul 2014 13:37:39 GMT
         Server-Authorization: <stripped>
-        Timestamp: 1405517859772
+        Timestamp: 1405517859
 
         {
             "apiKey": "44669102",
@@ -591,7 +591,7 @@ GET /calls?version=<version>
         Date: Wed, 16 Jul 2014 14:10:38 GMT
         ETag: W/"6f9-2990115590"
         Server-Authorization: <stripped>
-        Timestamp: 1405519838213
+        Timestamp: 1405519838
 
         {
             "calls": [
