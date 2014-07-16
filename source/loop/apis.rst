@@ -1,4 +1,4 @@
-/===================
+====================
 Loop Server API v1.0
 ====================
 
@@ -121,12 +121,12 @@ POST /registration
 
     Body parameters:
 
-    - **simple_push_url**, the simple push endpoint url as defined in
+    - **simplePushURL**, the simple push endpoint url as defined in
       https://wiki.mozilla.org/WebAPI/SimplePush#Definitions
 
     Example (when not authenticated)::
 
-        http POST localhost:5000/registration simple_push_url=https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyu --verbose
+        http POST localhost:5000/registration simplePushURL=https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyu --verbose
 
     .. code-block:: http
 
@@ -139,7 +139,7 @@ POST /registration
         User-Agent: HTTPie/0.8.0
 
         {
-            "simple_push_url": "https://test"
+            "simplePushURL": "https://test"
         }
 
         HTTP/1.1 200 OK
@@ -171,12 +171,12 @@ DELETE /registration
 
     Body parameters:
 
-    - **simple_push_url**, the simple-push endpoint url as defined in
+    - **simplePushURL**, the simple-push endpoint url as defined in
       https://wiki.mozilla.org/WebAPI/SimplePush#Definitions
 
     Example::
 
-      http DELETE localhost:5000/registration simple_push_url=https://test --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+      http DELETE localhost:5000/registration simplePushURL=https://test --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
 
@@ -190,7 +190,7 @@ DELETE /registration
         User-Agent: HTTPie/0.8.0
 
         {
-            "simple_push_url": "https://test"
+            "simplePushURL": "https://test"
         }
 
         HTTP/1.1 204 No Content
@@ -204,7 +204,7 @@ DELETE /registration
 
     Potential HTTP error responses include:
 
-    - **400 Bad Request:**  You forgot to pass the simple_push_url, or it's
+    - **400 Bad Request:**  You forgot to pass the simplePushURL, or it's
       not a valid URL.
     - **401 Unauthorized:** The credentials you passed aren't valid.
 
