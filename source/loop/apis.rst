@@ -564,15 +564,18 @@ GET /calls?version=<version>
     Each call has the following attributes:
 
     - **apiKey**, the provider public api Key.
-    - **callId**, an unique identifier for the call;
-    - **progressURL**, the location to reach for websockets;
-    - **sessionId**, the provider session identifier;
-    - **sessionToken**, the provider session token (for the caller);
-    - **websocketToken**, the token to use when authenticating to the websocket.
-    - **callToken**, the call token used for this call, if any;
-    - **callUrl**, the call url used for this call, if any.
-    - **urlCreationDate**, the unix timestamp when the url was created.
+    - **callId**, an unique identifier for the call.
     - **callType**, the call type ("audio" or "audio-video").
+    - **progressURL**, the location to reach for websockets.
+    - **sessionId**, the provider session identifier.
+    - **sessionToken**, the provider session token (for the caller).
+    - **websocketToken**, the token to use when authenticating to the websocket.
+
+    In case of call initiated form an URL you will also have:
+
+    - **callToken**, the call-url token used for this call.
+    - **callUrl**, the call-url used for this call.
+    - **urlCreationDate**, the unix timestamp when the used call-url was created.
 
     .. code-block:: http
 
