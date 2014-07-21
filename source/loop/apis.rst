@@ -571,7 +571,7 @@ GET /calls?version=<version>
     - **sessionToken**, the provider session token (for the caller).
     - **websocketToken**, the token to use when authenticating to the websocket.
 
-    In case of call initiated form an URL you will also have:
+    In case of call initiated from an URL you will also have:
 
     - **callToken**, the call-url token used for this call.
     - **callUrl**, the call-url used for this call.
