@@ -381,6 +381,7 @@ GET /calls/{token}
     with the following properties:
 
     - **calleeFriendlyName** the friendly name the creator of the call-url gave.
+    - **urlCreationDate**, the unix timestamp when the url was created.
 
     Example::
 
@@ -404,7 +405,8 @@ GET /calls/{token}
         Timestamp: 1405516984
 
         {
-            "calleeFriendlyName": "Alexis"
+            "calleeFriendlyName": "Alexis",
+            "urlCreationDate": 1405517546
         }
 
     Potential HTTP error responses include:
