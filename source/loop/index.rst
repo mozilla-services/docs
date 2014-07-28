@@ -14,8 +14,8 @@ and supplementary services.
 Assumptions
 ===========
 
-- The Loop Server will support BrowserID only in the future, but does
-  authentication with session cookies for now.
+- The Loop Server supports BrowserID authentication using FxA
+  certificates and MSISDN certificates and create Hawk session credentials.
 
 - All servers are time-synced
 
