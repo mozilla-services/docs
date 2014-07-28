@@ -15,7 +15,8 @@ Assumptions
 ===========
 
 - The Loop Server supports BrowserID authentication using FxA
-  certificates and MSISDN certificates and create Hawk session credentials.
+  certificates and MSISDN certificates. 
+  It uses it on the /register endpoint to create an Hawk session.
 
 - All servers are time-synced
 
