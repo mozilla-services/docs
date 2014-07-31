@@ -44,7 +44,8 @@ ones.  Enter "about:config" in the URL bar, search for items containing
   - use your content-server URL to replace "accounts.firefox.com" in
     the following settings:
 
-    - identity.fxaccounts.remote.uri
+    - identity.fxaccounts.remote.signin.uri
+    - identity.fxaccounts.remote.signup.uri
     - identity.fxaccounts.remote.force_auth.uri
     - identity.fxaccounts.settings.uri
 
