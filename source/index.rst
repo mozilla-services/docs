@@ -55,6 +55,7 @@ jump to the detailed documentation for each service:
    token/index
    heka/index
    loop/index
+   msisdn-gateway/index
 
 
 Server-side development guide

@@ -31,18 +31,19 @@ register, you can do so with different authentications schemes, but you are
 always given an hawk session back, that you should use when requesting the
 endpoints which need authentication.
 
+When authenticating using the `/register` endpoint, you will be given an hawk
+session token in the `Hawk-Session-Token` header. You will need to derive it,
+as explained at :ref:`derive_hawk`.
+
 Derive hawk credentials from the hawk session token
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When authenticating using the `/register` endpoint, you will be given an hawk
-session token in the `Hawk-Session-Token` header.
 
 In order to get the hawk credentials to use on the client you will need to:
 
 1. Do an `HKDF derivation <http://en.wikipedia.org/wiki/HKDF>`_ on the given
-   session token. You'll need to use the following parameters:
+   session token. You'll need to use the following parameters::
 
-   key_material = HKDF(hawk_session, "", 'identity.mozilla.com/picl/v1/sessionToken', 32*3)
+    key_material = HKDF(hawk_session, "", 'identity.mozilla.com/picl/v1/sessionToken', 32*2)
 
 2. The key material you'll get out of the HKDF need to be separated into two
    parts, the first 32 hex caracters are the hawk id, and the next 32 ones are the hawk
@@ -61,7 +62,7 @@ If you are writting a client, you might find these resources useful:
 - With javascript:
   https://mxr.mozilla.org/mozilla-central/source/services/fxaccounts/FxAccountsClient.jsm#309 &
   https://github.com/mozilla/gecko-projects/blob/elm/browser/components/loop/content/shared/libs/token.js#L55-L77
-- Wtih python:
+- With python:
   https://github.com/mozilla-services/loop-server/blob/master/loadtests/loadtest.py#L99-L122
 
 APIs
