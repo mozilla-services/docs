@@ -31,11 +31,12 @@ register, you can do so with different authentications schemes, but you are
 always given an hawk session back, that you should use when requesting the
 endpoints which need authentication.
 
+When authenticating using the `/register` endpoint, you will be given an hawk
+session token in the `Hawk-Session-Token` header. You will need to derive it,
+as explained at :ref:`derive_hawk`.
+
 Derive hawk credentials from the hawk session token
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When authenticating using the `/register` endpoint, you will be given an hawk
-session token in the `Hawk-Session-Token` header.
 
 In order to get the hawk credentials to use on the client you will need to:
 

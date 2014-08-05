@@ -31,39 +31,9 @@ register, you can do so with different authentications schemes, but you are
 always given an hawk session back, that you should use when requesting the
 endpoints which need authentication.
 
-
-Derive hawk credentials from the hawk session token
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 When authenticating using the `/register` endpoint, you will be given an hawk
-session token called `msisdnSessionToken` in the body.
-
-In order to get the hawk credentials to use on the client you will need to:
-
-1. Do an `HKDF derivation <http://en.wikipedia.org/wiki/HKDF>`_ on the given
-   session token. You'll need to use the following parameters::
-
-    key_material = HKDF(hawk_session, "", 'identity.mozilla.com/picl/v1/sessionToken', 32*2)
-
-2. The key material you'll get out of the HKDF need to be separated into two
-   parts, the first 32 hex characters are the hawk id, and the next 32 ones are the hawk
-   key.
-
-   Credentials::
-
-        credentials = {
-            'id': keyMaterial[0:32]
-            'key': keyMaterial[32:64]
-            'algorithm': 'sha256'
-        }
-
-If you are writting a client, you might find these resources useful:
-
-- With javascript:
-  https://github.com/ferjm/msisdn-verifier-client/blob/master/js/token.js
-- With python:
-  https://github.com/mozilla-services/requests-hawk/blob/master/requests_hawk/__init__.py
-
+session token called `msisdnSessionToken` in the body. You will need to derive
+as explained at :ref:`derive_hawk`.
 
 APIs
 ----
