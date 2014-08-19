@@ -118,17 +118,16 @@ file::
     serving on 0.0.0.0:5000 view at http://127.0.0.1:5000
 
 Once the server is launched, you need to tell Firefox about its location.
-Go to "about:config", search for "services.sync.tokenServerURI" and change
-its value to the URL of your server with a path of "token/1.0/sync/1.5":
+
+To configure desktop Firefox to talk to your new Sync server, go to
+"about:config", search for "services.sync.tokenServerURI" and change its value
+to the URL of your server with a path of "token/1.0/sync/1.5":
 
   - services.sync.tokenServerURI:  http://sync.example.com/token/1.0/sync/1.5
 
-
-.. note:: Firefox for Android currently does not offer a way to change this
-          setting without recompiling from source; further details and updates
-          may be found in `Bug 1003877 <https://bugzilla.mozilla.org/show_bug.cgi?id=1003877>`_.
-
-
+Since Firefox 33, Firefox for Android has supported custom sync servers.  To
+configure Firefox for Android, see the blog post `How to connect Firefox for
+Android to self-hosted Firefox Account and Firefox Sync servers`_.
 
 Further Configuration
 =====================
@@ -301,3 +300,5 @@ Don't hesitate to jump online and ask us for help:
 
 - on IRC (irc.mozilla.org) in the #sync channel
 - in our Mailing List: https://mail.mozilla.org/listinfo/sync-dev
+
+.. _How to connect Firefox for Android to self-hosted Firefox Account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/
