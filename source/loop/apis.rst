@@ -101,6 +101,34 @@ GET /
             "version": "0.9.0"
         }
 
+GET /push-server-config
+~~~~~~~~~~~~~~~~~~~~~~~
+
+    Retrieves the configuration of the push server. Specifically, returns the
+    websocket endpoint that should be used to reach simple push.
+
+    The response should contain a **pushServerURI** parameter with this
+    information.
+
+    .. code-block:: http
+
+        http localhost:5000/push-server-config
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 57
+        Content-Type: application/json; charset=utf-8
+        Date: Tue, 19 Aug 2014 14:26:42 GMT
+        ETag: W/"39-351294056"
+        Timestamp: 1408458402
+
+        {
+            "pushServerURI": "wss://push.services.mozilla.com/"
+        }
+
+    Server should acknowledge your request and answer with a status code of
+    **200 OK**.
+
 
 POST /registration
 ~~~~~~~~~~~~~~~~~~
