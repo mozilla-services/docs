@@ -580,11 +580,11 @@ GET /api-specs
                             "max_body_size": "10k"
                         }
                     }, 
-                    "/sms/momt/beepsend_callback": {
-                        "GET": {}
-                    }, 
-                    "/sms/momt/nexmo_callback": {
-                        "GET": {}
+                    "/sms/momt/": {
+                        "GET": {},
+                        "POST": {
+                            "max_body_size": "10k"
+                        }
                     }, 
                     "/sms/mt/verify": {
                         "POST": {
@@ -627,7 +627,7 @@ SMS /sms/momt/verify
     When the SMS Gateway receive the Inbound Message, it will make a
     call on the configured endpoint.
 
-    **For Nexmo** — GET /sms/momt/nexmo_callback
+    **For Nexmo** — GET or POST /sms/momt/?provider=nexmo
 
     Querystring parameters:
 
@@ -635,12 +635,16 @@ SMS /sms/momt/verify
     - **text**, the content of the message
     - **network-code**, the MCC/MNC unique identifier
 
-    **For BeepSend** — GET /sms/momt/nexmo_callback
+    **For BeepSend** — GET or POST /sms/momt/?provider=beepsend
 
-    Querystring parameters:
+    Querystring or Body parameters:
 
     - **from**, the phone number from which the message is coming
     - **message**, the content of the message
+
+    - **mcc**, The Mobile Country Code (in GET)
+    - **mnc**, The Mobile Network Code (in GET)
+    - **mccmnc**, {"mcc": "<Mobile Country Code>", "mnc": "<Mobile Network Code>"} (in POST)
 
 
 Error Responses
