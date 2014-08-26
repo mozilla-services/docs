@@ -731,16 +731,16 @@ DELETE /account
         Date: Wed, 16 Jul 2014 13:03:39 GMT
         Server-Authorization: <stripped>
 
-Integration with Firefox accounts using OAuth
+Integration with Firefox Accounts using OAuth
 ---------------------------------------------
 
 A few endpoints are available for integration with Firefox Accounts. This is
-the preffered way to login with your Firefox Accounts for loop. For more
+the prefered way to login with your Firefox Accounts for loop. For more
 information on how to integrate with Firefox Accounts, `have a look at the
 Firefox Accounts documentation on MDN
 <https://developer.mozilla.org/en-US/Firefox_Accounts#Login_with_the_FxA_OAuth_HTTP_API>`_
 
-POST /fxa-oauth/parameters
+POST /fxa-oauth/params
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Requires authentication**
@@ -752,7 +752,7 @@ POST /fxa-oauth/parameters
     - **oauth_uri**, URI of the OAuth server;
     - **redirect_uri**, URI where the client should redirect once authenticated;
     - **scope**, The scope of the token returned;
-    - **state**, A nonce used to check the session matches.
+    - **state**, A nonce used to check that the session matches.
 
     ::
 
@@ -812,8 +812,6 @@ GET /fxa-oauth/token
         Server-Authorization: <stripped>
         Timestamp: 1409058431
 
-        {access_token: }
-
 
 POST /fxa-oauth/token
 ~~~~~~~~~~~~~~~~~~~~~
@@ -830,7 +828,12 @@ POST /fxa-oauth/token
     Checks the validity of the given code and state and exchange it with a
     bearer token with the OAuth servers.
 
-    The token is returned in the **access_token** attribute.
+    The token is returned in the **access_token** attribute. A few additional
+    parameters are returned:
+
+    - **scope** the scope of the token;
+    - **token_type** the type of the token returned (here, it will be
+      "bearer").
 
 Error Responses
 ---------------
