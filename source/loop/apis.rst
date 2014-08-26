@@ -22,6 +22,14 @@ order to make requests. Examples of use with httpie are provided when possible.
 In order to authenticate with hawk, you'll need to install the `requests-hawk
 module <https://github.com/mozilla-services/requests-hawk>`_
 
+Versioning
+----------
+
+The current API is versioned, using only a major version. All the endpoints for
+version 1 are prefixed by `/v1/`. In case you don't specify the prefix, your
+requests will be redirected automatically with an http `307` status.
+
+
 Authentication
 --------------
 
