@@ -194,7 +194,8 @@ POST /registration
 
     Example (when not authenticated)::
 
-        http POST localhost:5000/v1/registration simplePushURL=https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyu --verbose
+        http POST localhost:5000/v1/registration --verbose\
+        simplePushURL=https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyu
 
     .. code-block:: http
 
@@ -244,7 +245,9 @@ DELETE /registration
 
     Example::
 
-      http DELETE localhost:5000/v1/registration simplePushURL=https://test --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+      http DELETE localhost:5000/v1/registration --verbose\
+      simplePushURL=https://test\
+      --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
 
@@ -304,7 +307,9 @@ POST /call-url
 
     Example::
 
-       http POST localhost:5000/v1/call-url callerId=Remy expiresIn=5 issuer=Alexis --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+       http POST localhost:5000/v1/call-url --verbose\
+       callerId=Remy expiresIn=5 issuer=Alexis\
+       --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
 
@@ -369,10 +374,12 @@ PUT /call-url/{token}
 
     Example::
 
-        http PUT localhost:5000/v1/call-url/B65nvlGh8iM issuer=Adam --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'                                                                                                    PUT /call-url/B65nvlGh8iM HTTP/1.1
+        http PUT localhost:5000/v1/call-url/B65nvlGh8iM --verbose\
+        issuer=Adam --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
 
+        PUT /v1/call-url/B65nvlGh8iM HTTP/1.1
         Accept: application/json
         Accept-Encoding: gzip, deflate
         Authorization: <stripped>
@@ -409,7 +416,8 @@ DELETE /call-url/{token}
 
     Example::
 
-        http DELETE localhost:5000/v1/call-url/_nxD4V4FflQ --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+        http DELETE localhost:5000/v1/call-url/_nxD4V4FflQ --verbose\
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
 
     .. code-block:: http
@@ -581,7 +589,9 @@ POST /calls
 
     Example::
 
-        http POST localhost:5000/v1/calls calleeId=alexis callType="audio-video" --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+        http POST localhost:5000/v1/calls --verbose\
+        calleeId=alexis callType="audio-video"\
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
 
@@ -703,7 +713,8 @@ DELETE /account
 
     Example::
 
-        http DELETE localhost:5000/v1/account --verbose --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+        http DELETE localhost:5000/v1/account --verbose\
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
 
