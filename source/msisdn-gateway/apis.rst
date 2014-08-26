@@ -111,9 +111,9 @@ POST /register
 
     Potential HTTP error responses include:
 
-    - **429 Too Many Requests:**  Client has sent too many requests
+    - **429 Too Many Requests:**  Client has sent too many requests (errno: 117)
     - **503 Service Unavailable:** Service temporarily unavailable due
-      to high load or misconfiguration of the storage backend.
+      to high load or misconfiguration of the storage backend. (errno: 201)
 
 
 POST /unregister
@@ -156,10 +156,10 @@ POST /unregister
 
     Potential HTTP error responses include:
 
-    - **401 Unauthorized:** The credentials you passed aren't valid.
-    - **429 Too Many Requests:**  Client has sent too many requests
+    - **401 Unauthorized:** The credentials you passed aren't valid. (errno: 109 or 110)
+    - **429 Too Many Requests:**  Client has sent too many requests (errno: 117)
     - **503 Service Unavailable:** Service temporarily unavailable due
-      to high load or misconfiguration of the storage backend.
+      to high load or misconfiguration of the storage backend. (errno: 201)
 
 
 POST /discover
@@ -258,15 +258,32 @@ POST /discover
             ]
         }
 
-    Server should return the list of available methods with a
-    **200 OK**.
+    Response from the server:
+
+    The server should answer this with a **200 OK** status code and a JSON object
+    with the following properties:
+
+    - **verificationMethods**, a list of verification methods
+      available for the given set of parameters, in order of preferred
+      use
+    - **verificationDetails**, an object whose keys are the elements
+      of `verificationMethods` and whose values are the details of each
+      method
+
+    The methods listed in `verificationMethods` are sorted in the
+    preferred order from the perspective of the server, i.e., the
+    method listed first is the most preferred method.
 
     Potential HTTP error responses include:
 
-    - **400 Bad Request:** The MCC is missing.
-    - **429 Too Many Requests:**  Client has sent too many requests
+    - **400 Bad Request:** MCC, MNC or MSISDN missing (errno: 108) or
+      invalids (errno: 107)
+    - **406 Bad JSON:** The body is not valid JSON. (errno: 106)
+    - **411 Length Required:** Content-Length header wasn't provided. (errno: 112)
+    - **413 Request Too Large:** Request Too Large. (errno: 113)
+    - **429 Too Many Requests:**  Client has sent too many requests (errno: 117)
     - **503 Service Unavailable:** Service temporarily unavailable due
-      to high load or misconfiguration of the storage backend.
+      to high load or misconfiguration of the storage backend. (errno: 201)
 
 
 POST /sms/mt/verify
@@ -322,12 +339,14 @@ POST /sms/mt/verify
 
     Potential HTTP error responses include:
 
-    - **400 Bad Request:** You forgot to give the MSISDN and MCC code
-      or pass a wrong MSISDN, MCC or MNC code.
-    - **401 Unauthorized**: You need to authenticate to call this URL.
-    - **429 Too Many Requests:**  Client has sent too many requests
+    - **400 Bad Request:** MCC, MNC or MSISDN missing (errno: 108) or
+      invalids (errno: 107)
+    - **406 Bad JSON:** The body is not valid JSON. (errno: 106)
+    - **411 Length Required:** Content-Length header wasn't provided. (errno: 112)
+    - **413 Request Too Large:** Request too large. (errno: 113)
+    - **429 Too Many Requests:**  Client has sent too many requests (errno: 117)
     - **503 Service Unavailable:** Service temporarily unavailable due
-      to high load or misconfiguration of the storage backend.
+      to high load or misconfiguration of the storage backend. (errno: 201)
 
 
 POST /sms/verify_code
@@ -385,11 +404,14 @@ POST /sms/verify_code
 
     Potential HTTP error responses include:
 
-    - **400 Bad Request:** code missing or invalid.
-    - **401 Unauthorized**: You need to authenticate to call this URL.
-    - **429 Too Many Requests:**  Client has sent too many requests
+    - **400 Bad Request:** code missing (errno: 108) or invalid (errno: 105)
+    - **406 Bad JSON:** the body is not valid JSON. (errno: 106)
+    - **410 Expired:** the session MSISDN has expired. (errno: 111)
+    - **411 Length Required:** Content-Length header wasn't provided. (errno: 112)
+    - **413 Request Too Large:** Request too large. (errno: 113)
+    - **429 Too Many Requests:**  Client has sent too many requests (errno: 117)
     - **503 Service Unavailable:** Service temporarily unavailable due
-      to high load or misconfiguration of the storage backend.
+      to high load or misconfiguration of the storage backend. (errno: 201)
 
 
 POST /certificate/sign
@@ -439,11 +461,14 @@ POST /certificate/sign
 
     Potential HTTP error responses include:
 
-    - **400 Bad Request:**  duration or publicKey parameter missing or invalid
-    - **401 Unauthorized**: You need to authenticate to call this URL.
-    - **429 Too Many Requests:**  Client has sent too many requests
+    - **400 Bad Request:** duration or publicKey parameter missing
+      (errno: 108) or invalid (errno: 107)
+    - **406 Bad JSON:** The body is not valid JSON. (errno: 106)
+    - **411 Length Required:** Content-Length header wasn't provided. (errno: 112)
+    - **413 Request Too Large:** Request Too Large. (errno: 113)
+    - **429 Too Many Requests:**  Client has sent too many requests (errno: 117)
     - **503 Service Unavailable:** Service temporarily unavailable due
-      to high load or misconfiguration of the storage backend.
+      to high load or misconfiguration of the storage backend. (errno: 201)
 
 
 GET /.well-known/browserid
