@@ -521,6 +521,14 @@ POST /calls
       receiver(s) of the call. These identities should be one of the valid Loop
       identities (Firefox Accounts email or MSISDN) and can belong to none, an
       unique or multiple Loop users.
+      It can also be an object with two properties:
+
+      - **phoneNumber** The phone number on a local form
+      - **mcc** The current SIM card Mobile Country Code
+
+      In that case, the server will try to convert the phoneNumber as
+      an MSISDN identity
+
     - **callType**, Specifies the type of media the remote party intends to
       send. Valid values are "audio" or "audio-video".
 
