@@ -1037,16 +1037,9 @@ timeout                        √         √         The call setup has timed 
 cancel                √                            The calling party has cancelled a pending
                                                    call.
 media-fail                     √                   The called user has declined the call.
-unregistered                             √         The called user does not have any
-                                                   registered push server endpoints.
 user-unknown                             √         The indicated user id does not exist.
 closed                                   √         The other user's WSS connection closed
                                                    unexpectedly.
-answered-elsewhere                       √         When the called user has more than one
-                                                   device alerting at the same time and
-                                                   accepts on one device, a "terminated"
-                                                   with this reason code is sent to all
-                                                   other devices that had been alerting.
 ==================   ======    ======    ======    ========================================
 
 Timer Supervision
