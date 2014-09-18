@@ -1040,7 +1040,7 @@ media-fail                     √                   The called user has decline
 unregistered                             √         The called user does not have any
                                                    registered push server endpoints.
 user-unknown                             √         The indicated user id does not exist.
-connection-failure                       √         The other user's WSS connection closed
+closed                                   √         The other user's WSS connection closed
                                                    unexpectedly.
 answered-elsewhere                       √         When the called user has more than one
                                                    device alerting at the same time and
