@@ -238,7 +238,7 @@ DELETE /registration
 
     Unregister a given simple push-url from the loop server.
 
-    Body parameters:
+    Body or querystring parameters:
 
     - **simplePushURL**, the simple-push endpoint url as defined in
       https://wiki.mozilla.org/WebAPI/SimplePush#Definitions
