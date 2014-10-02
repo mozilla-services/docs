@@ -138,37 +138,6 @@ GET /push-server-config
     **200 OK**.
 
 
-POST /session
-~~~~~~~~~~~~~
-
-    Creates a hawk session to be used for the rest of the interactions with the
-    server. This is especially useful if you want to create a session and
-    upgrade it with the OAuth flow.
-
-    Example::
-
-        http POST localhost:5000/v1/session --verbose
-
-    .. code-block:: http
-
-        POST /v1/session HTTP/1.1
-        Accept: */*
-        Accept-Encoding: gzip, deflate, compress
-        Content-Length: 0
-        Host: localhost:5000
-        User-Agent: HTTPie/0.8.0
-
-        HTTP/1.1 204 No Content
-        Access-Control-Expose-Headers: Hawk-Session-Token
-        Connection: keep-alive
-        Date: Tue, 26 Aug 2014 11:20:46 GMT
-        Hawk-Session-Token:
-        ca13d91d1d4b67edf0b9523a2867b3d1b74eb63823732c441992f813f9da1f76
-
-    Server should acknowledge your request and answer with a status code of
-    **204 No Content**.
-
-
 POST /registration
 ~~~~~~~~~~~~~~~~~~
 
