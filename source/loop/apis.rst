@@ -6,10 +6,17 @@ This document is based on the current status of the server. All the examples
 had been done with real calls. It doesn't reflect any future implementation and
 tries to stick with the currently deployed version.
 
-This document describes the HTTP API and the Websockets API.
+This document describes the :ref:`HTTP APIs <http-apis>` and the :ref:`Websockets APIs <websockets-apis>`.
+
+.. contents::
+
+.. _http-apis:
 
 HTTP APIs
 =========
+
+Overview
+-------
 
 .. note::
 
@@ -43,6 +50,8 @@ When authenticating using the `/register` endpoint, you will be given an hawk
 session token in the `Hawk-Session-Token` header. You will need to derive it,
 as explained at :ref:`derive_hawk`.
 
+.. _derive_hawk:
+
 Derive hawk credentials from the hawk session token
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -73,8 +82,9 @@ If you are writting a client, you might find these resources useful:
 - With python:
   https://github.com/mozilla-services/loop-server/blob/master/loadtests/loadtest.py#L99-L122
 
-APIs
-----
+HTTP API - Reference
+---------------------
+
 
 GET /
 ~~~~~
@@ -834,6 +844,8 @@ Also the associated errno can be one of:
 - **114 INVALID_OAUTH_STATE**: This come with a 400 and tells the oauth state is invalid;
 - **201 BACKEND**: This come with a 503 when a third party is not available at the moment.
 
+
+.. _websockets-apis:
 
 Websockets APIs
 ===============

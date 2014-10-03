@@ -34,7 +34,7 @@ Assuming you are using Virtualenv::
    # You are now in the fresh virtualenv for Sphinx.
 
    # Install dependencies.
-   $ pip install sphinx sphinxcontrib-seqdiag
+   $ pip install sphinx sphinxcontrib-seqdiag mozilla_sphinx_theme
 
    # Build HTML docs.
    $ make html
