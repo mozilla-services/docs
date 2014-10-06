@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from datetime import datetime
-import mozilla_sphinx_theme
+#import mozilla_sphinx_theme
 
 
 extensions = [
@@ -22,8 +22,8 @@ blockdiag_antialias = True
 seqdiag_antialias = True
 
 templates_path = ['_templates']
-html_theme_path = [os.path.dirname(mozilla_sphinx_theme.__file__)]
-html_theme = 'mozilla'
+#html_theme_path = [os.path.dirname(mozilla_sphinx_theme.__file__)]
+#html_theme = 'mozilla'
 source_suffix = '.rst'
 master_doc = 'index'
 project = u'Mozilla Services'

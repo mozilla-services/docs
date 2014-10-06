@@ -1,4 +1,3 @@
 sphinxcontrib-seqdiag==0.6.0
 sphinxcontrib-spelling==2.1
-mozilla-sphinx-theme
 pyenchant==1.6.5
