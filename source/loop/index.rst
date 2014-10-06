@@ -37,7 +37,7 @@ Documentation content
    :maxdepth: 3
 
    http
-   websocket
+   websockets
    
 You can also find the user flow in the wiki, at
 https://wiki.mozilla.org/Loop/Architecture.
