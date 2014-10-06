@@ -1,3 +1,15 @@
-sphinxcontrib-seqdiag==0.6.0
-sphinxcontrib-spelling==2.1
+Jinja2==2.7.3
+MarkupSafe==0.23
+Pillow==2.6.0
+Pygments==1.6
+Sphinx==1.2.3
+argparse==1.2.1
+blockdiag==1.4.5
+docutils==0.12
+funcparserlib==0.3.6
 pyenchant==1.6.5
+seqdiag==0.9.3
+six==1.8.0
+sphinxcontrib-seqdiag==0.7.2
+sphinxcontrib-spelling==2.1
+wsgiref==0.1.2

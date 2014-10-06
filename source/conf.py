@@ -7,7 +7,7 @@ from datetime import datetime
 extensions = [
     'sphinx.ext.graphviz',
     'sphinx.ext.viewcode',
-    # 'sphinxcontrib.seqdiag',
+    'sphinxcontrib.seqdiag',
 ]
 
 try:
