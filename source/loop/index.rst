@@ -1,8 +1,8 @@
 .. _loop:
 
-===========
-Loop Server
-===========
+====================
+Loop Server API v1.0
+====================
 
 Goal of the Service
 ===================
@@ -24,13 +24,20 @@ Assumptions
   resource sharing.
 
 
+This document is based on the current status of the server. All the examples
+had been done with real calls. It doesn't reflect any future implementation and
+tries to stick with the currently deployed version.
+
+This document describes the :ref:`HTTP APIs <http-apis>` and the :ref:`Websockets APIs <websockets-apis>`.
+
 Documentation content
 =====================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
-   apis
+   http
+   websocket
    
 You can also find the user flow in the wiki, at
 https://wiki.mozilla.org/Loop/Architecture.
@@ -38,4 +45,4 @@ https://wiki.mozilla.org/Loop/Architecture.
 Resources
 =========
 
-- Server: https://github.com/mozilla-services/loop-server
+- Server source code: https://github.com/mozilla-services/loop-server
