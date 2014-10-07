@@ -31,6 +31,7 @@ Documentation content
    :maxdepth: 2
 
    apis
+   tools
    
 You can also find the user flow in the wiki, at
 https://wiki.mozilla.org/Loop/Architecture.
