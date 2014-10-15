@@ -187,8 +187,8 @@ In Protocol 1.5, client records additionally include:
 * **protocols** *array*: an array of Sync protocol versions supported by this client, such as ["1.1", "1.5"]. Optional.
 
 
-Version 2
----------
+Version 2 (never deployed)
+--------------------------
 
 .. note::
 
@@ -275,8 +275,8 @@ Every page a user visits generates a history item/page. One history (page) per r
 * **date** *integer*: datetime of the visit
 * **type** *integer*: `transition type <https://developer.mozilla.org/en/nsINavHistoryService#Constants>`_ of the visit
 
-Version 2
----------
+Version 2 (never deployed)
+--------------------------
 
 .. note::
 
