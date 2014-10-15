@@ -349,6 +349,21 @@ Saved passwords help users get back into websites that require a login such as H
 * **usernameField** *string*: HTML field name of the username
 * **passwordField** *string*: HTML field name of the password
 
+If possible, clients should also write fields corresponding to nsILoginMetaInfo:
+
+* **timeLastUsed** *unsigned long*: local Unix timestamp in milliseconds at which this password was last used.
+  Note that client clocks can be wrong, and thus this time can be dramatically earlier or later than the modified time of the record.
+  Consuming clients should be careful to handle out of range values.
+* **timeCreated** *unsigned long*: as with **timeLastUsed**, but for creation.
+* **timePasswordChanged** *unsigned long*: as with **timeLastUsed**, but for password change.
+* **timesUsed** *unsigned long*: the number of uses of this password.
+
+Note that these fields are not required as part of the record, so clients should expect them to be missing. Clients that don't use this data locally are encouraged to pass through when it makes sense (**timeCreated**), or wipe when invalidation is the best option (e.g., **timePasswordChanged**).
+
+Note also that clients should use judgment when updating these fields. It is typically not feasible to upload new records each time a password is used on the web. Neither would it make sense during download to treat a non-matching timestamp, or a missing field in an otherwise matching local record, as a record collision. The handling of these fields introduces new complexities in reconciliation.
+
+The Firefox desktop client began recording this data in Bug 555755.
+
 Preferences
 ===========
 
