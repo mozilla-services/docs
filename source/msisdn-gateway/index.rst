@@ -42,7 +42,7 @@ Documentation content
    :maxdepth: 2
 
    apis
-   
+
 
 Resources
 =========

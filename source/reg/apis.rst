@@ -30,7 +30,7 @@ Certain functions use HTTP basic auth (over SSL, so as to maintain password
 security). If the auth username does not match the username in the path, the
 server will issue an Error Response.
 
-The Sync User API has a set of :ref:`respcodes` to cover errors in the request 
+The Sync User API has a set of :ref:`respcodes` to cover errors in the request
 or on the server side. The format of a successful response is defined in the appropriate request method section.
 
 

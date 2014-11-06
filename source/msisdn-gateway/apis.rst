@@ -65,10 +65,10 @@ GET /
         Timestamp: 1406555536
 
         {
-            "description": "The Mozilla MSISDN Gateway", 
-            "endpoint": "http://localhost:5000", 
-            "homepage": "https://github.com/mozilla-services/msisdn-gateway/", 
-            "name": "mozilla-msisdn-gateway", 
+            "description": "The Mozilla MSISDN Gateway",
+            "endpoint": "http://localhost:5000",
+            "homepage": "https://github.com/mozilla-services/msisdn-gateway/",
+            "name": "mozilla-msisdn-gateway",
             "version": "0.5.0"
         }
 
@@ -200,14 +200,14 @@ POST /discover
         Content-Type: application/json; charset=utf-8
         Date: Mon, 28 Jul 2014 14:18:05 GMT
         Timestamp: 1406557085
-        
+
         {
             "verificationDetails": {
                 "sms/momt": {
-                    "moVerifier": "+34191600777", 
+                    "moVerifier": "+34191600777",
                     "mtSender": "Mozilla@"
                 }
-            }, 
+            },
             "verificationMethods": [
                 "sms/momt"
             ]
@@ -228,8 +228,8 @@ POST /discover
         User-Agent: HTTPie/0.8.0
 
         {
-            "mcc": "214", 
-            "mnc": "07", 
+            "mcc": "214",
+            "mnc": "07",
             "msisdn": "3412578946"
         }
 
@@ -244,16 +244,16 @@ POST /discover
         {
             "verificationDetails": {
                 "sms/momt": {
-                    "moVerifier": "+34191600777", 
+                    "moVerifier": "+34191600777",
                     "mtSender": "Mozilla@"
-                }, 
+                },
                 "sms/mt": {
-                    "mtSender": "Mozilla@", 
+                    "mtSender": "Mozilla@",
                     "url": "http://localhost:5000/sms/mt/verify"
                 }
-            }, 
+            },
             "verificationMethods": [
-                "sms/mt", 
+                "sms/mt",
                 "sms/momt"
             ]
         }
@@ -325,12 +325,12 @@ POST /sms/mt/verify
         Content-Type: application/json; charset=utf-8
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
-        
+
         {
-            "mcc": "208", 
+            "mcc": "208",
             "msisdn": "+33123456789"
         }
-        
+
         HTTP/1.1 204 No Content
         Access-Control-Allow-Credentials: true
         Connection: keep-alive
@@ -440,9 +440,9 @@ POST /certificate/sign
         Content-Type: application/json; charset=utf-8
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
-        
+
         {
-            "duration": "3600", 
+            "duration": "3600",
             "publicKey": "{\"algorithm\":\"DS\",\"y\":\"e6...40\",\"p\":\"d6...01\",\"q\":\"b1...3b\",\"g\":\"9a...ef\"}"
         }
 
@@ -454,7 +454,7 @@ POST /certificate/sign
         Date: Mon, 28 Jul 2014 14:44:39 GMT
         Server-Authorization: Hawk mac="QMCs...=", hash="NVuB...="
         Timestamp: 1406558679
-        
+
         {
             "cert": "eyJh...1Rgg"
         }
@@ -508,13 +508,13 @@ GET /.well-known/browserid
         Timestamp: 1406559290
 
         {
-            "authentication": "/.well-known/browserid/warning.html", 
-            "provisioning": "/.well-known/browserid/warning.html", 
+            "authentication": "/.well-known/browserid/warning.html",
+            "provisioning": "/.well-known/browserid/warning.html",
             "public-key": {
-                "algorithm": "DS", 
-                "g": "9a...ef", 
-                "p": "d6...01", 
-                "q": "b1...3b", 
+                "algorithm": "DS",
+                "g": "9a...ef",
+                "p": "d6...01",
+                "q": "b1...3b",
                 "y": "7e...b9"
             }
         }
@@ -548,61 +548,61 @@ GET /api-specs
         Date: Mon, 28 Jul 2014 14:57:54 GMT
         ETag: W/"42d-3425668954"
         Timestamp: 1406559474
-        
+
         {
             "service": {
-                "location": "http://localhost:5000", 
+                "location": "http://localhost:5000",
                 "resources": {
                     "/": {
                         "GET": {}
-                    }, 
+                    },
                     "/.well-known/browserid": {
                         "GET": {}
-                    }, 
+                    },
                     "/.well-known/browserid/warning.html": {
                         "GET": {}
-                    }, 
+                    },
                     "/__heartbeat__": {
                         "GET": {}
-                    }, 
+                    },
                     "/certificate/sign": {
                         "POST": {
                             "max_body_size": "10k"
                         }
-                    }, 
+                    },
                     "/discover": {
                         "POST": {
                             "max_body_size": "10k"
                         }
-                    }, 
+                    },
                     "/register": {
                         "POST": {
                             "max_body_size": "10k"
                         }
-                    }, 
+                    },
                     "/sms/momt/": {
                         "GET": {},
                         "POST": {
                             "max_body_size": "10k"
                         }
-                    }, 
+                    },
                     "/sms/mt/verify": {
                         "POST": {
                             "max_body_size": "10k"
                         }
-                    }, 
+                    },
                     "/sms/verify_code": {
                         "POST": {
                             "max_body_size": "10k"
                         }
-                    }, 
+                    },
                     "/unregister": {
                         "POST": {
                             "max_body_size": "10k"
                         }
                     }
-                }, 
-                "version": "0.5.0", 
+                },
+                "version": "0.5.0",
                 "videur_version": "0.1"
             }
         }

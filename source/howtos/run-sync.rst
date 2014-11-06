@@ -134,7 +134,7 @@ fixes.  The following commands will update server-full in place::
 
 By default, the **build** command will checkout the latest released tags for
 each server product.  If you need access to a fix that has not yet been
-released (or if you just want to live on the bleeding edge) then you can 
+released (or if you just want to live on the bleeding edge) then you can
 build the development channel like so::
 
     $ make build CHANNEL=dev

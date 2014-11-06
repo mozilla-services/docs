@@ -19,7 +19,7 @@ that can be used to:
 - delete a user
 - change a user password
 - e-mail password reset codes
-- delete password reset codes 
+- delete password reset codes
 
 It's used by the mozilla auth backend in server-core in order to separate
 system writes that can be done with the users credentials from those that
@@ -34,7 +34,7 @@ writes as the user.
 Sreg does not require any authentication, as it is not intended to be used
 without first going through a primary gateway that performs any necessary
 authentication before proxying the requests. The server must remain private to
-our infrastructure with as little outside access as possible 
+our infrastructure with as little outside access as possible
 
 .. image:: /images/Sreg.png
 

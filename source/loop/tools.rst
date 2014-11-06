@@ -54,7 +54,7 @@ know how many of each keys are used, you can use::
     =====================
     spurl.89272fca80167430382fae1a92e4e561e186db71ba0e37178a5f4cb8ce81fa6c.e7f1f6adf79ed64b6b48b64cf63d75b81ec66f9ac615884a5736b209266048c7
     Total of keys: 5
-    
+
     [...]
 
 

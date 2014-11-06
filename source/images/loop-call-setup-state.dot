@@ -5,11 +5,11 @@ digraph test123 {
   half_connected [label="half-connected"];
   connected [label="connected\n(Server closes connection)"];
   terminated [label="terminated\n(Server closes connection)"];
- 
+
   init->alerting [label="hello\n(called party)"];
   alerting->connecting [label="accept"];
   connecting->half_connected [label="media-up"];
   half_connected->connected [label="media-up"];
- 
+
   {init,alerting,connecting,half_connected} -> terminated [label="terminate\n(or other\nerror)"];
-} 
+}

@@ -2,7 +2,7 @@
 Sync Client Documentation
 =========================
 
-This section is intended to provide a comprehensive guide to how 
+This section is intended to provide a comprehensive guide to how
 Firefox Sync clients interact with the server and ultimately with each
 other to provide the functionality of syncing browser data between clients.
 

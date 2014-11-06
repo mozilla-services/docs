@@ -5,7 +5,7 @@ Coding guidelines
 Style
 =====
 
-All the code must follow PEP 8. You can use Flake8 to check for compliance. 
+All the code must follow PEP 8. You can use Flake8 to check for compliance.
 Flake8 is installed by default to all server environments, via MoPyTools.
 
 Flake8 provides a Mercurial hook, to perform a code check on every commit or

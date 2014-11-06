@@ -88,7 +88,7 @@ all tests::
 Configuring Flake8
 ------------------
 
-Flake8 can be used from the command-line, by simply running it over one or 
+Flake8 can be used from the command-line, by simply running it over one or
 several files::
 
     $ flake8 syncreg/controllers/
@@ -100,13 +100,13 @@ several files::
     syncreg/controllers/user.py:276: undefined name 'config'
     syncreg/controllers/user.py:180:8: E111 indentation is not a multiple of four
     syncreg/controllers/user.py:240:1: 'UserController.change_password' is too complex (10)
-    syncreg/controllers/user.py:318:1: 'UserController.do_password_reset' is too complex (11) 
+    syncreg/controllers/user.py:318:1: 'UserController.do_password_reset' is too complex (11)
 
 
-A simpler way to use it without having to think about it, is to configure 
+A simpler way to use it without having to think about it, is to configure
 Mercurial to call it every time you commit a change.
 
-To use the Mercurial hook on any *commit* or *qrefresh*, change your *.hgrc* file 
+To use the Mercurial hook on any *commit* or *qrefresh*, change your *.hgrc* file
 like this::
 
     [hooks]

@@ -82,9 +82,8 @@ If you are writting a client, you might find these resources useful:
 - With python:
   https://github.com/mozilla-services/loop-server/blob/master/loadtests/loadtest.py#L99-L122
 
-HTTP API - Reference
----------------------
-
+Global API
+----------
 
 GET /
 ~~~~~
@@ -147,6 +146,8 @@ GET /push-server-config
     Server should acknowledge your request and answer with a status code of
     **200 OK**.
 
+Registration
+------------
 
 POST /registration
 ~~~~~~~~~~~~~~~~~~
@@ -249,6 +250,8 @@ DELETE /registration
       not a valid URL.
     - **401 Unauthorized:** The credentials you passed aren't valid.
 
+Call URLs
+---------
 
 POST /call-url
 ~~~~~~~~~~~~~~
@@ -411,6 +414,8 @@ DELETE /call-url/{token}
     - **400 Bad Request:**  The token you passed is not valid or expired.
     - **404 Not Found:**  The token you passed doesn't exist.
 
+Calls
+-----
 
 GET /calls/{token}
 ~~~~~~~~~~~~~~~~~~
@@ -675,6 +680,223 @@ GET /calls?version=<version>
     - **400 Bad Request:**  The version you passed is not valid.
 
 
+Rooms
+-----
+
+POST /rooms
+~~~~~~~~~~~
+
+    **Requires owner authentication**
+
+    Create a new room
+
+    Request body parameters:
+
+    - **roomName**, The name of the room
+    - **roomOwner**, The name of the roomOwner
+    - **maxSize**, The maximum number of people the room can handle
+
+    An optional parameter:
+
+    - **expiresIn**, the number of hours for which the room will exist.
+
+    Response body parameters:
+
+    - **roomToken**, The token used to identify the created room.
+    - **roomUrl**, A URL that can be given to other users to allow them to join the room.
+    - **expiresAt**, The date after which the room will no longer be valid (in seconds since the Unix epoch)
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+PATCH /rooms/:token
+~~~~~~~~~~~~~~~~~~~
+
+    **Requires owner authentication**
+
+    Update an existing room
+
+    Optional request body parameters:
+
+    - **roomName**, The name of the room
+    - **roomOwner**, The user-friendly display name indicating the name of the room's owner.
+    - **maxSize**, The maximum number of people the room can handle
+    - **expiresIn**, the number of hours for which the room will exist.
+
+    You can only set the body parameter you want to update.
+
+    Response body parameters:
+
+    - **expiresAt**, The date after which the room will no longer be valid (in seconds since the Unix epoch)
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+DELETE /rooms/:token
+~~~~~~~~~~~~~~~~~~~~
+
+    **Requires owner authentication**
+
+    Delete an existing room
+
+
+GET /rooms/:token
+~~~~~~~~~~~~~~~~~
+
+    **Requires participant authentication**
+
+    Retrieve information about the room.
+
+    Response body parameters:
+
+    - **roomToken**, The token used to identify this room.
+    - **roomName**, The name of the room.
+    - **roomUrl**, A URL that can be given to other users to allow them to join the room.
+    - **roomOwner**, The user-friendly display name indicating the name of the room's owner.
+    - **maxSize**, The maximum number of users allowed in the room at
+      one time (as configured by the room owner).
+    - **clientMaxSize**, The current maximum number of users allowed
+      in the room, as constrained by the clients currently
+      participating in the session. If no client has a supported size
+      smaller than "maxSize", then this will be equal to
+      "maxSize". Under no circumstances can "clientMaxSize" be larger
+      than "maxSize".
+    - **creationTime**, The time (in seconds since the Unix epoch) at which the room was created.
+    - **expiresAt**, The time (in seconds since the Unix epoch) at which the room goes away.
+    - **participants**, An array containing a list of the current room
+      participants object with these properties:
+
+      - **displayName**, The user-friendly name that should be displayed for this participant
+      - **account**, If the user is logged in, this is the FxA account
+        name or MSISDN that was used to authenticate the user for this
+        session.
+      - **roomConnectionId**, An id, unique within the room for the
+        lifetime of the room, used to identify a partcipant for the
+        duration of one instance of joining the room. If the user
+        departs and re-joins, this id will change.
+
+    - **ctime**, The time, in seconds since the Unix epoch, that any
+      of the following happened to the room:
+
+      - The room was created
+      - The owner modified its attributes with "PATCH /rooms/{token}"
+      - A user joined the room
+      - A user left the room
+
+
+POST /rooms/:token
+~~~~~~~~~~~~~~~~~~
+
+This endpoint handle three kinds of actions:
+
+- **join**, A new participant join the room.
+- **refresh**, A participant notifies he is still in the room.
+- **leave**, A participant notifies he is leaving the room.
+
+
+Joining the room
+________________
+
+    Request body parameters:
+
+    - **action**, Should be "join" in that case
+    - **displayName**, The participant friendly name for this room
+    - **clientMaxSize**, Maximum number of room participants the
+      user's client is capable of supporting.
+
+    Response body parameters:
+
+    - **apiKey**, The TokBox public api key.
+    - **sessionId**, The TokBox session identifier (identifies the room)
+    - **sessionToken**, The TokBox session token (identifies the room participant)
+    - **expires**, The number of seconds within which the client must
+      send another POST to this endpoint with the refresh action to
+      remain a participant in this room.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+Refreshing membership in a room
+_______________________________
+
+    Request body parameters:
+
+    - **action**, Should be "refresh" in that case
+
+    The endpoint will return a **204 No Content** response.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+Leaving the room
+________________
+
+    Request body parameters:
+
+    - **action**, Should be "refresh" in that case
+
+    The endpoint will return a **204 No Content** response.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+GET /rooms
+~~~~~~~~~~
+
+    **Requires owner authentication**
+
+    Retrieve a list of rooms owned by the owner.
+
+    The response is a list of objects with this informations:
+
+    - **roomToken**, The token used to identify this room.
+    - **roomName**, The name of the room.
+    - **roomUrl**, A URL that can be given to other users to allow them to join the room.
+    - **roomOwner**, The user-friendly display name indicating the name of the room's owner.
+    - **maxSize**, The maximum number of users allowed in the room at
+      one time (as configured by the room owner).
+    - **clientMaxSize**, The current maximum number of users allowed
+      in the room, as constrained by the clients currently
+      participating in the session. If no client has a supported size
+      smaller than "maxSize", then this will be equal to
+      "maxSize". Under no circumstances can "clientMaxSize" be larger
+      than "maxSize".
+    - **creationTime**, The time (in seconds since the Unix epoch) at which the room was created.
+    - **expiresAt**, The time (in seconds since the Unix epoch) at which the room goes away.
+    - **participants**, An array containing a list of the current room
+      participants object with these properties:
+
+      - **displayName**, The user-friendly name that should be displayed for this participant
+      - **account**, If the user is logged in, this is the FxA account
+        name or MSISDN that was used to authenticate the user for this
+        session.
+      - **roomConnectionId**, An id, unique within the room for the
+        lifetime of the room, used to identify a partcipant for the
+        duration of one instance of joining the room. If the user
+        departs and re-joins, this id will change.
+
+    - **ctime**, The time, in seconds since the Unix epoch, that any
+      of the following happened to the room:
+
+      - The room was created
+      - The owner modified its attributes with "PATCH /rooms/{token}"
+      - A user joined the room
+      - A user left the room
+
+
+Account and Session
+-------------------
+
 DELETE /account
 ~~~~~~~~~~~~~~~
 
@@ -713,7 +935,7 @@ DELETE /session
     This should be used to clear the hawk session of a Firefox Account
     user. You should not attempt to call this endpoint with a
     non-firefox account session, since it would mean as a client you
-    could not attach a session anymore.  
+    could not attach a session anymore.
 
     In case you want to destroy a non-FxA session, please use the
     DELETE /account endpoint.

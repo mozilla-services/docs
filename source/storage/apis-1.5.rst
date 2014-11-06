@@ -361,7 +361,7 @@ collection.
 
     Deletes an entire collection.
 
-    After executing this request, the collection will not appear 
+    After executing this request, the collection will not appear
     in the output of **GET /info/collections** and calls to
     **GET /storage/<collection>** will return an empty list.
 
