@@ -470,6 +470,21 @@ POST /calls/{token}
     - **callType**, Specifies the type of media the remote party intends to
       send. Valid values are "audio" or "audio-video".
 
+    Optional parameters:
+
+    - **channel**, the TokBox channel to use for the call
+
+    Channel can be one of:
+
+    - **release**
+    - **esr**
+    - **beta**
+    - **aurora**
+    - **nightly**
+    - **default**
+    - **mobile** -- used for the Firefox OS Mobile client
+    - **standalone** -- used for the standalone / "link-clicker" client
+
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
 
@@ -495,7 +510,8 @@ POST /calls/{token}
         User-Agent: HTTPie/0.8.0
 
         {
-            "callType": "audio-video"
+            "callType": "audio-video",
+            "channel": "nightly"
         }
 
         HTTP/1.1 200 OK
@@ -547,6 +563,21 @@ POST /calls
     - **callType**, Specifies the type of media the remote party intends to
       send. Valid values are "audio" or "audio-video".
 
+    Optional parameters:
+
+    - **channel**, the TokBox channel to use for the call
+
+    Channel can be one of:
+
+    - **release**
+    - **esr**
+    - **beta**
+    - **aurora**
+    - **nightly**
+    - **default**
+    - **mobile** -- used for the Firefox OS Mobile client
+    - **standalone** -- used for the standalone / "link-clicker" client
+
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
 
@@ -577,6 +608,7 @@ POST /calls
         {
             "callType": "audio-video"
             "calleeId": ["alexis@mozilla.com", "+34123456789"],
+            "channel": "nightly"
         }
 
         HTTP/1.1 200 OK
