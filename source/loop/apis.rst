@@ -215,7 +215,8 @@ DELETE /registration
 
     **Requires authentication**
 
-    Unregister the given session's SimplePushURLs (active the do not disturb mode)
+    Unregister the given session's SimplePushURLs. The server will not
+    be able to notify the client for this session.
 
     Example::
 
@@ -709,8 +710,13 @@ DELETE /session
 
     Deletes the current session.
 
-    In case your session is not linked to a Firefox Account, you will get a 403 Forbidden,
-    please use ``DELETE /account`` in that case.
+    This should be used to clear the hawk session of a Firefox Account
+    user. You should not attempt to call this endpoint with a
+    non-firefox account session, since it would mean as a client you
+    could not attach a session anymore.  
+
+    In case you want to destroy a non-FxA session, please use the
+    DELETE /account endpoint.
 
     Example::
 
