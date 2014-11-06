@@ -173,7 +173,7 @@ POST /registration
 
     Example (when not authenticated)::
 
-        http POST localhost:5000/v1/registration --verbose\
+        http POST localhost:5000/v1/registration --verbose \
         simplePushURL=https://push.services.mozilla.com/update/MGlYke2SrEmYE8ceyu
 
     .. code-block:: http
@@ -215,17 +215,12 @@ DELETE /registration
 
     **Requires authentication**
 
-    Unregister a given simple push-url from the loop server.
-
-    Body or querystring parameters:
-
-    - **simplePushURL**, the simple-push endpoint url as defined in
-      https://wiki.mozilla.org/WebAPI/SimplePush#Definitions
+    Unregister the given session's SimplePushURLs. The server will not
+    be able to notify the client for this session.
 
     Example::
 
-      http DELETE localhost:5000/v1/registration --verbose\
-      simplePushURL=https://test\
+      http DELETE localhost:5000/v1/registration --verbose \
       --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
@@ -234,14 +229,10 @@ DELETE /registration
         Accept: application/json
         Accept-Encoding: gzip, deflate
         Authorization: <Stripped>
-        Content-Length: 35
-        Content-Type: application/json; charset=utf-8
         Host: localhost:5000
+        Content: 0
         User-Agent: HTTPie/0.8.0
 
-        {
-            "simplePushURL": "https://test"
-        }
 
         HTTP/1.1 204 No Content
         Connection: keep-alive
@@ -286,8 +277,8 @@ POST /call-url
 
     Example::
 
-       http POST localhost:5000/v1/call-url --verbose\
-       callerId=Remy expiresIn=5 issuer=Alexis\
+       http POST localhost:5000/v1/call-url --verbose \
+       callerId=Remy expiresIn=5 issuer=Alexis \
        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
@@ -353,7 +344,7 @@ PUT /call-url/{token}
 
     Example::
 
-        http PUT localhost:5000/v1/call-url/B65nvlGh8iM --verbose\
+        http PUT localhost:5000/v1/call-url/B65nvlGh8iM --verbose \
         issuer=Adam --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
@@ -395,7 +386,7 @@ DELETE /call-url/{token}
 
     Example::
 
-        http DELETE localhost:5000/v1/call-url/_nxD4V4FflQ --verbose\
+        http DELETE localhost:5000/v1/call-url/_nxD4V4FflQ --verbose \
         --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
 
@@ -568,8 +559,8 @@ POST /calls
 
     Example::
 
-        http POST localhost:5000/v1/calls --verbose\
-        calleeId=alexis callType="audio-video"\
+        http POST localhost:5000/v1/calls --verbose \
+        calleeId=alexis callType="audio-video" \
         --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
@@ -683,6 +674,7 @@ GET /calls?version=<version>
 
     - **400 Bad Request:**  The version you passed is not valid.
 
+
 DELETE /account
 ~~~~~~~~~~~~~~~
 
@@ -692,7 +684,7 @@ DELETE /account
 
     Example::
 
-        http DELETE localhost:5000/v1/account --verbose\
+        http DELETE localhost:5000/v1/account --verbose \
         --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
 
     .. code-block:: http
@@ -709,6 +701,49 @@ DELETE /account
         Connection: keep-alive
         Date: Wed, 16 Jul 2014 13:03:39 GMT
         Server-Authorization: <stripped>
+
+
+DELETE /session
+~~~~~~~~~~~~~~~
+
+    **Requires authentication**
+
+    Deletes the current session.
+
+    This should be used to clear the hawk session of a Firefox Account
+    user. You should not attempt to call this endpoint with a
+    non-firefox account session, since it would mean as a client you
+    could not attach a session anymore.  
+
+    In case you want to destroy a non-FxA session, please use the
+    DELETE /account endpoint.
+
+    Example::
+
+        http DELETE localhost:5000/v1/session --verbose \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        DELETE /v1/session HTTP/1.1
+        Accept: */*
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 0
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        HTTP/1.1 204 No Content
+        Connection: keep-alive
+        Date: Wed, 16 Jul 2014 13:03:39 GMT
+        Server-Authorization: <stripped>
+
+    Potential HTTP error responses include:
+
+    - **403 Forbidden:** If you remove this session you will loose
+      access to your loop-server data because you will not be able to
+      link them to a new session. Use DELETE /account instead.
+
 
 Integration with Firefox Accounts using OAuth
 ---------------------------------------------
@@ -735,7 +770,7 @@ POST /fxa-oauth/params
 
     ::
 
-        http POST http://localhost:5000/v1/fxa-oauth/params --verbose\
+        http POST http://localhost:5000/v1/fxa-oauth/params --verbose \
         --auth-type=hawk --auth='ca13d91d1d4b67edf0b9523a2867b3d1b74eb63823732c441992f813f9da1f76:' --json
 
     .. code-block:: http
@@ -770,7 +805,7 @@ GET /fxa-oauth/token
 
     Returns the current status of the hawk session (e.g. if it's authenticated or not)::
 
-        http GET http://localhost:5000/v1/fxa-oauth/token  --verbose\
+        http GET http://localhost:5000/v1/fxa-oauth/token  --verbose \
         --auth-type=hawk --auth='ca13d91d1d4b67edf0b9523a2867b3d1b74eb63823732c441992f813f9da1f76:' --json
 
     If the current session is authenticated using OAuth, it returns it in the **access_token** attribute.
@@ -799,9 +834,9 @@ POST /fxa-oauth/token
 
     Trades an OAuth code with an oauth bearer token::
 
-        http POST http://localhost:5000/v1/fxa-oauth/token --verbose\
-        state=b56b3753c15efdcae80ea208134ecd6ae97f27027ce9bb11f7c333be6ea7029c\
-        code=12345
+        http POST http://localhost:5000/v1/fxa-oauth/token --verbose \
+        state=b56b3753c15efdcae80ea208134ecd6ae97f27027ce9bb11f7c333be6ea7029c \
+        code=12345 \
         --auth-type=hawk --auth='ca13d91d1d4b67edf0b9523a2867b3d1b74eb63823732c441992f813f9da1f76:' --json
 
     Checks the validity of the given code and state and exchange it with a
