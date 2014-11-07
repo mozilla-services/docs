@@ -16,7 +16,7 @@ HTTP APIs
 =========
 
 Overview
--------
+--------
 
 .. note::
 
@@ -781,6 +781,68 @@ DELETE /rooms/:token
     Deletes an existing room.
 
 
+POST /rooms/:token
+~~~~~~~~~~~~~~~~~~
+
+This endpoint handles three kinds of actions:
+
+- **join**, A new participant joins the room.
+- **refresh**, A participant notifies she is still in the room.
+- **leave**, A participant notifies she is leaving the room.
+
+
+Joining the room
+""""""""""""""""
+
+    Request body parameters:
+
+    - **action**, Should be "join" in that case.
+    - **displayName**, The participant friendly name for this room.
+    - **clientMaxSize**, Maximum number of room participants the
+      user's client is capable of supporting.
+
+    Response body parameters:
+
+    - **apiKey**, The TokBox public api key.
+    - **sessionId**, The TokBox session identifier (identifies the room).
+    - **sessionToken**, The TokBox session token (identifies the room participant).
+    - **expires**, The number of seconds within which the client must
+      send another POST to this endpoint with the refresh action to
+      remain a participant in this room.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+Refreshing membership in a room
+"""""""""""""""""""""""""""""""
+
+    Request body parameters:
+
+    - **action**, Should be "refresh" in that case.
+
+    On success, the endpoint will return a **204 No Content** response.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+Leaving the room
+""""""""""""""""
+
+    Request body parameters:
+
+    - **action**, Should be "leave" in that case.
+
+    The endpoint will return a **204 No Content** response.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
 GET /rooms/:token
 ~~~~~~~~~~~~~~~~~
 
@@ -805,16 +867,7 @@ GET /rooms/:token
     - **creationTime**, The time (in seconds since the Unix epoch) at which the room was created.
     - **expiresAt**, The time (in seconds since the Unix epoch) at which the room goes away.
     - **participants**, An array containing a list of the current room
-      participants object with these properties:
-
-      - **displayName**, The user-friendly name that should be displayed for this participant.
-      - **account**, If the user is logged in, this is the FxA account
-        name or MSISDN that was used to authenticate the user for this
-        session.
-      - **id**, An id, unique within the room for the
-        lifetime of the room, used to identify a partcipant for the
-        duration of one instance of joining the room. If the user
-        departs and re-joins, this id will change.
+      participants. :ref:`More information about the participant properties <participant-information>`.
 
     - **ctime**, The time, in seconds since the Unix epoch, that any
       of the following happened to the room:
@@ -823,68 +876,6 @@ GET /rooms/:token
       - The owner modified its attributes with "PATCH /rooms/{token}"
       - A user joined the room
       - A user left the room
-
-
-POST /rooms/:token
-~~~~~~~~~~~~~~~~~~
-
-This endpoint handles three kinds of actions:
-
-- **join**, A new participant joins the room.
-- **refresh**, A participant notifies she is still in the room.
-- **leave**, A participant notifies she is leaving the room.
-
-
-Joining the room
-________________
-
-    Request body parameters:
-
-    - **action**, Should be "join" in that case.
-    - **displayName**, The participant friendly name for this room.
-    - **clientMaxSize**, Maximum number of room participants the
-      user's client is capable of supporting.
-
-    Response body parameters:
-
-    - **apiKey**, The TokBox public api key.
-    - **sessionId**, The TokBox session identifier (identifies the room).
-    - **sessionToken**, The TokBox session token (identifies the room participant).
-    - **expires**, The number of seconds within which the client must
-      send another POST to this endpoint with the refresh action to
-      remain a participant in this room.
-
-    Potential HTTP error responses include:
-
-    - **400 Bad Request:**  Missing or invalid body parameters
-
-
-Refreshing membership in a room
-_______________________________
-
-    Request body parameters:
-
-    - **action**, Should be "refresh" in that case.
-
-    On success, the endpoint will return a **204 No Content** response.
-
-    Potential HTTP error responses include:
-
-    - **400 Bad Request:**  Missing or invalid body parameters
-
-
-Leaving the room
-________________
-
-    Request body parameters:
-
-    - **action**, Should be "leave" in that case.
-
-    The endpoint will return a **204 No Content** response.
-
-    Potential HTTP error responses include:
-
-    - **400 Bad Request:**  Missing or invalid body parameters
 
 
 GET /rooms
@@ -911,16 +902,7 @@ GET /rooms
     - **creationTime**, The time (in seconds since the Unix epoch) at which the room was created.
     - **expiresAt**, The time (in seconds since the Unix epoch) at which the room goes away.
     - **participants**, An array containing a list of the current room
-      participants object with these properties:
-
-      - **displayName**, The user-friendly name that should be displayed for this participant
-      - **account**, If the user is logged in, this is the FxA account
-        name or MSISDN that was used to authenticate the user for this
-        session.
-      - **id**, An id, unique within the room for the
-        lifetime of the room, used to identify a partcipant for the
-        duration of one instance of joining the room. If the user
-        departs and re-joins, this id will change.
+      participants. :ref:`More information about the participant properties <participant-information>`.
 
     - **ctime**, The time, in seconds since the Unix epoch, that any
       of the following happened to the room:
@@ -929,6 +911,24 @@ GET /rooms
       - The owner modified its attributes with "PATCH /rooms/{token}"
       - A user joined the room
       - A user left the room
+
+
+.. _participant-information:
+
+Participant information
+~~~~~~~~~~~~~~~~~~~~~~~
+
+    When retrieving the room information you get a list of participants.
+    It is a list of objects with these properties:
+
+    - **displayName**, The user-friendly name that should be displayed for this participant.
+    - **account**, If the user is logged in, this is the FxA account
+      name or MSISDN that was used to authenticate the user for this
+      session.
+    - **id**, An id, unique within the room for the
+      lifetime of the room, used to identify a partcipant for the
+      duration of one instance of joining the room. If the user
+      departs and re-joins, this id will change.
 
 
 Account and Session
@@ -1014,7 +1014,7 @@ Firefox Accounts documentation on MDN
 <https://developer.mozilla.org/en-US/Firefox_Accounts#Login_with_the_FxA_OAuth_HTTP_API>`_
 
 POST /fxa-oauth/params
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
     **Requires authentication**
 
