@@ -31,7 +31,7 @@ Most Services applications need to generate CEF logs. A CEF Log is a
 formatted log that can be used by ArcSight, a central application used
 by the Infrasec team to manage application security.
 
-The *cef* module provides a :func:`log_cef` function that can be 
+The *cef* module provides a :func:`log_cef` function that can be
 used to emit CEF logs:
 
     log_cef(message, severity, environ, config, [username, [signature]], \*\*kw)
@@ -66,12 +66,12 @@ server-core
 
 The *server-core* library provides helpers to build Services applications.
 
-In *server-core*'s philosophy, a WSGI application is a :class:`SyncServerApp` 
+In *server-core*'s philosophy, a WSGI application is a :class:`SyncServerApp`
 instance which will contain a **config** attribute that's a mapper containing
-all the configuration needed by the code. This configuration 
+all the configuration needed by the code. This configuration
 is loaded from a unique ini-like file.
 
-When a request comes in, *Routes* is used to dispatch it to a controller 
+When a request comes in, *Routes* is used to dispatch it to a controller
 method.
 
 Controllers are simple classes whose methods receive the request and

@@ -4,7 +4,7 @@
 Storage API v1.1
 ================
 
-The Storage server provides web services that can be used to store and 
+The Storage server provides web services that can be used to store and
 retrieve **Weave Basic Objects** or **WBOs** organized into **collections**.
 
 .. _storage_wbo:
@@ -17,7 +17,7 @@ items passed into and out of the storage server. Like all JSON, Weave
 Basic Objects need to be UTF-8 encoded. WBOs have the following fields:
 
 +---------------+-----------+------------+---------------------------------------------------------------+
-| Parameter     | Default   | Type/Max   |  Description                                                  | 
+| Parameter     | Default   | Type/Max   |  Description                                                  |
 +===============+===========+============+===============================================================+
 | id            | required  |  string    | An identifying string. For a user, the id must be unique for  |
 |               |           |  64        | a WBO within a collection, though objects in different        |
@@ -34,7 +34,7 @@ Basic Objects need to be UTF-8 encoded. WBOs have the following fields:
 | sortindex     | none      | integer    | An integer indicating the relative importance of this item in |
 |               |           |            | the collection.                                               |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| payload       | none      | string     | A string containing a JSON structure encapsulating the data   | 
+| payload       | none      | string     | A string containing a JSON structure encapsulating the data   |
 |               |           | 256k       | of the record. This structure is defined separately for each  |
 |               |           |            | WBO type. Parts of the structure may be encrypted, in which   |
 |               |           |            | case the structure should also specify a record for           |
@@ -125,60 +125,60 @@ APIs
 
 **GET** **https://server/pathname/version/username/info/collections**
 
-    Returns a hash of collections associated with the account, along with 
+    Returns a hash of collections associated with the account, along with
     the last modified timestamp for each collection.
 
 
 **GET** **https://server/pathname/version/username/info/collection_usage**
 
-    Returns a hash of collections associated with the account, along with 
+    Returns a hash of collections associated with the account, along with
     the data volume used for each (in KB).
 
 
 **GET** **https://server/pathname/version/username/info/collection_counts**
 
-    Returns a hash of collections associated with the account, along with 
+    Returns a hash of collections associated with the account, along with
     the total number of items in each collection.
 
 
 **GET** **https://server/pathname/version/username/info/quota**
 
-    Returns a list containing the user's current usage and quota (in KB). 
+    Returns a list containing the user's current usage and quota (in KB).
     The second value will be null if no quota is defined.
 
 
 **GET** **https://server/pathname/version/username/storage/collection**
 
-    Returns a list of the WBO ids contained in a collection. 
+    Returns a list of the WBO ids contained in a collection.
     This request has additional optional parameters:
 
-    - **ids**: returns the ids for objects in the collection that are in 
+    - **ids**: returns the ids for objects in the collection that are in
       the provided comma-separated list.
 
-    - **predecessorid**: returns the ids for objects in the collection 
-      that are directly preceded by the id given. Usually only returns 
+    - **predecessorid**: returns the ids for objects in the collection
+      that are directly preceded by the id given. Usually only returns
       one result. [4]_
 
-    - **parentid**: returns the ids for objects in the collection that 
+    - **parentid**: returns the ids for objects in the collection that
       are the children of the parent id given. [4]_
 
-    - **older**: returns only ids for objects in the collection that 
+    - **older**: returns only ids for objects in the collection that
       have been last modified before the date given.
 
-    - **newer**: returns only ids for objects in the collection that 
+    - **newer**: returns only ids for objects in the collection that
       have been last modified since the date given.
 
     - **full**: if defined, returns the full WBO, rather than just the id.
 
-    - **index_above**: if defined, only returns items with a higher 
+    - **index_above**: if defined, only returns items with a higher
       sortindex than the value specified.
 
-    - **index_below**: if defined, only returns items with a lower 
+    - **index_below**: if defined, only returns items with a lower
       sortindex than the value specified.
 
     - **limit**: sets the maximum number of ids that will be returned.
 
-    - **offset**: skips the first n ids. For use with the limit 
+    - **offset**: skips the first n ids. For use with the limit
       parameter (required) to paginate through a result set.
 
     - **sort**: sorts the output.
@@ -189,18 +189,18 @@ APIs
 
 
 
-    Two alternate output formats are available for multiple record GET 
-    requests. They are triggered by the presence of the appropriate 
-    format in the **Accept** header (with *application/whoisi* taking 
+    Two alternate output formats are available for multiple record GET
+    requests. They are triggered by the presence of the appropriate
+    format in the **Accept** header (with *application/whoisi* taking
     precedence):
 
-    - **application/whoisi**: each record consists of a 32-bit integer, 
-      defining the length of the record, followed by the json record for a 
+    - **application/whoisi**: each record consists of a 32-bit integer,
+      defining the length of the record, followed by the json record for a
       WBO
 
-    - **application/newlines**: each record is a separate json object on 
-      its own line. Newlines in the body of the json object are replaced 
-      by '\u000a' 
+    - **application/newlines**: each record is a separate json object on
+      its own line. Newlines in the body of the json object are replaced
+      by '\u000a'
 
 
 
@@ -211,8 +211,8 @@ APIs
 
 **PUT** **https://server/pathname/version/username/storage/collection/id**
 
-    Adds the WBO defined in the request body to the collection. If the WBO 
-    does not contain a payload, it will only update the provided metadata 
+    Adds the WBO defined in the request body to the collection. If the WBO
+    does not contain a payload, it will only update the provided metadata
     fields on an already defined object.
 
     The server will return the timestamp associated with the modification.
@@ -220,13 +220,13 @@ APIs
 
 **POST** **https://server/pathname/version/username/storage/collection**
 
-    Takes an array of WBOs in the request body and iterates over them, 
+    Takes an array of WBOs in the request body and iterates over them,
     effectively doing a series of atomic PUTs with the same timestamp.
 
-    Returns a hash of successful and unsuccessful saves, including 
+    Returns a hash of successful and unsuccessful saves, including
     guidance as to possible errors::
 
-        {"modified": 1233702554.25, 
+        {"modified": 1233702554.25,
          "success": ["{GXS58IDC}12", "{GXS58IDC}13", "{GXS58IDC}15",
                      "{GXS58IDC}16", "{GXS58IDC}18", "{GXS58IDC}19"],
          "failed": {"{GXS58IDC}11": ["invalid parentid"],
@@ -237,25 +237,25 @@ APIs
 
 **DELETE** **https://server/pathname/version/username/storage/collection**
 
-    Deletes the collection and all contents. Additional request parameters 
+    Deletes the collection and all contents. Additional request parameters
     may modify the selection of which items to delete:
 
-    - **ids**: deletes the ids for objects in the collection that are in 
-      the provided comma-separated list. 
+    - **ids**: deletes the ids for objects in the collection that are in
+      the provided comma-separated list.
 
-    - **parentid**: only deletes objects in the collection that are the 
+    - **parentid**: only deletes objects in the collection that are the
       children of the parent id given. [4]_
 
-    - **older**: only deletes objects in the collection that have been 
+    - **older**: only deletes objects in the collection that have been
       last modified before the date given. [4]_
 
-    - **newer**: only deletes objects in the collection that have been 
+    - **newer**: only deletes objects in the collection that have been
       last modified since the date given. [4]_
 
     - **limit**: sets the maximum number of objects that will be deleted. [4]_
 
-    - **offset**: skips the first n objects in the defined set. Must be 
-      used with the limit parameter. [5]_ 
+    - **offset**: skips the first n objects in the defined set. Must be
+      used with the limit parameter. [5]_
 
     - **sort**: sorts before deleting [4]_
 
@@ -271,10 +271,10 @@ APIs
 
 **DELETE** **https://server/pathname/version/username/storage**
 
-    Deletes all records for the user. Will return a precondition error 
+    Deletes all records for the user. Will return a precondition error
     unless an *X-Confirm-Delete* header is included.
 
-    All delete requests return the timestamp of the action. 
+    All delete requests return the timestamp of the action.
 
 
 .. [4] Deprecated in 1.1
@@ -299,7 +299,7 @@ Headers
 
 **X-If-Unmodified-Since**
 
-    On any write transaction (PUT, POST, DELETE), this header may be added 
+    On any write transaction (PUT, POST, DELETE), this header may be added
     to the request, set to a timestamp in decimal seconds. If the collection to
     be acted on has been modified since the provided timestamp, the request
     will fail with an HTTP 412 Precondition Failed status.
@@ -307,22 +307,22 @@ Headers
 
 **X-Weave-Alert**
 
-    This header may be sent back from any transaction, and contains potential 
-    warning messages, information, or other alerts. The contents are 
+    This header may be sent back from any transaction, and contains potential
+    warning messages, information, or other alerts. The contents are
     intended to be human-readable.
-    
+
 
 **X-Weave-Timestamp**
 
-    This header will be sent back with all requests, indicating the current 
-    timestamp on the server. If the request was a PUT or POST, this will 
+    This header will be sent back with all requests, indicating the current
+    timestamp on the server. If the request was a PUT or POST, this will
     also be the modification date of any WBOs submitted or modified.
 
 
 **X-Weave-Records**
 
-    If supported by the DB, this header will return the number of records 
-    total in the request body of any multiple-record GET request. 
+    If supported by the DB, this header will return the number of records
+    total in the request body of any multiple-record GET request.
 
 HTTP status codes
 =================

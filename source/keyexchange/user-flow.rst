@@ -32,11 +32,11 @@ or a desktop computer, and "Desktop" refers to a desktop computer.
 Overview
 ========
 
-- Mobile and Desktop complete the two roundtrips of J-PAKE messages to agree 
+- Mobile and Desktop complete the two roundtrips of J-PAKE messages to agree
   upon a strong secret K.
-- A 256-bit key is derived from K using HMAC-SHA256 using a fixed extraction 
+- A 256-bit key is derived from K using HMAC-SHA256 using a fixed extraction
   key.
-- The encryption and HMAC keys are derived from that 256-bit key using 
+- The encryption and HMAC keys are derived from that 256-bit key using
   HMAC-SHA256.
 - To establish the pairing, Mobile encrypts the known message
   "0123456789ABCDEF" with the AES key and uploads it. Desktop verifies that it
@@ -45,7 +45,7 @@ Overview
 - To exchange credentials after a successful pairing and possibly account
   creation on Desktop:
 
-  - Desktop encrypts the credentials with the encryption key and uploads the 
+  - Desktop encrypts the credentials with the encryption key and uploads the
     encrypted credentials in turn, adding a HMAC-SHA256 hash of the ciphertext
     (using the HMAC key).
   - Mobile verifies the ciphertext against the HMAC-SHA256 hash.  If
@@ -96,26 +96,26 @@ Detailed Flow
 1. Mobile asks server for new channel ID (4 characters a-z0-9)
 
    ::
-    
+
        C: GET /new_channel HTTP/1.1
        S: "a7id"
 
 
-2. Mobile generates PIN from random weak secret (4 characters a-z0-9) 
+2. Mobile generates PIN from random weak secret (4 characters a-z0-9)
    and the channel ID, computes and uploads J-PAKE msg 1.
 
-   **New in v2:** To prevent double uploads in case of retries, the 
+   **New in v2:** To prevent double uploads in case of retries, the
    ``If-None-Match: *`` header may be specified. This ensures that the message
-   is only uploaded if the channel is empty. If it is not then the request 
-   will fail with a 412 Precondition Failed which should be considered the 
-   same as 200 OK. The 412 will also contain the Etag of the data was the 
+   is only uploaded if the channel is empty. If it is not then the request
+   will fail with a 412 Precondition Failed which should be considered the
+   same as 200 OK. The 412 will also contain the Etag of the data was the
    client just uploaded.
 
    ::
 
     C: PUT /a7id HTTP/1.1
     C: If-None-Match: *
-    C: 
+    C:
     C: {
     C:    'type': 'receiver1',
     C:    'version': 3,   // new in v3
@@ -147,7 +147,7 @@ Detailed Flow
     S: ETag: "etag-of-receiver1-message"
 
 
-3. Desktop asks user for the PIN, extracts channel ID and weak secret, fetches 
+3. Desktop asks user for the PIN, extracts channel ID and weak secret, fetches
    Mobile's msg 1::
 
     C: GET /a7id HTTP/1.1
@@ -167,17 +167,17 @@ Detailed Flow
 4. Desktop computes and uploads msg 1.
 
    **New in v2:** The ``If-Match`` header may be set so that we only upload this
-   message if the other side's previous message is still in the channel. This 
-   is to prevent double PUTs during retries. If a 412 is received then it 
-   means that our first PUT was actually correctly received by the server and 
-   that the other side has already uploaded its next message. 
+   message if the other side's previous message is still in the channel. This
+   is to prevent double PUTs during retries. If a 412 is received then it
+   means that our first PUT was actually correctly received by the server and
+   that the other side has already uploaded its next message.
    So just consider the 412 to be a 200.
 
    ::
 
     C: PUT /a7id HTTP/1.1
     C: If-Match: "etag-of-receiver1-message"
-    C: 
+    C:
     C: {
     C:    'type': 'sender1',
     C:    'version': 3,   // new in v3
@@ -226,15 +226,15 @@ Detailed Flow
    Mobile computes and uploads msg 2.
 
    **New in v2:** The ``If-Match`` header may be set so that we only upload this
-   message if the other side's previous message is still in the channel. This 
-   is to prevent double PUTs during retries. If a 412 is received then it means 
-   that our first PUT was actually correctly received by the server and that 
+   message if the other side's previous message is still in the channel. This
+   is to prevent double PUTs during retries. If a 412 is received then it means
+   that our first PUT was actually correctly received by the server and that
    the other side has already uploaded its next message. In this instance, the
    client can effectively consider the 412 to be a 200.::
 
     C: PUT /a7id HTTP/1.1
     C: If-Match: "etag-of-sender1-message"
-    C: 
+    C:
     C: {
     C:    'type': 'receiver2',
     C:    'version': 3,   // new in v3
@@ -272,9 +272,9 @@ Detailed Flow
    Desktop computes key, computes and uploads msg 2.
 
    **New in v2:** The ``If-Match`` header may be set so that we only upload this
-   message if the other side's previous message is still in the channel. This 
-   is to prevent double PUTs during retries. If a 412 is received then it 
-   means that our first PUT was actually correctly received by the server and 
+   message if the other side's previous message is still in the channel. This
+   is to prevent double PUTs during retries. If a 412 is received then it
+   means that our first PUT was actually correctly received by the server and
    that the other side has already uploaded its next message. In this
    instance, the client can effectively consider the 412 to be a 200.
 
@@ -282,7 +282,7 @@ Detailed Flow
 
     C: PUT /a7id HTTP/1.1
     C: If-Match: "etag-of-receiver2-message"
-    C: 
+    C:
     C: {
     C:    'type': 'sender2',
     C:    'version': 3,   // new in v3
@@ -318,21 +318,21 @@ Detailed Flow
 
     S: HTTP/1.1 304 Not Modified
 
-   Mobile computes key, uploads encrypted known message "0123456789ABCDEF" to 
+   Mobile computes key, uploads encrypted known message "0123456789ABCDEF" to
    prove its knowledge (msg 3).
 
-   **New in v2:** The ``If-Match`` header may be set so that we only upload 
-   this message if the other side's previous message is still in the channel. 
-   This is to prevent double PUTs during retries. If a 412 is received then it 
-   means that our first PUT was actually correctly received by the server and 
-   that the other side has already uploaded its next message. 
+   **New in v2:** The ``If-Match`` header may be set so that we only upload
+   this message if the other side's previous message is still in the channel.
+   This is to prevent double PUTs during retries. If a 412 is received then it
+   means that our first PUT was actually correctly received by the server and
+   that the other side has already uploaded its next message.
    In this instance, the client can effectively consider the 412 to be a 200.
 
    ::
 
         C: PUT /a7id HTTP/1.1
         C: If-Match: "etag-of-sender2-message"
-        C: 
+        C:
         C: {
         C:    'type': 'receiver3',
         C:    'version': 3,   // new in v3
@@ -368,10 +368,10 @@ Detailed Flow
    Once credentials are available, and if the channel is still available,
    Desktop encrypts the credentials and uploads them.
 
-   **New in v2:** The ``If-Match`` header may be set so that we only upload 
-   this message if the other side's previous message is still in the channel. 
-   This is to prevent double PUTs during retries. If a 412 is received then 
-   it means that our first PUT was actually correctly received by the server 
+   **New in v2:** The ``If-Match`` header may be set so that we only upload
+   this message if the other side's previous message is still in the channel.
+   This is to prevent double PUTs during retries. If a 412 is received then
+   it means that our first PUT was actually correctly received by the server
    and that the other side has already uploaded its next message.
    In this instance, the client can effectively consider the 412 to be a 200.
 
@@ -383,7 +383,7 @@ Detailed Flow
 
         C: PUT /a7id HTTP/1.1
         C: If-Match: "etag-of-receiver3-message"
-        C: 
+        C:
         C: {
         C:    'type': 'sender3',
         C:    'version': 3,   // new in v3
@@ -412,7 +412,7 @@ Detailed Flow
         S: HTTP/1.1 200 OK
         ...
 
-   This means that Mobile will receive a 404 when it tries to retrieve 
+   This means that Mobile will receive a 404 when it tries to retrieve
    the encrypted credentials.
 
 
@@ -424,7 +424,7 @@ Detailed Flow
     C: If-None-Match: "etag-of-receiver3-message"
 
     S: HTTP/1.1 200 OK
-    ... 
+    ...
 
    Decrypts Sync credentials and verifies HMAC.
 
@@ -436,6 +436,6 @@ Detailed Flow
      C: DELETE /a7id HTTP/1.1
 
      S: HTTP/1.1 200 OK
-     ... 
+     ...
 
 11. Mobile starts syncing.

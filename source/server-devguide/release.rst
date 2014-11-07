@@ -30,7 +30,7 @@ Let's say you want to release **1.2**, create a *1.2-release* branch::
 
     $ git checkout -b 1.2-release
 
-Go back to the default branch, then change the release to **1.3.dev1**, 
+Go back to the default branch, then change the release to **1.3.dev1**,
 so any further change will be in the 1.3 train.
 
 The version is located in the *.spec* file under the **version** field.
@@ -55,7 +55,7 @@ Change the .spec file version to 1.2 (it's probably 1.2.devX right now)
 2. Pin the dependencies versions
 ::::::::::::::::::::::::::::::::
 
-When you release an application, you must make sure that all the dependencies 
+When you release an application, you must make sure that all the dependencies
 are pinned. If you don't do this, you can't be sure the application will be
 run in stage or production with the same versions that the ones you've
 tested.
@@ -146,13 +146,13 @@ Examples::
 Building the app can now be done, by providing the tag value for your
 app, and if needed a tag value for internal dependencies.
 
-For example for account-portal (uses server-core), a call can look like 
+For example for account-portal (uses server-core), a call can look like
 this::
 
     $ make build_rpms SERVER_CORE=rpm-2.0 ACCOUNT_PORTAL=rpm-1.2 RPM_CHANNEL=stage
 
 The syntax for the options is: **PROJECT_NAME=rpm-X.X**. When used,
-will checkout the given project at the mentioned tag. 
+will checkout the given project at the mentioned tag.
 The tag can be a release tag, or *master*.
 
 *PROJECT_NAME* refers to the name of the repository, after it has been
@@ -220,14 +220,14 @@ is left to the judgment of the releaser.
 
 We don't really have any strategy here, like incrementing *MAJOR* only
 on backward incompatible changes: all Python packages we use are part of a
-server application and the only public facing API is documented web services 
+server application and the only public facing API is documented web services
 that have their own versioning scheme.
 
 That said, if a library is published at PyPI, it has supposedly reached
 a stable state, and incrementing the *MAJOR* version should occur on backward
 incompatible changes.
 
-When a release fails in stage or prod, we can use a *MAJOR.MINOR.MICRO* 
+When a release fails in stage or prod, we can use a *MAJOR.MINOR.MICRO*
 scheme to fix it.
 
 
@@ -273,7 +273,7 @@ It should contain these targets:
 
 - *build*: builds the project in-place
 - *tests*: runs the tests.
-- *build_rpms*: build the RPM collection. The collection must include the 
+- *build_rpms*: build the RPM collection. The collection must include the
   project RPM but also all direct and indirect dependencies.
 - *mock*: builds the RPMs, install them in a chroot, then make sure the
   app can be imported in Python
@@ -337,10 +337,10 @@ Channels
 
 We define three channels:
 
-- **dev**: development channel, most dependencies are unpinned, so the latest 
+- **dev**: development channel, most dependencies are unpinned, so the latest
   PyPI release is taken
 - **prod**: all dependencies should be pinned **default one**
-- **stage**: all dependencies should be pinned -- might vary from production 
+- **stage**: all dependencies should be pinned -- might vary from production
   versions. This channel is most of the time the same as production but can be
   useful in case the staging environment needs to be different.
 
@@ -348,9 +348,9 @@ We define three channels:
 Requirement files
 :::::::::::::::::
 
-All dependencies are listed in requirement files. A requirement file is a text 
-file with a list of dependencies. One per line. Each dependency can have a 
-version information. The file follows Pip's standard. 
+All dependencies are listed in requirement files. A requirement file is a text
+file with a list of dependencies. One per line. Each dependency can have a
+version information. The file follows Pip's standard.
 See http://www.pip-installer.org/en/latest/requirement-format.html
 
 Example::
@@ -372,7 +372,7 @@ Example::
     recaptcha-client
 
 
-There should be three requirement files located at the root 
+There should be three requirement files located at the root
 of the project, one for each channel:
 
 1. dev-reqs.txt: requirements for the **dev channel**
@@ -406,7 +406,7 @@ picks the corresponding requirement files to decide which version to pick.
 Unpinned versions will make the build process pick the latest release at PyPI.
 (Even if it's not stable!)
 
-For the *build* target the default value is *dev* and for the *build_rpms* 
+For the *build* target the default value is *dev* and for the *build_rpms*
 option it's *prod*.
 
 You can also force a specific channel for *build* with the **CHANNEL** variable::

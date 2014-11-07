@@ -16,7 +16,7 @@ code all our applications should have.
 
 A minimal Services' project usually contains:
 
-- **Makefile** and **build.py**: used to build the environment, run tests, 
+- **Makefile** and **build.py**: used to build the environment, run tests,
   etc.
 - **RPM spec**: used to build the project's RPM.
 - a directory for the Python code.
@@ -28,7 +28,7 @@ A minimal Services' project usually contains:
 Paster Template
 ---------------
 
-You can create a new application layout by using the *services_base* Paster 
+You can create a new application layout by using the *services_base* Paster
 template provided by *MoPyTools*, which will ask you a few questions::
 
     $ paster create -t services_base MyApp
@@ -66,7 +66,7 @@ Once the application is generated, a default layout is created::
     MyApp/build.py
 
 
-You can build and test that the project is ready, by going in the 
+You can build and test that the project is ready, by going in the
 directory and running::
 
     $ make build test
@@ -94,7 +94,7 @@ replaced by underlines ("_"). So "server-core" becomes "SERVER_CORE".
 
 For more info on building and releasing, see :ref:`releasing`.
 
-The **test** target runs the Nose test runner, and can be used to 
+The **test** target runs the Nose test runner, and can be used to
 work on the code. It's also used by Jenkins to continuously test your
 project.
 
@@ -104,9 +104,9 @@ See :ref:`rpm-building` for more info on the building process.
 RPM Spec file
 -------------
 
-The spec file that gets generated is used by "make build_rpm" to generate a 
+The spec file that gets generated is used by "make build_rpm" to generate a
 RPM for your application. It contains all the required dependencies for a stock
-Services application, but will require that you add any new dependency your 
+Services application, but will require that you add any new dependency your
 code needs.
 
 setup.py and MANIFEST.in

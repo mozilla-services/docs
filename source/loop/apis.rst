@@ -16,7 +16,7 @@ HTTP APIs
 =========
 
 Overview
--------
+--------
 
 .. note::
 
@@ -36,6 +36,7 @@ The current API is versioned, using only a major version. All the endpoints for
 version 1 are prefixed by `/v1/`. In case you don't specify the prefix, your
 requests will be redirected automatically with an http `307` status.
 
+.. _hawk-authentication:
 
 Authentication
 --------------
@@ -82,9 +83,8 @@ If you are writting a client, you might find these resources useful:
 - With python:
   https://github.com/mozilla-services/loop-server/blob/master/loadtests/loadtest.py#L99-L122
 
-HTTP API - Reference
----------------------
-
+Configuration
+-------------
 
 GET /
 ~~~~~
@@ -148,6 +148,36 @@ GET /push-server-config
     **200 OK**.
 
 
+Healthcheck
+-----------
+
+GET /__healthcheck__
+~~~~~~~~~~~~~~~~~~~~
+
+   - Returns 200 in case of success
+   - Returns 503 with the backend error message in case backends are broken
+
+    .. code-block:: http
+
+        http localhost:5000/__heartbeat__
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 32
+        Content-Type: application/json; charset=utf-8
+        Date: Fri, 07 Nov 2014 13:02:45 GMT
+        ETag: W/"20-e938360a"
+        Timestamp: 1415365365
+
+        {
+            "provider": true,
+            "storage": true
+        }
+
+
+Registration
+------------
+
 POST /registration
 ~~~~~~~~~~~~~~~~~~
 
@@ -210,6 +240,7 @@ POST /registration
       not a valid URL.
     - **401 Unauthorized:** The credentials you passed aren't valid.
 
+
 DELETE /registration
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -249,6 +280,8 @@ DELETE /registration
       not a valid URL.
     - **401 Unauthorized:** The credentials you passed aren't valid.
 
+Call URLs
+---------
 
 POST /call-url
 ~~~~~~~~~~~~~~
@@ -411,6 +444,8 @@ DELETE /call-url/{token}
     - **400 Bad Request:**  The token you passed is not valid or expired.
     - **404 Not Found:**  The token you passed doesn't exist.
 
+Calls
+-----
 
 GET /calls/{token}
 ~~~~~~~~~~~~~~~~~~
@@ -707,6 +742,251 @@ GET /calls?version=<version>
     - **400 Bad Request:**  The version you passed is not valid.
 
 
+Rooms
+-----
+
+Some endpoints requires **owner** authentication, it is the account
+used to create the room on the ``POST /rooms``.
+
+On these endpoints only the owner can perform the action on the room.
+
+Some endpoints requires **participants** authentification, it is
+either the Hawk Session used to join the room using the :ref:`Hawk
+Authorization scheme <hawk-authentication>` or the sessionToken the
+user has got when joining anonymously using the :ref:`Basic Auth
+Authorization scheme <basic-auth-authorization>`.
+
+.. _basic-auth-authorization:
+
+Basic Auth Authorization
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+In that case, just use the room participant sessionToken as a Basic
+Auth username with no password.
+
+    http POST localhost:5000/rooms/:token --auth "_sessionToken_:"
+
+    Authorization: Basic X3Nlc3Npb25Ub2tlbl86
+
+POST /rooms
+~~~~~~~~~~~
+
+    **Requires owner authentication**
+
+    Creates a new room
+
+    Request body parameters:
+
+    - **roomName**, The name of the room.
+    - **roomOwner**, The room owner name.
+    - **maxSize**, The maximum number of people the room can handle.
+
+    Optional parameter:
+
+    - **expiresIn**, the number of hours for which the room will exist.
+
+    Response body parameters:
+
+    - **roomToken**, The token used to identify the created room.
+    - **roomUrl**, A URL that can be given to other users to allow them to join the room.
+    - **expiresAt**, The date after which the room will no longer be
+      valid (in seconds since the Unix epoch).
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+PATCH /rooms/:token
+~~~~~~~~~~~~~~~~~~~
+
+    **Requires owner authentication**
+
+    Updates an existing room
+
+    Optional request body parameters:
+
+    - **roomName**, The name of the room.
+    - **roomOwner**, The room owner name.
+    - **maxSize**, The maximum number of people the room can handle.
+    - **expiresIn**, the number of hours for which the room will exist.
+
+    You only need set the body parameters you want to update.
+
+    Response body parameters:
+
+    - **expiresAt**, The date after which the room will no longer be
+      valid (in seconds since the Unix epoch)
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+DELETE /rooms/:token
+~~~~~~~~~~~~~~~~~~~~
+
+    **Requires owner authentication**
+
+    Deletes an existing room.
+
+
+POST /rooms/:token
+~~~~~~~~~~~~~~~~~~
+
+This endpoint handles three kinds of actions:
+
+- **join**, A new participant joins the room.
+- **refresh**, A participant notifies she is still in the room.
+- **leave**, A participant notifies she is leaving the room.
+
+
+Joining the room
+""""""""""""""""
+
+    Request body parameters:
+
+    - **action**, Should be "join" in that case.
+    - **displayName**, The participant friendly name for this room.
+    - **clientMaxSize**, Maximum number of room participants the
+      user's client is capable of supporting.
+
+    Response body parameters:
+
+    - **apiKey**, The TokBox public api key.
+    - **sessionId**, The TokBox session identifier (identifies the room).
+    - **sessionToken**, The TokBox session token (identifies the room participant).
+    - **expires**, The number of seconds within which the client must
+      send another POST to this endpoint with the refresh action to
+      remain a participant in this room.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+Refreshing membership in a room
+"""""""""""""""""""""""""""""""
+
+    **Requires participant authentication**
+
+
+    Request body parameters:
+
+    - **action**, Should be "refresh" in that case.
+
+    On success, the endpoint will return a **204 No Content** response.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+Leaving the room
+""""""""""""""""
+
+    Request body parameters:
+
+    - **action**, Should be "leave" in that case.
+
+    The endpoint will return a **204 No Content** response.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+
+GET /rooms/:token
+~~~~~~~~~~~~~~~~~
+
+    **Requires participant authentication**
+
+    Retrieves information about the room.
+
+    Response body parameters:
+
+    - **roomToken**, The token used to identify this room.
+    - **roomName**, The name of the room.
+    - **roomUrl**, A URL that can be given to other users to allow them to join the room.
+    - **roomOwner**, The user-friendly display name indicating the name of the room's owner.
+    - **maxSize**, The maximum number of users allowed in the room at
+      one time (as configured by the room owner).
+    - **clientMaxSize**, The current maximum number of users allowed
+      in the room, as constrained by the clients currently
+      participating in the session. If no client has a supported size
+      smaller than "maxSize", then this will be equal to
+      "maxSize". Under no circumstances can "clientMaxSize" be larger
+      than "maxSize".
+    - **creationTime**, The time (in seconds since the Unix epoch) at which the room was created.
+    - **expiresAt**, The time (in seconds since the Unix epoch) at which the room goes away.
+    - **participants**, An array containing a list of the current room
+      participants. :ref:`More information about the participant properties <participant-information>`.
+
+    - **ctime**, The time, in seconds since the Unix epoch, that any
+      of the following happened to the room:
+
+      - The room was created
+      - The owner modified its attributes with "PATCH /rooms/{token}"
+      - A user joined the room
+      - A user left the room
+
+
+GET /rooms
+~~~~~~~~~~
+
+    **Requires owner authentication**
+
+    Retrieves a list of rooms owned by the owner.
+
+    The response is a list of objects with this information:
+
+    - **roomToken**, The token used to identify this room.
+    - **roomName**, The name of the room.
+    - **roomUrl**, A URL that can be given to other users to allow them to join the room.
+    - **roomOwner**, The user-friendly display name indicating the name of the room's owner.
+    - **maxSize**, The maximum number of users allowed in the room at
+      one time (as configured by the room owner).
+    - **clientMaxSize**, The current maximum number of users allowed
+      in the room, as constrained by the clients currently
+      participating in the session. If no client has a supported size
+      smaller than "maxSize", then this will be equal to
+      "maxSize". Under no circumstances can "clientMaxSize" be larger
+      than "maxSize".
+    - **creationTime**, The time (in seconds since the Unix epoch) at which the room was created.
+    - **expiresAt**, The time (in seconds since the Unix epoch) at which the room goes away.
+    - **participants**, An array containing a list of the current room
+      participants. :ref:`More information about the participant properties <participant-information>`.
+
+    - **ctime**, The time, in seconds since the Unix epoch, that any
+      of the following happened to the room:
+
+      - The room was created
+      - The owner modified its attributes with "PATCH /rooms/{token}"
+      - A user joined the room
+      - A user left the room
+
+
+.. _participant-information:
+
+Participant information
+~~~~~~~~~~~~~~~~~~~~~~~
+
+    When retrieving the room information you get a list of participants.
+    It is a list of objects with these properties:
+
+    - **displayName**, The user-friendly name that should be displayed for this participant.
+    - **account**, If the user is logged in, this is the FxA account
+      name or MSISDN that was used to authenticate the user for this
+      session.
+    - **id**, An id, unique within the room for the
+      lifetime of the room, used to identify a partcipant for the
+      duration of one instance of joining the room. If the user
+      departs and re-joins, this id will change.
+
+
+Account and Session
+-------------------
+
 DELETE /account
 ~~~~~~~~~~~~~~~
 
@@ -745,7 +1025,7 @@ DELETE /session
     This should be used to clear the hawk session of a Firefox Account
     user. You should not attempt to call this endpoint with a
     non-firefox account session, since it would mean as a client you
-    could not attach a session anymore.  
+    could not attach a session anymore.
 
     In case you want to destroy a non-FxA session, please use the
     DELETE /account endpoint.
@@ -787,7 +1067,7 @@ Firefox Accounts documentation on MDN
 <https://developer.mozilla.org/en-US/Firefox_Accounts#Login_with_the_FxA_OAuth_HTTP_API>`_
 
 POST /fxa-oauth/params
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
     **Requires authentication**
 
@@ -840,7 +1120,8 @@ GET /fxa-oauth/token
         http GET http://localhost:5000/v1/fxa-oauth/token  --verbose \
         --auth-type=hawk --auth='ca13d91d1d4b67edf0b9523a2867b3d1b74eb63823732c441992f813f9da1f76:' --json
 
-    If the current session is authenticated using OAuth, it returns it in the **access_token** attribute.
+    If the current session is authenticated using OAuth, it returns it
+    in the **access_token** attribute.
 
     .. code-block:: http
 
@@ -903,7 +1184,8 @@ Also the associated errno can be one of:
 
 - **105 INVALID_TOKEN**: This come with a 404 on a wrong call-url token;
 - **106 BADJSON**: This come with a 406 if the sent JSON is not parsable;
-- **107 INVALID_PARAMETERS**: This come with a 400 and describe invalid parameters with a reason;
+- **107 INVALID_PARAMETERS**: This come with a 400 and describe
+  invalid parameters with a reason;
 - **108 MISSING_PARAMETERS**: This come with a 400 and list all missing parameters;
 - **110 INVALID_AUTH_TOKEN**: This come with a 401 and define a problem during Auth;
 - **111 EXPIRED**: This come with a 410 and define a EXPIRE ressource;
@@ -917,9 +1199,16 @@ Also the associated errno can be one of:
 Websockets APIs
 ===============
 
-During the setup phase of a call, the websocket protocol is used to let clients broadcast their state to other clients and to listen to changes.
+During the setup phase of a call, the websocket protocol is used to
+let clients broadcast their state to other clients and to listen to
+changes.
 
-The client will establish a WebSockets connection to the resource indicated in the "progressURL" when it receives it. The client never closes this connection; that is the responsibility of the server. The times at which the server closes the connection are detailed below. If the server sees the client close the connection, it assumes that the client has failed, and informs the other party of such call failure.
+The client will establish a WebSockets connection to the resource
+indicated in the "progressURL" when it receives it. The client never
+closes this connection; that is the responsibility of the server. The
+times at which the server closes the connection are detailed below. If
+the server sees the client close the connection, it assumes that the
+client has failed, and informs the other party of such call failure.
 
 For forward compatibility purposes:
 

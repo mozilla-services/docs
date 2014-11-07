@@ -18,7 +18,7 @@ that can be used to:
 
 It's currently used by all Sync clients applications.
 
-If you are using our hosted services with your own client code, 
+If you are using our hosted services with your own client code,
 please read the :ref:`tos`.
 
 

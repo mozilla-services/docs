@@ -65,7 +65,7 @@ Request Headers
     of client-side state.  It may be up to 32 characters long, and must
     contain only characters from the urlsafe-base64 alphabet (i.e.
     alphanumeric characters, underscore and hyphen) and the period.
-    
+
     A change in the value of this header will cause the user's node
     allocation to be reset.  Clients should include any client-side state
     that is necessary for accessing the selected app.  For example, clients
