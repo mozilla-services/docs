@@ -36,6 +36,7 @@ The current API is versioned, using only a major version. All the endpoints for
 version 1 are prefixed by `/v1/`. In case you don't specify the prefix, your
 requests will be redirected automatically with an http `307` status.
 
+.. _hawk-authentication:
 
 Authentication
 --------------
@@ -717,6 +718,23 @@ used to create the room on the ``POST /rooms``.
 
 On these endpoints only the owner can perform the action on the room.
 
+Some endpoints requires **participants** authentification, it is
+either the Hawk Session used to join the room using the :ref:`Hawk
+Authorization scheme <hawk-authentication>` or the sessionToken the
+user has got when joining anonymously using the :ref:`Basic Auth
+Authorization scheme <basic-auth-authorization>`.
+
+.. _basic-auth-authorization:
+
+Basic Auth Authorization
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+In that case, just use the room participant sessionToken as a Basic
+Auth username with no password.
+
+    http POST localhost:5000/rooms/:token --auth "_sessionToken_:"
+
+    Authorization: Basic X3Nlc3Npb25Ub2tlbl86
 
 POST /rooms
 ~~~~~~~~~~~
@@ -817,6 +835,9 @@ Joining the room
 
 Refreshing membership in a room
 """""""""""""""""""""""""""""""
+
+    **Requires participant authentication**
+
 
     Request body parameters:
 
