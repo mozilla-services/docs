@@ -82,8 +82,8 @@ If you are writting a client, you might find these resources useful:
 - With python:
   https://github.com/mozilla-services/loop-server/blob/master/loadtests/loadtest.py#L99-L122
 
-Global API
-----------
+Configuration
+-------------
 
 GET /
 ~~~~~
@@ -145,6 +145,34 @@ GET /push-server-config
 
     Server should acknowledge your request and answer with a status code of
     **200 OK**.
+
+
+Healthcheck
+-----------
+
+GET /__healthcheck__
+~~~~~~~~~~~~~~~~~~~~
+
+   - Returns 200 in case of success
+   - Returns 503 with the backend error message in case backends are broken
+
+    .. code-block:: http
+
+        http localhost:5000/__heartbeat__
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 32
+        Content-Type: application/json; charset=utf-8
+        Date: Fri, 07 Nov 2014 13:02:45 GMT
+        ETag: W/"20-e938360a"
+        Timestamp: 1415365365
+
+        {
+            "provider": true,
+            "storage": true
+        }
+
 
 Registration
 ------------
@@ -210,6 +238,7 @@ POST /registration
     - **400 Bad Request:**  You forgot to pass the simple_push_url, or it's
       not a valid URL.
     - **401 Unauthorized:** The credentials you passed aren't valid.
+
 
 DELETE /registration
 ~~~~~~~~~~~~~~~~~~~~
@@ -683,20 +712,26 @@ GET /calls?version=<version>
 Rooms
 -----
 
+Some endpoints requires **owner** authentication, it is the account
+used to create the room on the ``POST /rooms``.
+
+On these endpoints only the owner can perform the action on the room.
+
+
 POST /rooms
 ~~~~~~~~~~~
 
     **Requires owner authentication**
 
-    Create a new room
+    Creates a new room
 
     Request body parameters:
 
-    - **roomName**, The name of the room
-    - **roomOwner**, The name of the roomOwner
-    - **maxSize**, The maximum number of people the room can handle
+    - **roomName**, The name of the room.
+    - **roomOwner**, The room owner name.
+    - **maxSize**, The maximum number of people the room can handle.
 
-    An optional parameter:
+    Optional parameter:
 
     - **expiresIn**, the number of hours for which the room will exist.
 
@@ -704,7 +739,8 @@ POST /rooms
 
     - **roomToken**, The token used to identify the created room.
     - **roomUrl**, A URL that can be given to other users to allow them to join the room.
-    - **expiresAt**, The date after which the room will no longer be valid (in seconds since the Unix epoch)
+    - **expiresAt**, The date after which the room will no longer be
+      valid (in seconds since the Unix epoch).
 
     Potential HTTP error responses include:
 
@@ -716,20 +752,21 @@ PATCH /rooms/:token
 
     **Requires owner authentication**
 
-    Update an existing room
+    Updates an existing room
 
     Optional request body parameters:
 
-    - **roomName**, The name of the room
-    - **roomOwner**, The user-friendly display name indicating the name of the room's owner.
-    - **maxSize**, The maximum number of people the room can handle
+    - **roomName**, The name of the room.
+    - **roomOwner**, The room owner name.
+    - **maxSize**, The maximum number of people the room can handle.
     - **expiresIn**, the number of hours for which the room will exist.
 
-    You can only set the body parameter you want to update.
+    You only need set the body parameters you want to update.
 
     Response body parameters:
 
-    - **expiresAt**, The date after which the room will no longer be valid (in seconds since the Unix epoch)
+    - **expiresAt**, The date after which the room will no longer be
+      valid (in seconds since the Unix epoch)
 
     Potential HTTP error responses include:
 
@@ -741,7 +778,7 @@ DELETE /rooms/:token
 
     **Requires owner authentication**
 
-    Delete an existing room
+    Deletes an existing room.
 
 
 GET /rooms/:token
@@ -749,7 +786,7 @@ GET /rooms/:token
 
     **Requires participant authentication**
 
-    Retrieve information about the room.
+    Retrieves information about the room.
 
     Response body parameters:
 
@@ -770,11 +807,11 @@ GET /rooms/:token
     - **participants**, An array containing a list of the current room
       participants object with these properties:
 
-      - **displayName**, The user-friendly name that should be displayed for this participant
+      - **displayName**, The user-friendly name that should be displayed for this participant.
       - **account**, If the user is logged in, this is the FxA account
         name or MSISDN that was used to authenticate the user for this
         session.
-      - **roomConnectionId**, An id, unique within the room for the
+      - **id**, An id, unique within the room for the
         lifetime of the room, used to identify a partcipant for the
         duration of one instance of joining the room. If the user
         departs and re-joins, this id will change.
@@ -791,11 +828,11 @@ GET /rooms/:token
 POST /rooms/:token
 ~~~~~~~~~~~~~~~~~~
 
-This endpoint handle three kinds of actions:
+This endpoint handles three kinds of actions:
 
-- **join**, A new participant join the room.
-- **refresh**, A participant notifies he is still in the room.
-- **leave**, A participant notifies he is leaving the room.
+- **join**, A new participant joins the room.
+- **refresh**, A participant notifies she is still in the room.
+- **leave**, A participant notifies she is leaving the room.
 
 
 Joining the room
@@ -803,16 +840,16 @@ ________________
 
     Request body parameters:
 
-    - **action**, Should be "join" in that case
-    - **displayName**, The participant friendly name for this room
+    - **action**, Should be "join" in that case.
+    - **displayName**, The participant friendly name for this room.
     - **clientMaxSize**, Maximum number of room participants the
       user's client is capable of supporting.
 
     Response body parameters:
 
     - **apiKey**, The TokBox public api key.
-    - **sessionId**, The TokBox session identifier (identifies the room)
-    - **sessionToken**, The TokBox session token (identifies the room participant)
+    - **sessionId**, The TokBox session identifier (identifies the room).
+    - **sessionToken**, The TokBox session token (identifies the room participant).
     - **expires**, The number of seconds within which the client must
       send another POST to this endpoint with the refresh action to
       remain a participant in this room.
@@ -827,9 +864,9 @@ _______________________________
 
     Request body parameters:
 
-    - **action**, Should be "refresh" in that case
+    - **action**, Should be "refresh" in that case.
 
-    The endpoint will return a **204 No Content** response.
+    On success, the endpoint will return a **204 No Content** response.
 
     Potential HTTP error responses include:
 
@@ -841,7 +878,7 @@ ________________
 
     Request body parameters:
 
-    - **action**, Should be "refresh" in that case
+    - **action**, Should be "leave" in that case.
 
     The endpoint will return a **204 No Content** response.
 
@@ -855,9 +892,9 @@ GET /rooms
 
     **Requires owner authentication**
 
-    Retrieve a list of rooms owned by the owner.
+    Retrieves a list of rooms owned by the owner.
 
-    The response is a list of objects with this informations:
+    The response is a list of objects with this information:
 
     - **roomToken**, The token used to identify this room.
     - **roomName**, The name of the room.
@@ -880,7 +917,7 @@ GET /rooms
       - **account**, If the user is logged in, this is the FxA account
         name or MSISDN that was used to authenticate the user for this
         session.
-      - **roomConnectionId**, An id, unique within the room for the
+      - **id**, An id, unique within the room for the
         lifetime of the room, used to identify a partcipant for the
         duration of one instance of joining the room. If the user
         departs and re-joins, this id will change.
@@ -1030,7 +1067,8 @@ GET /fxa-oauth/token
         http GET http://localhost:5000/v1/fxa-oauth/token  --verbose \
         --auth-type=hawk --auth='ca13d91d1d4b67edf0b9523a2867b3d1b74eb63823732c441992f813f9da1f76:' --json
 
-    If the current session is authenticated using OAuth, it returns it in the **access_token** attribute.
+    If the current session is authenticated using OAuth, it returns it
+    in the **access_token** attribute.
 
     .. code-block:: http
 
@@ -1093,7 +1131,8 @@ Also the associated errno can be one of:
 
 - **105 INVALID_TOKEN**: This come with a 404 on a wrong call-url token;
 - **106 BADJSON**: This come with a 406 if the sent JSON is not parsable;
-- **107 INVALID_PARAMETERS**: This come with a 400 and describe invalid parameters with a reason;
+- **107 INVALID_PARAMETERS**: This come with a 400 and describe
+  invalid parameters with a reason;
 - **108 MISSING_PARAMETERS**: This come with a 400 and list all missing parameters;
 - **110 INVALID_AUTH_TOKEN**: This come with a 401 and define a problem during Auth;
 - **111 EXPIRED**: This come with a 410 and define a EXPIRE ressource;
@@ -1107,9 +1146,16 @@ Also the associated errno can be one of:
 Websockets APIs
 ===============
 
-During the setup phase of a call, the websocket protocol is used to let clients broadcast their state to other clients and to listen to changes.
+During the setup phase of a call, the websocket protocol is used to
+let clients broadcast their state to other clients and to listen to
+changes.
 
-The client will establish a WebSockets connection to the resource indicated in the "progressURL" when it receives it. The client never closes this connection; that is the responsibility of the server. The times at which the server closes the connection are detailed below. If the server sees the client close the connection, it assumes that the client has failed, and informs the other party of such call failure.
+The client will establish a WebSockets connection to the resource
+indicated in the "progressURL" when it receives it. The client never
+closes this connection; that is the responsibility of the server. The
+times at which the server closes the connection are detailed below. If
+the server sees the client close the connection, it assumes that the
+client has failed, and informs the other party of such call failure.
 
 For forward compatibility purposes:
 
