@@ -6,7 +6,8 @@ This document is based on the current status of the server. All the examples
 had been done with real calls. It doesn't reflect any future implementation and
 tries to stick with the currently deployed version.
 
-This document describes the :ref:`HTTP APIs <http-apis>` and the :ref:`Websockets APIs <websockets-apis>`.
+This document describes the :ref:`HTTP APIs <http-apis>` and the
+:ref:`Websockets APIs <websockets-apis>`.
 
 .. contents::
 
@@ -796,6 +797,43 @@ POST /rooms
 
     - **400 Bad Request:**  Missing or invalid body parameters
 
+    Example::
+
+        http POST localhost:5000/v1/rooms --verbose \
+        roomName="My Room" roomOwner="Natim" maxSize=5 \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        POST /rooms HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 61
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "maxSize": "5",
+            "roomName": "My Room",
+            "roomOwner": "Natim"
+        }
+
+        HTTP/1.1 201 Created
+        Connection: keep-alive
+        Content-Length: 109
+        Content-Type: application/json; charset=utf-8
+        Date: Mon, 10 Nov 2014 14:29:41 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
+
+        {
+            "expiresAt": 1418221780,
+            "roomToken": "pPVoaqiH89M",
+            "roomUrl": "http://localhost:3000/static/#rooms/pPVoaqiH89M"
+        }
+
 
 PATCH /rooms/:token
 ~~~~~~~~~~~~~~~~~~~
@@ -822,6 +860,42 @@ PATCH /rooms/:token
 
     - **400 Bad Request:**  Missing or invalid body parameters
 
+    Example::
+
+        http PATCH localhost:5000/v1/rooms/pPVoaqiH89M --verbose \
+        roomName="My Room" roomOwner="Natim" maxSize=5 \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        PATCH /rooms/pPVoaqiH89M HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 61
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "maxSize": "5",
+            "roomName": "My Room",
+            "roomOwner": "Natim"
+        }
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 24
+        Content-Type: application/json; charset=utf-8
+        Date: Mon, 10 Nov 2014 14:33:19 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
+        Timestamp: 1415629999
+
+        {
+            "expiresAt": 1418221999
+        }
+
 
 DELETE /rooms/:token
 ~~~~~~~~~~~~~~~~~~~~
@@ -829,6 +903,28 @@ DELETE /rooms/:token
     **Requires owner authentication**
 
     Deletes an existing room.
+
+    Example::
+
+        http DELETE localhost:5000/v1/rooms/LURlwjMc8wI --verbose \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        DELETE /rooms/LURlwjMc8wI HTTP/1.1
+        Accept: */*
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 0
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+
+        HTTP/1.1 204 No Content
+        Connection: keep-alive
+        Date: Mon, 10 Nov 2014 14:35:37 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
 
 
 POST /rooms/:token
@@ -864,6 +960,45 @@ Joining the room
 
     - **400 Bad Request:**  Missing or invalid body parameters
 
+    Example::
+
+        http POST localhost:5000/v1/rooms/pPVoaqiH89M --verbose \
+        action=join displayName=Natim clientMaxSize=5 \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        POST /rooms/pPVoaqiH89M HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 64
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "action": "join",
+            "clientMaxSize": "5",
+            "displayName": "Natim"
+        }
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 461
+        Content-Type: application/json; charset=utf-8
+        Date: Mon, 10 Nov 2014 14:39:12 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
+        Timestamp: 1415630346
+
+        {
+            "apiKey": "44669102",
+            "expires": 300,
+            "sessionId": "1_XM40NYDO2TEwMI5-MTQxNTYyOTc4MTIzOH5PaGxlZlNRTXdqVi9XRGUIel8jZWh0KZz-VH4",
+            "sessionToken": "T1==cGFydG5lcl9pZD00NDY2OTEw...=="
+        }
+
 
 Refreshing membership in a room
 """""""""""""""""""""""""""""""
@@ -881,6 +1016,40 @@ Refreshing membership in a room
 
     - **400 Bad Request:**  Missing or invalid body parameters
 
+    Example::
+
+        http POST localhost:5000/v1/rooms/pPVoaqiH89M --verbose \
+        action=refresh \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        POST /rooms/pPVoaqiH89M HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 21
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "action": "refresh"
+        }
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 461
+        Content-Type: application/json; charset=utf-8
+        Date: Mon, 10 Nov 2014 14:40:06 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
+        Timestamp: 1415630346
+
+        {
+            "expires": 300
+        }
+
 
 Leaving the room
 """"""""""""""""
@@ -894,6 +1063,33 @@ Leaving the room
     Potential HTTP error responses include:
 
     - **400 Bad Request:**  Missing or invalid body parameters
+
+    Example::
+
+        http POST localhost:5000/v1/rooms/pPVoaqiH89M --verbose \
+        action=leave \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        POST /rooms/pPVoaqiH89M HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 19
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "action": "leave"
+        }
+
+        HTTP/1.1 204 No Content
+        Connection: keep-alive
+        Date: Mon, 10 Nov 2014 14:48:24 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
 
 
 GET /rooms/:token
@@ -930,6 +1126,48 @@ GET /rooms/:token
       - A user joined the room
       - A user left the room
 
+    Example::
+
+        http GET localhost:5000/v1/rooms/pPVoaqiH89M --verbose \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        GET /rooms/pPVoaqiH89M HTTP/1.1
+        Accept: */*
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 284
+        Content-Type: application/json; charset=utf-8
+        Date: Mon, 10 Nov 2014 14:52:20 GMT
+        ETag: W/"11c-d426a3d5"
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
+        Timestamp: 1415631140
+
+        {
+            "clientMaxSize": 5,
+            "creationTime": 1415629780,
+            "ctime": 1415631010,
+            "expiresAt": 1418221999,
+            "maxSize": 5,
+            "participants": [
+                {
+                    "displayName": "Natim",
+                    "id": "0bc7fa46-3df0-4621-b904-afdd2390d9ef"
+                }
+            ],
+            "roomName": "My Room",
+            "roomOwner": "Natim",
+            "roomUrl": "http://locahost:3000/#/rooms/pPVoaqiH89M"
+        }
+
 
 GET /rooms
 ~~~~~~~~~~
@@ -964,6 +1202,51 @@ GET /rooms
       - The owner modified its attributes with "PATCH /rooms/{token}"
       - A user joined the room
       - A user left the room
+
+    Example::
+
+        http GET localhost:5000/v1/rooms --verbose \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        GET /rooms/ HTTP/1.1
+        Accept: */*
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 312
+        Content-Type: application/json; charset=utf-8
+        Date: Mon, 10 Nov 2014 14:50:12 GMT
+        ETag: W/"138-9bb2c1c"
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
+        Timestamp: 1415631012
+
+        [
+            {
+                "clientMaxSize": 5,
+                "creationTime": 1415629780,
+                "ctime": 1415631010,
+                "expiresAt": 1418221999,
+                "maxSize": 5,
+                "participants": [
+                    {
+                        "displayName": "Natim",
+                        "id": "0bc7fa46-3df0-4621-b904-afdd2390d9ef"
+                    }
+                ],
+                "roomName": "My Room",
+                "roomOwner": "Natim",
+                "roomToken": "pPVoaqiH89M",
+                "roomUrl": "http://localhost:3000/static/#rooms/pPVoaqiH89M"
+            }
+        ]
 
 
 .. _participant-information:
