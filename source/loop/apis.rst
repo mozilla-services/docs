@@ -289,14 +289,14 @@ GET /call-url
 
     **Requires authentication**
 
-    List all user current call-urls.
+    List all user valid call-urls.
 
     Response from the server:
 
     The server should answer this with a 200 status code and a list of
-    JSON object with the following properties:
+    JSON objects with the following properties:
 
-    - **callerId** The name of the person ;
+    - **callerId** The name of the person to whom the call-url has been issued ;
     - **expires** The date when the url will expire (the unix epoch, in
       seconds).
     - **timestamp** The date when the url has been created (the unix epoch, in
@@ -351,7 +351,7 @@ POST /call-url
     Body parameters:
 
     - **callerId**, the caller (the person you will give the link to)
-      identifier. The callerId is supposed to be a valid email address.
+      identifier.
     - **expiresIn**, the number of hours the call-url will be valid for.
     - **issuer**, The friendly name of the issuer of the token.
 
