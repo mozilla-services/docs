@@ -284,6 +284,62 @@ DELETE /registration
 Call URLs
 ---------
 
+GET /call-url
+~~~~~~~~~~~~~~
+
+    **Requires authentication**
+
+    List all user current call-urls.
+
+    Response from the server:
+
+    The server should answer this with a 200 status code and a list of
+    JSON object with the following properties:
+
+    - **callerId** The name of the person ;
+    - **expires** The date when the url will expire (the unix epoch, in
+      seconds).
+    - **timestamp** The date when the url has been created (the unix epoch, in
+      seconds).
+
+    Example::
+
+       http GET localhost:5000/v1/call-url --verbose \
+       --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        GET /v1/call-url HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 186
+        Content-Type: application/json; charset=utf-8
+        Date: Thu, 13 Nov 2014 16:19:59 GMT
+        Server-Authorization: <stripped>
+        Timestamp: 1415895599
+
+        [
+            {
+                "callerId": "Natim",
+                "expires": 1416499576,
+                "timestamp": 1415894776
+            }
+        ]
+
+
+    Potential HTTP error responses include:
+
+    - **401 Unauthorized**: You need to authenticate to call this URL.
+    - **503 Service Unavailable**: Something is wrong on the server side.
+
+
 POST /call-url
 ~~~~~~~~~~~~~~
 
