@@ -1317,6 +1317,8 @@ Participant information
     - **account**, If the user is logged in, this is the FxA account
       name or MSISDN that was used to authenticate the user for this
       session.
+    - **owner**, if the user is also the owner of the room, this
+      property will be true, it will be false otherwise.
     - **id**, An id, unique within the room for the
       lifetime of the room, used to identify a partcipant for the
       duration of one instance of joining the room. If the user
