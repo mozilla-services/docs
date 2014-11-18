@@ -1240,7 +1240,9 @@ GET /rooms/:token
             "participants": [
                 {
                     "displayName": "Natim",
-                    "id": "0bc7fa46-3df0-4621-b904-afdd2390d9ef"
+                    "roomConnectionId": "0bc7fa46-3df0-4621-b904-afdd2390d9ef",
+                    "owner": true,
+                    "account": "natim@example.com"
                 }
             ],
             "roomName": "My Room",
@@ -1317,8 +1319,10 @@ GET /rooms
                 "maxSize": 5,
                 "participants": [
                     {
-                        "displayName": "Natim",
-                        "id": "0bc7fa46-3df0-4621-b904-afdd2390d9ef"
+                      "displayName": "Natim",
+                      "roomConnectionId": "0bc7fa46-3df0-4621-b904-afdd2390d9ef",
+                      "owner": true,
+                      "account": "natim@example.com"
                     }
                 ],
                 "roomName": "My Room",
@@ -1343,7 +1347,7 @@ Participant information
       session.
     - **owner**, if the user is also the owner of the room, this
       property will be true, it will be false otherwise.
-    - **id**, An id, unique within the room for the
+    - **roomConnectionId**, An id, unique within the room for the
       lifetime of the room, used to identify a partcipant for the
       duration of one instance of joining the room. If the user
       departs and re-joins, this id will change.
