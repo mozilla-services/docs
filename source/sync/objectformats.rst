@@ -186,6 +186,18 @@ In Protocol 1.5, client records additionally include:
 * **version** *string*: a version indicator for this client, such as "29.0a1". Optional.
 * **protocols** *array*: an array of Sync protocol versions supported by this client, such as ["1.1", "1.5"]. Optional.
 
+In Bug 1097222 additional optional fields were added:
+
+* **os** *string*: an OS name, most likely one of "Darwin" (Mac OS X), "WINNT" (Windows), "Android", or "iOS".
+* **appPackage** *string*: an unambiguous identifier for the client application. For Android, this is the package (e.g., **org.mozilla.firefox_beta**). For desktop this is the value of **Services.appinfo.ID**.
+* **application** *string*: a human-readable application name, such as "Nightly" or "Firefox".
+* **formfactor** *string*: a value such as "phone", "largetablet", "smalltablet", "desktop", "laptop", "tv".
+* **device** *string*: a description of the hardware that this client uses. Currently only supported by Android; returns values like "HTC One".
+
+If these fields are missing, clients are expected to fall back to behaviors that do not depend on the missing data.
+
+Clients should preserve existing fields if possible when sending commands to another client.
+
 
 Version 2 (never deployed)
 --------------------------
