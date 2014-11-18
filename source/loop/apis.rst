@@ -1160,7 +1160,7 @@ GET /rooms/:token
             "participants": [
                 {
                     "displayName": "Natim",
-                    "id": "0bc7fa46-3df0-4621-b904-afdd2390d9ef"
+                    "roomConnectionId": "0bc7fa46-3df0-4621-b904-afdd2390d9ef"
                 }
             ],
             "roomName": "My Room",
@@ -1238,7 +1238,7 @@ GET /rooms
                 "participants": [
                     {
                         "displayName": "Natim",
-                        "id": "0bc7fa46-3df0-4621-b904-afdd2390d9ef"
+                        "roomConnectionId": "0bc7fa46-3df0-4621-b904-afdd2390d9ef"
                     }
                 ],
                 "roomName": "My Room",
@@ -1261,7 +1261,7 @@ Participant information
     - **account**, If the user is logged in, this is the FxA account
       name or MSISDN that was used to authenticate the user for this
       session.
-    - **id**, An id, unique within the room for the
+    - **roomConnectionId**, An id, unique within the room for the
       lifetime of the room, used to identify a partcipant for the
       duration of one instance of joining the room. If the user
       departs and re-joins, this id will change.
