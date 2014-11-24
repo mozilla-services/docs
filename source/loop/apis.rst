@@ -355,6 +355,10 @@ POST /call-url
     - **expiresIn**, the number of hours the call-url will be valid for.
     - **issuer**, The friendly name of the issuer of the token.
 
+    Optional parameters:
+
+    - **subject**, The subject of the conversation.
+
     Response from the server:
 
     The server should answer this with a 200 status code and a JSON object
@@ -385,7 +389,8 @@ POST /call-url
         {
             "callerId": "Remy",
             "expiresIn": "5",
-            "issuer": "Alexis"
+            "issuer": "Alexis",
+            "subject": "MySubject"
         }
 
         HTTP/1.1 200 OK
@@ -424,6 +429,10 @@ PUT /call-url/{token}
     - **expiresIn**, the number of hours the call-url will be valid for.
     - **issuer**, The friendly name of the issuer of the token.
 
+    Optional parameters:
+
+    - **subject**, The subject of the conversation.
+
     Response from the server:
 
     The server should answer this with a 200 status code and a JSON object
@@ -449,7 +458,8 @@ PUT /call-url/{token}
         User-Agent: HTTPie/0.8.0
 
         {
-            "issuer": "Adam"
+            "issuer": "Adam",
+            "subject": "MySubject2"
         }
 
         HTTP/1.1 200 OK
@@ -519,6 +529,10 @@ GET /calls/{token}
     - **calleeFriendlyName** the friendly name the creator of the call-url gave.
     - **urlCreationDate**, the unix timestamp when the url was created.
 
+    Optional:
+
+    - **subject**, the subject of the conversation.
+
     Example::
 
         http GET localhost:5000/v1/calls/3jKS_Els9IU --verbose
@@ -542,7 +556,8 @@ GET /calls/{token}
 
         {
             "calleeFriendlyName": "Alexis",
-            "urlCreationDate": 1405517546
+            "urlCreationDate": 1405517546,
+            "subject": "MySubject"
         }
 
     Potential HTTP error responses include:
@@ -564,6 +579,7 @@ POST /calls/{token}
 
     Optional parameters:
 
+    - **subject**, the subject of the conversation
     - **channel**, the TokBox channel to use for the call
 
     Channel can be one of:
@@ -603,7 +619,8 @@ POST /calls/{token}
 
         {
             "callType": "audio-video",
-            "channel": "nightly"
+            "channel": "nightly",
+            "subject": "MySubject"
         }
 
         HTTP/1.1 200 OK
@@ -657,6 +674,7 @@ POST /calls
 
     Optional parameters:
 
+    - **subject**, the subject of the conversation
     - **channel**, the TokBox channel to use for the call
 
     Channel can be one of:
@@ -700,7 +718,8 @@ POST /calls
         {
             "callType": "audio-video"
             "calleeId": ["alexis@mozilla.com", "+34123456789"],
-            "channel": "nightly"
+            "channel": "nightly",
+            "subject": "MySubject"
         }
 
         HTTP/1.1 200 OK
@@ -751,6 +770,10 @@ GET /calls?version=<version>
     - **sessionToken**, the provider session token (for the caller).
     - **websocketToken**, the token to use when authenticating to the websocket.
 
+    Optional:
+
+    - **subject**, the subject of the call
+
     In case of call initiated from an URL you will also have:
 
     - **callToken**, the call-url token used for this call.
@@ -788,7 +811,8 @@ GET /calls?version=<version>
                     "sessionId": "2_MX40NDY2OTEwMn5-V2VkIEp1bCAxNiAwNzoxMDoyMCBQRFQgMjAxNH4wLj",
                     "sessionToken": "T1==cGFydG5lcl9pZD00NDY2OTEwMiZzaWc9NzMyMGVmZjY1YWU0ZmFkZTY1NmU0",
                     "urlCreationDate": 1405517546,
-                    "websocketToken": "a2fc1ee029169b62b08a4ba87c328d71"
+                    "websocketToken": "a2fc1ee029169b62b08a4ba87c328d71",
+                    "subject": "MySubject"
                 }
             ]
         }
