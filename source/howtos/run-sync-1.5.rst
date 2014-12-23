@@ -284,6 +284,13 @@ Tested with debian stable/squeeze
 5. After restarting your nginx and syncserver you should be able to use the
    sync server behind your nginx installation
 
+.. note:: If you see errors about a mismatch between **public_url** and
+   **application_url**, you may need to tell gunicorn that it should trust
+   the **X-Forwarded-Proto** header being sent by nginx.  Add the following
+   to the gunicorn configuration in **syncserver.ini**::
+
+        forwarded_allow_ips = *
+
 
 Things that still need to be Documented
 =======================================
