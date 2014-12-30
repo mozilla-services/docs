@@ -1175,8 +1175,6 @@ Leaving the room
 GET /rooms/:token
 ~~~~~~~~~~~~~~~~~
 
-    **Requires participant authentication**
-
     Retrieves information about the room.
 
     Response body parameters:
@@ -1185,6 +1183,10 @@ GET /rooms/:token
     - **roomName**, The name of the room.
     - **roomUrl**, A URL that can be given to other users to allow them to join the room.
     - **roomOwner**, The user-friendly display name indicating the name of the room's owner.
+
+    If a **participant authentication** is provided, **additional information**
+    is returned:
+
     - **maxSize**, The maximum number of users allowed in the room at
       one time (as configured by the room owner).
     - **clientMaxSize**, The current maximum number of users allowed
