@@ -914,6 +914,57 @@ POST /rooms
             "roomUrl": "http://localhost:3000/static/#rooms/pPVoaqiH89M"
         }
 
+PATCH /rooms
+~~~~~~~~~~~~
+
+    **Requires owner authentication**
+
+    Remove given rooms
+
+    Request body parameters:
+
+    - **deleteRoomTokens**, a list of rooms to delete.
+
+    Response body parameters:
+
+    - **deletedRoomTokens**, a list of room's tokens actually deleted.
+
+    Potential HTTP error responses include:
+
+    - **404 Not Found:**  If none of the given roomTokens where found for this user.
+
+    Example::
+
+        echo '{"deleteRoomTokens": ["pPVoaqiH89M"]}' | http PATCH localhost:5000/v1/rooms -v \
+          --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        PATCH /rooms HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 39
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "deleteRoomTokens": ["pPVoaqiH89M"]
+        }
+
+        HTTP/1.1 200 OK
+        Connection: keep-alive
+        Content-Length: 40
+        Content-Type: application/json; charset=utf-8
+        Date: Tue, 30 Dec 2014 15:39:41 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
+
+        {
+            "deletedRoomTokens": ["pPVoaqiH89M"]
+        }
+
 
 PATCH /rooms/:token
 ~~~~~~~~~~~~~~~~~~~
