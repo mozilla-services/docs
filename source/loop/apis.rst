@@ -914,6 +914,61 @@ POST /rooms
             "roomUrl": "http://localhost:3000/static/#rooms/pPVoaqiH89M"
         }
 
+PATCH /rooms
+~~~~~~~~~~~~
+
+    **Requires owner authentication**
+
+    Remove given rooms
+
+    Request body parameters:
+
+    - **deleteRoomTokens**, a list of rooms to delete.
+
+    Response body parameters:
+
+    - **responses**, a mapping of room's tokens and the request's status for each.
+
+    Potential HTTP error responses include:
+
+    - **207 Multi-Status:**  When tokens are processed, each token having it's own status.
+    - **404 Not Found:**  If none of the given roomTokens where found for this user.
+    - **400 Bad Requests:**  If no room tokens where provided.
+
+    Example::
+
+        echo '{"deleteRoomTokens": ["pPVoaqiH89M"]}' | http PATCH localhost:5000/v1/rooms -v \
+          --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        PATCH /rooms HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 39
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "deleteRoomTokens": ["pPVoaqiH89M"]
+        }
+
+        HTTP/1.1 207 Multi-Status
+        Connection: keep-alive
+        Content-Length: 40
+        Content-Type: application/json; charset=utf-8
+        Date: Tue, 30 Dec 2014 15:39:41 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
+
+        {
+            "responses": {
+                "pPVoaqiH89M": {"code": 200},
+                "_nxD4V4FflQ": {"code": 404, "errno": "105", "message": "Room not found."}
+        }
+
 
 PATCH /rooms/:token
 ~~~~~~~~~~~~~~~~~~~
@@ -1242,7 +1297,9 @@ GET /rooms/:token
             "participants": [
                 {
                     "displayName": "Natim",
-                    "id": "0bc7fa46-3df0-4621-b904-afdd2390d9ef"
+                    "roomConnectionId": "0bc7fa46-3df0-4621-b904-afdd2390d9ef",
+                    "owner": true,
+                    "account": "natim@example.com"
                 }
             ],
             "roomName": "My Room",
@@ -1319,8 +1376,10 @@ GET /rooms
                 "maxSize": 5,
                 "participants": [
                     {
-                        "displayName": "Natim",
-                        "id": "0bc7fa46-3df0-4621-b904-afdd2390d9ef"
+                      "displayName": "Natim",
+                      "roomConnectionId": "0bc7fa46-3df0-4621-b904-afdd2390d9ef",
+                      "owner": true,
+                      "account": "natim@example.com"
                     }
                 ],
                 "roomName": "My Room",
@@ -1345,7 +1404,7 @@ Participant information
       session.
     - **owner**, if the user is also the owner of the room, this
       property will be true, it will be false otherwise.
-    - **id**, An id, unique within the room for the
+    - **roomConnectionId**, An id, unique within the room for the
       lifetime of the room, used to identify a partcipant for the
       duration of one instance of joining the room. If the user
       departs and re-joins, this id will change.
