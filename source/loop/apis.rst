@@ -927,11 +927,13 @@ PATCH /rooms
 
     Response body parameters:
 
-    - **deletedRoomTokens**, a list of room's tokens actually deleted.
+    - **responses**, a mapping of room's tokens and the request's status for each.
 
     Potential HTTP error responses include:
 
+    - **207 Multi-Status:**  When tokens are processed, each token having it's own status.
     - **404 Not Found:**  If none of the given roomTokens where found for this user.
+    - **400 Bad Requests:**  If no room tokens where provided.
 
     Example::
 
@@ -953,7 +955,7 @@ PATCH /rooms
             "deleteRoomTokens": ["pPVoaqiH89M"]
         }
 
-        HTTP/1.1 200 OK
+        HTTP/1.1 207 Multi-Status
         Connection: keep-alive
         Content-Length: 40
         Content-Type: application/json; charset=utf-8
@@ -962,7 +964,9 @@ PATCH /rooms
         Server-Authorization: <stripped>
 
         {
-            "deletedRoomTokens": ["pPVoaqiH89M"]
+            "responses": {
+                "pPVoaqiH89M": {"code": 200},
+                "_nxD4V4FflQ": {"code": 404, "errno": "105", "message": "Room not found."}
         }
 
 
