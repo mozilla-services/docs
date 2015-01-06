@@ -865,6 +865,18 @@ POST /rooms
     Optional parameter:
 
     - **expiresIn**, the number of hours for which the room will exist.
+    - **channel**, the TokBox channel to use for the call
+
+    Channel can be one of:
+
+    - **release**
+    - **esr**
+    - **beta**
+    - **aurora**
+    - **nightly**
+    - **default**
+    - **mobile** -- used for the Firefox OS Mobile client
+    - **standalone** -- used for the standalone / "link-clicker" client
 
     Response body parameters:
 
