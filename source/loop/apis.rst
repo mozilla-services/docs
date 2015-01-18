@@ -1617,6 +1617,7 @@ Also the associated errno can be one of:
 - **111 EXPIRED**: This come with a 410 and define a EXPIRE ressource;
 - **113 REQUEST_TOO_LARGE**: This come with a 400 and define a too large request;
 - **114 INVALID_OAUTH_STATE**: This come with a 400 and tells the oauth state is invalid;
+- **122 USER_UNAVAILABLE**: This come with a 400 and tell the user could not be found in the database;
 - **201 BACKEND**: This come with a 503 when a third party is not available at the moment.
 
 
