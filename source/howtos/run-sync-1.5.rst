@@ -22,6 +22,9 @@ Firefox, see :ref:`howto_run_sync11`.
 The new sync service uses `Firefox Accounts <https://wiki.mozilla.org/Identity/FirefoxAccounts>`_ for user authentication, which is a separate service and is
 not covered by this guide.
 
+.. note:: By default, a server set up using this guide will defer authentication
+   to the Mozilla-hosted accounts server at https://accounts.firefox.com.
+
 You can safely use the Mozilla-hosted Firefox Accounts server in combination
 with a self-hosted sync storage server.  The authentication and encryption
 protocols are designed so that the account server does not know the user's
