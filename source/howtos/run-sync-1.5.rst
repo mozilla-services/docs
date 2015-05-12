@@ -69,8 +69,7 @@ run the **build** command::
 
 This command will create an isolated Python environment and pull all the
 required dependencies in it. A **local/bin** directory is created and contains
-a **pserve** command that can be used to run the server, using the built-in web
-server.
+a **gunicorn** command that can be used to run the server.
 
 If you like, you can run the testsuite to make sure everything is working
 properly::
@@ -113,12 +112,14 @@ database URI; for example the following would connect to a mysql server::
 Running the Server
 ==================
 
-Now you can run the server using pserve and the provided "syncserver.ini"
-file::
+Now you can run the server using gunicorn and the provided "syncserver.ini"
+file.  The simplest way is to use the Makefile like this::
 
-    $ local/bin/pserve syncserver.ini
-    Starting server in PID 29951.
-    serving on 0.0.0.0:5000 view at http://127.0.0.1:5000
+    $ make serve
+
+Or if you'd like to pass additional arguments to gunicorn, like this::
+
+    $ local/bin/gunicorn --threads 4 --paste syncserver.ini
 
 Once the server is launched, you need to tell Firefox about its location.
 
