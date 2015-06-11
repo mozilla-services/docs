@@ -12,7 +12,8 @@ The use of AES128 in preference to AES256 is driven by power and CPU concerns.
 Cipher Suites
 =============
 
-Android 20+::
+Android 20+:
+^^^^^^^^^^^^
 * TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
 * TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 * TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
@@ -23,14 +24,16 @@ Android 20+::
 * TLS_DHE_RSA_WITH_AES_128_CBC_SHA
 * TLS_RSA_WITH_AES_128_CBC_SHA
   
-Android 11+::
+Android 11+:
+^^^^^^^^^^^^
 * TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
 * TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
 * TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
 * TLS_DHE_RSA_WITH_AES_128_CBC_SHA
 * TLS_RSA_WITH_AES_128_CBC_SHA
 
-Android 9+ (Gingerbread)::
+Android 9+ (Gingerbread):
+^^^^^^^^^^^^^^^^^^^^^^^^^
 * TLS_DHE_RSA_WITH_AES_128_CBC_SHA
 * TLS_DHE_DSS_WITH_AES_128_CBC_SHA
 * TLS_DHE_RSA_WITH_AES_128_CBC_SHA
