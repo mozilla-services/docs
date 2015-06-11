@@ -33,6 +33,7 @@ let us know in the* `mailing list <https://mail.mozilla.org/listinfo/services-de
    howtos/run-sync
    howtos/run-sync-1.5
    howtos/run-fxa
+   howtos/configure-tls
 
 
 Services
