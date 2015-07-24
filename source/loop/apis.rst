@@ -580,18 +580,8 @@ POST /calls/{token}
     Optional parameters:
 
     - **subject**, the subject of the conversation
-    - **channel**, the TokBox channel to use for the call
-
-    Channel can be one of:
-
-    - **release**
-    - **esr**
-    - **beta**
-    - **aurora**
-    - **nightly**
-    - **default**
-    - **mobile** -- used for the Firefox OS Mobile client
-    - **standalone** -- used for the standalone / "link-clicker" client
+    - **channel**, the TokBox channel to use for the call.
+	  :ref:`More information about the channel parameter <channel-information>`.
 
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
@@ -675,18 +665,8 @@ POST /calls
     Optional parameters:
 
     - **subject**, the subject of the conversation
-    - **channel**, the TokBox channel to use for the call
-
-    Channel can be one of:
-
-    - **release**
-    - **esr**
-    - **beta**
-    - **aurora**
-    - **nightly**
-    - **default**
-    - **mobile** -- used for the Firefox OS Mobile client
-    - **standalone** -- used for the standalone / "link-clicker" client
+    - **channel**, the client channel to use for the call.
+	  :ref:`More information about the channel parameter <channel-information>`.
 
     Server should answer with a status of 200 and the following information in
     its body (json encoded):
@@ -865,6 +845,8 @@ POST /rooms
     Optional parameter:
 
     - **expiresIn**, the number of hours for which the room will exist.
+    - **channel**, the client channel to use for the room.
+	  :ref:`More information about the channel parameter <channel-information>`.
 
     Response body parameters:
 
@@ -1408,6 +1390,27 @@ Participant information
       lifetime of the room, used to identify a partcipant for the
       duration of one instance of joining the room. If the user
       departs and re-joins, this id will change.
+
+
+.. _channel-information:
+
+Channel information
+-------------------
+
+The client can send its channel in order to let the server use
+different API keys (of the underlying service provider) depending on
+it.
+
+Channel can be one of:
+
+    - **release**
+    - **esr**
+    - **beta**
+    - **aurora**
+    - **nightly**
+    - **default**
+    - **mobile** -- used for the Firefox OS Mobile client
+    - **standalone** -- used for the standalone / "link-clicker" client
 
 
 Account and Session
