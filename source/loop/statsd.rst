@@ -5,30 +5,32 @@ Statsd
 Loop-Server have got a number of Statsd counters and timers that can
 help monitor what's going on in near real-time.
 
-Statsd Counters
-###############
-
-Here is a list of the statsd counters loop-server provides:
-
-- ``loop-activated-users``: Incremented when a new Hawk Session is created for a user.
-- ``loop-call-urls``: Incremented when a new call-url is created.
-- ``loop.simplepush.call``: Incremented when a call is made to a SimplePush URL
-- ``loop.simplepush.call.(success|failures)``: Count SP calls success and failures
-- ``loop.simplepush.call.{reason}``: Incremented when a call is made
-  to a SimplePush URL for a given reason
-- ``loop.simplepush.call.{reason}.(success|failures)``: Count success
-  or failures when a call is made to a SimplePush URL for a given
-  reason.
-
-Statsd Timers
-#############
-
-Here is a list of the statsd timers loop-server provides:
-
-- ``loop.aws.write``: Time AWS write calls.
-- ``loop.aws.read``: Time AWS read calls.
-- ``loop.aws.remove``: Time AWS deletion object calls.
-- ``loop.filesystem.write``: Time AWS write calls.
-- ``loop.filesystem.read``: Time AWS read calls.
-- ``loop.filesystem.remove``: Time AWS deletion object calls.
-- ``loop.tokbox.createSession``: Time TokBox createSession calls.
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| Name                                                  | Type     | Description                                                |
++=======================================================+==========+============================================================+
+| ``loop.activated-users``                              | counter  | New Hawk Session created for a user.                       |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.call-urls``                                    | counter  | New call-url creation.                                     |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.simplepush.call``                              | counter  | Calls made to a SimplePush URL.                            |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.simplepush.call.(success|failures)``           | counter  | SimplePush calls success and failures.                     |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.simplepush.call.{reason}``                     | counter  | Calls made to a SimplePush URL for a given reason.         |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.simplepush.call.{reason}.(success|failures)``  | counter  | Calls success and failures on SP urls for a given reason.  |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.aws.write``                                    | timer    | AWS S3 roomContext write calls.                            |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.aws.read``                                     | timer    | AWS S3 roomContext read calls.                             |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.aws.remove``                                   | timer    | AWS S3 roomContext deletion calls.                         |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.filesystem.write``                             | timer    | Filesystem roomContext write calls.                        |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.filesystem.read``                              | timer    | Filesystem roomContext read calls.                         |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.filesystem.remove``                            | timer    | Filesystem roomContext deletion calls.                     |
++-------------------------------------------------------+----------+------------------------------------------------------------+
+| ``loop.tokbox.createSession``                         | timer    | TokBox createSession calls.                                |
++-------------------------------------------------------+----------+------------------------------------------------------------+
