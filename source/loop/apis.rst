@@ -1804,6 +1804,7 @@ media-fail                     √                   The called user has decline
 user-unknown                             √         The indicated user id does not exist.
 closed                                   √         The other user's WSS connection closed
                                                    unexpectedly.
+answered-elsewhere                       √         This call has been answered on another device.
 ==================   ======    ======    ======    ========================================
 
 Timer Supervision
