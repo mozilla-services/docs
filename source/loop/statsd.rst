@@ -1,9 +1,12 @@
-===============
-Statsd Counters
-===============
+======
+Statsd
+======
 
-Loop-Server have got a number of Statsd Counter that can help monitor
-what's going on in near real-time.
+Loop-Server have got a number of Statsd counters and timers that can
+help monitor what's going on in near real-time.
+
+Statsd Counters
+###############
 
 Here is a list of the statsd counters loop-server provides:
 
@@ -16,3 +19,16 @@ Here is a list of the statsd counters loop-server provides:
 - ``loop.simplepush.call.{reason}.(success|failures)``: Count success
   or failures when a call is made to a SimplePush URL for a given
   reason.
+
+Statsd Timers
+#############
+
+Here is a list of the statsd timers loop-server provides:
+
+- ``loop.aws.write``: Time AWS write calls.
+- ``loop.aws.read``: Time AWS read calls.
+- ``loop.aws.remove``: Time AWS deletion object calls.
+- ``loop.filesystem.write``: Time AWS write calls.
+- ``loop.filesystem.read``: Time AWS read calls.
+- ``loop.filesystem.remove``: Time AWS deletion object calls.
+- ``loop.tokbox.createSession``: Time TokBox createSession calls.
