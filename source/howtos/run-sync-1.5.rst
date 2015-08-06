@@ -124,14 +124,20 @@ Or if you'd like to pass additional arguments to gunicorn, like this::
 Once the server is launched, you need to tell Firefox about its location.
 
 To configure desktop Firefox to talk to your new Sync server, go to
-"about:config", search for "services.sync.tokenServerURI" and change its value
+"about:config", search for "identity.sync.tokenserver.uri" and change its value
 to the URL of your server with a path of "token/1.0/sync/1.5":
 
-  - services.sync.tokenServerURI:  http://sync.example.com/token/1.0/sync/1.5
+  - identity.sync.tokenserver.uri:  http://sync.example.com/token/1.0/sync/1.5
 
 Since Firefox 33, Firefox for Android has supported custom sync servers.  To
 configure Firefox for Android, see the blog post `How to connect Firefox for
 Android to self-hosted Firefox Account and Firefox Sync servers`_.
+
+(Prior to Firefox 42, the TokenServer preference name for Firefox Desktop was
+"services.sync.tokenServerURI". While the old preference name will work in
+Firefox 42 and later, the new preference is recommended as the old preference
+name will be reset when the user signs out from Sync causing potential
+confusion.)
 
 Further Configuration
 =====================
