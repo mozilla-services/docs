@@ -147,8 +147,7 @@ and a *HMAC key*.
 
 In pseudo-code::
 
-  HMAC_INPUT = "Sync-AES_256_CBC-HMAC256"
-  info = HMAC_INPUT + username
+  info = "identity.mozilla.com/picl/v1/oldsync"
 
   T(1) = HMAC-SHA256(sync_key, info + 0x01)
   T(2) = HMAC-SHA256(sync_key, T(1) + info + 0x02)
@@ -159,12 +158,7 @@ In pseudo-code::
 Example::
 
   sync_key = \xc7\x1a\xa7\xcb\xd8\xb8\x2a\x8f\xf6\xed\xa5\x5c\x39\x47\x9f\xd2
-  username = johndoe@example.com
-  HMAC_INPUT = Sync-AES_256_CBC-HMAC256
-
-  # Combine HMAC_INPUT and username to form HKDF info input.
-  info = HMAC_INPUT + username
-    -> "Sync-AES_256_CBC-HMAC256johndoe@example.com"
+  info = "identity.mozilla.com/picl/v1/oldsync"
 
   # Perform HKDF Expansion (1)
   encryption_key = HKDF-Expand(sync_key, info + "\x01", 32)
@@ -174,6 +168,13 @@ Example::
   hmac = HKDF-Expand(sync_key, encryption_key + info + "\x02", 32)
     -> 0xbf9e48ac50a2fcc400ae4d30a58dc6a83a7720c32f58c60fd9d02db16e406216
 
+NB1: The Sync Key is stored in Firefox Accounts. It is referred to as 'kB' in
+https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#-fetching-sync-keys
+(kA is not used).
+
+NB2: In earlier versions, "Sync-AES_256_CBC-HMAC256" + username was used as the
+hkdf info string instead of "identity.mozilla.com/picl/v1/oldsync", for instance
+"Sync-AES_256_CBC-HMAC256johndoe@example.com".
 
 Record Encryption
 -----------------
