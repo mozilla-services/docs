@@ -236,6 +236,7 @@ collection.
 
     - **sort**: sorts the output:
        - 'newest' - orders by last-modified time, largest first
+       - 'oldest' - orders by last-modified time, smallest first
        - 'index' - orders by the sortindex, highest weight first
 
     The response may include an *X-Weave-Records* header indicating the
@@ -832,8 +833,8 @@ The following is a summary of protocol changes from
 | end-of-life announcements.                |                                                   |
 +-------------------------------------------+---------------------------------------------------+
 | **GET /storage/collection** no longer     | These are not in active use in current versions   |
-| accepts 'older', 'index_above',           | of Firefox, and impose additional requirements on |
-| 'index_below' or 'sort=oldest'.           | the server that may limit operational flexibility.|
+| accepts 'older', 'index_above' or         | of Firefox, and impose additional requirements on |
+| 'index_below'                             | the server that may limit operational flexibility.|
 +-------------------------------------------+---------------------------------------------------+
 | **DELETE /storage/collection** no longer  | These are not in active use in current versions   |
 | accepts query parameters other than 'ids' | of Firefox, are not all implemented correctly in  |
