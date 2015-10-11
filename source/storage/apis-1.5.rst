@@ -124,6 +124,10 @@ The last-modified time is guaranteed to be monotonically increasing and can be
 used for coordination and conflict management as described in
 :ref:`syncstorage_concurrency`.
 
+Note that the last-modified time of a collection may be larger than that of any item
+within in.  For example, if all items are deleted from the collection, its last-modified
+time will be the timestamp of the last deletion.
+
 
 API Instructions
 ================
