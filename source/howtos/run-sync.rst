@@ -120,6 +120,23 @@ Once the server is launched, you can run the Firefox Sync Wizard and choose
 You should then see a lot of output in the stdout, which are the calls made
 by the browser for the initial sync.
 
+.. note:: As of October 2015, the Mozilla-hosted sync-1.1 service has been
+   decommissioned, so you must perform some additional configuration to let
+   Firefox use a self-hosted key-exchange server; see below.
+
+
+Configuring Firefox
+===================
+
+While the sync setup dialog allows you to specify a custom storage server,
+it does not provide any UI for specifying a custom key-exchange server.  In
+order to pair with a second device, you will need to go to "about:config",
+search for "jpake.serverURL" and change its value to the URL of your server
+with a "/jpake" suffix:
+
+  - services.sync.jpake.serverURL:  http://localhost:5000/jpake
+
+
 
 Updating the server
 ===================
