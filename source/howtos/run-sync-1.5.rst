@@ -50,11 +50,12 @@ installed:
 - python-dev
 - make
 - git
+- c and c++ compiler
 
 For example, under a fresh Ubuntu, you can run this command to meet all
 requirements::
 
-    $ sudo apt-get install python-dev git-core python-virtualenv
+    $ sudo apt-get install python-dev git-core python-virtualenv g++
 
 
 Building the server
