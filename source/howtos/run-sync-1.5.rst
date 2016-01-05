@@ -302,6 +302,12 @@ Tested with debian stable/squeeze
 
         forwarded_allow_ips = *
 
+.. note:: If you see errors about "client sent too long header line" in your
+   nginx logs, you may need to configure nginx to allow large client header
+   buffers by adding this to the nginx config::
+
+        large_client_header_buffers 4 8k;
+
 
 Things that still need to be Documented
 =======================================
