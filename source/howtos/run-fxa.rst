@@ -11,6 +11,9 @@ and we don't provide any other packaging or publish official builds yet.
    questions or find any bugs, please don't hesitate to drop by the IRC channel
    or mailing list and let us know.
 
+.. note:: You might also be interested in
+   [this Docker-based self-hosting guide](https://github.com/michielbdejong/fxa-self-hosting)
+   (use at your own risk).
 
 The Firefox Accounts server is hosted in **git** and requires **nodejs**.
 Make sure your system has these, or install them:
