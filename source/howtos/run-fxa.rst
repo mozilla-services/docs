@@ -12,7 +12,7 @@ and we don't provide any other packaging or publish official builds yet.
    or mailing list and let us know.
 
 .. note:: You might also be interested in
-   [this Docker-based self-hosting guide](https://github.com/michielbdejong/fxa-self-hosting)
+   `this Docker-based self-hosting guide <https://github.com/michielbdejong/fxa-self-hosting>`_
    (use at your own risk).
 
 The Firefox Accounts server is hosted in **git** and requires **nodejs**.
