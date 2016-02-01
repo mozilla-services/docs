@@ -162,7 +162,7 @@ build the development channel like so::
    into a new database table.  To do so:
 
       1. Check that the [auth] section in your config file is using the
-        "services.user.sql.SQLUser" backend.
+         "services.user.sql.SQLUser" backend.
 
       2. Check if your database contains a "users" table.
 
