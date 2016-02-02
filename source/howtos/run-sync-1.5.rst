@@ -131,8 +131,20 @@ to the URL of your server with a path of "token/1.0/sync/1.5":
   - identity.sync.tokenserver.uri:  http://sync.example.com/token/1.0/sync/1.5
 
 Since Firefox 33, Firefox for Android has supported custom sync servers.  To
-configure Firefox for Android, see the blog post `How to connect Firefox for
-Android to self-hosted Firefox Account and Firefox Sync servers`_.
+configure Android Firefox 44 and later to talk to your new Sync server, just set
+the "identity.sync.tokenserver.uri" exactly as above **before signing in to
+Firefox Accounts and Sync on your Android device**.
+
+**Important**: *after* creating the Android account, changes to
+"identity.sync.tokenserver.uri" will be *ignored*.  (If you need to change the
+URI, delete the Android account using the *Settings > Sync > Disconnect...* menu
+item, update the pref, and sign in again.)  Non-default TokenServer URLs are
+displayed in the *Settings > Sync* panel in Firefox for Android, so you should
+be able to verify your URL there.
+
+Prior to Firefox 44, a custom add-on was needed to configure Firefox for
+Android.  For Firefox 43 and earlier, see the blog post `How to connect Firefox
+for Android to self-hosted Firefox Account and Firefox Sync servers`_.
 
 (Prior to Firefox 42, the TokenServer preference name for Firefox Desktop was
 "services.sync.tokenServerURI". While the old preference name will work in

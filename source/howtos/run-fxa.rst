@@ -36,8 +36,10 @@ own content-server:
 - https://github.com/mozilla/fxa-content-server/
 
 Now direct Firefox to use your servers rather than the default, Mozilla-hosted
-ones.  Enter "about:config" in the URL bar, search for items containing
-"fxaccounts", and edit them to use your self-hosted URLs:
+ones.  The procedure varies a little between desktop and Android Firefox.
+
+In desktop Firefox, enter "about:config" in the URL bar, search for items
+containing "fxaccounts", and edit them to use your self-hosted URLs:
 
   - use your auth-server URL to replace "api.accounts.firefox.com" in
     the following settings:
@@ -51,6 +53,38 @@ ones.  Enter "about:config" in the URL bar, search for items containing
     - identity.fxaccounts.remote.signup.uri
     - identity.fxaccounts.remote.force_auth.uri
     - identity.fxaccounts.settings.uri
+
+Since Firefox 33, Firefox for Android has supported custom Firefox Account (and
+sync) servers.  For Firefox 44 and later, enter "about:config" in the URL bar,
+search for items containing "fxaccounts", and edit them to use your self-hosted
+URLs:
+
+  - use your auth-server URL to replace "api.accounts.firefox.com" in
+    the following settings:
+
+    - identity.fxaccounts.auth.uri
+
+  - use your content-server URL to replace "accounts.firefox.com" in
+    the following settings:
+
+    - identity.fxaccounts.remote.webchannel.uri
+
+  - optionally, use your oauth- and profile-server URLs to replace
+    "{oauth,profile}.accounts.firefox.com" in
+
+    - identity.fxaccounts.remote.profile.uri
+    - identity.fxaccounts.remote.oauth.uri
+
+**Important**: *after* creating the Android account, changes to
+"identity.fxaccounts" prefs will be *ignored*.  (If you need to change the
+prefs, delete the Android account using the *Settings > Sync > Disconnect...*
+menu item, update the pref(s), and sign in again.)  Non-default Firefox Account
+URLs are displayed in the *Settings > Sync* panel in Firefox for Android, so you
+should be able to verify your URL there.
+
+Prior to Firefox 44, a custom add-on was needed to configure Firefox for
+Android.  For Firefox 43 and earlier, see the blog post `How to connect Firefox
+for Android to self-hosted Firefox Account and Firefox Sync servers`_.
 
 Since the Mozilla-hosted sync servers will not trust assertions issued by
 third-party accounts servers, you will also need to :ref:`run your own
@@ -68,3 +102,5 @@ You can ask for help:
 
 - on IRC (irc.mozilla.org) in the #fxa channel
 - in our Mailing List: https://mail.mozilla.org/listinfo/dev-fxacct
+
+.. _How to connect Firefox for Android to self-hosted Firefox Account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/
