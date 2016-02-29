@@ -1052,6 +1052,8 @@ This endpoint handles three kinds of actions:
 - **join**, A new participant joins the room.
 - **refresh**, A participant notifies she is still in the room.
 - **leave**, A participant notifies she is leaving the room.
+- **status**, A participant update his status in the room.
+- **logDomain**, A participant send metrics about whitelisted shared domains.
 
 
 Joining the room
@@ -1207,6 +1209,159 @@ Leaving the room
         Date: Mon, 10 Nov 2014 14:48:24 GMT
         Server: nginx/1.6.1
         Server-Authorization: <stripped>
+
+
+Update Status
+"""""""""""""
+
+    This endpoint is used to send some WebRTC metrics to be logged on
+    server side.
+
+    Request body parameters:
+
+    - **action**, Should be "status" in that case.
+
+    The endpoint will return a **204 No Content** response.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+    Example::
+
+        http POST localhost:5000/v1/rooms/pPVoaqiH89M --verbose \
+        action=status event=Session.connectionCreated state=sendrecv \
+        connections=2 sendStreams=1 recvStreams=1 \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        POST /rooms/pPVoaqiH89M HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 19
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "action": "status",
+            "event": "Session.connectionCreated",
+            "state": "sendrecv",
+            "connections": 2,
+            "sendStreams": 1,
+            "recvStreams": 1
+        }
+
+        HTTP/1.1 204 No Content
+        Connection: keep-alive
+        Date: Mon, 10 Nov 2014 14:48:24 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
+
+
+Shared Domain Logs
+""""""""""""""""""
+
+    This endpoint is used to log domains that where shared with the
+    Loop-client tab sharing feature.
+
+    Request body parameters:
+
+    - **action**, Should be "logDomain" in that case.
+
+    The endpoint will return a **204 No Content** response.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+    Example::
+
+        echo '{
+            "action": "logDomain",
+            "domains": [{"domain": "mozilla.org", "count": 1}, {"domain": "others": 10}]
+        }' | \
+        http POST localhost:5000/v1/rooms/pPVoaqiH89M --verbose \
+        --auth-type=hawk --auth='c0d8cd2ec579a3599bef60f060412f01f5dc46f90465f42b5c47467481315f51:'
+
+    .. code-block:: http
+
+        POST /rooms/pPVoaqiH89M HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Length: 19
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "action": "logDomain",
+            "domains": [{
+                "domain": "mozilla.org",
+                "count": 1
+            }, {
+                "domain": "others",
+                "count": 10
+            }]
+        }
+
+        HTTP/1.1 204 No Content
+        Connection: keep-alive
+        Date: Mon, 10 Nov 2014 14:48:24 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: <stripped>
+
+
+
+POST /events
+~~~~~~~~~~~~
+
+    **Requires authentication**
+
+    Event logging to the Google Analytics panel.
+
+    - **event**, The event name
+    - **action**, The action
+    - **label**, The label
+
+    The endpoint will return a **204 No Content** response.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
+    ::
+
+        http POST http://localhost:5000/v1/event -v \
+        event="Addon" action="start" label="Clicked Start Browsing" \
+        --auth-type=hawk --auth='ca13d91d1d4b67edf0b9523a2867b3d1b74eb63823732c441992f813f9da1f76:' --json
+
+    .. code-block:: http
+
+        POST /v1/event HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "action": "start", 
+            "event": "Addon", 
+            "label": "Clicked Start Browsing."
+        }
+
+
+        HTTP/1.1 204 No Content
+        Connection: keep-alive
+        Date: Mon, 29 Feb 2016 14:39:41 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: Hawk mac="jcDymnhIosT8NzEdd+JZ9mwv4ZXHKDyfK/1+04gm5bA="
+        Vary: Origin
 
 
 GET /rooms/:token
