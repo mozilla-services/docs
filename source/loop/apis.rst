@@ -1269,7 +1269,7 @@ Shared Domain Logs
 
     Request body parameters:
 
-    - **action**, Should be "logDomains" in that case.
+    - **action**, Should be "logDomain" in that case.
 
     The endpoint will return a **204 No Content** response.
 
@@ -1327,6 +1327,12 @@ POST /events
     - **action**, The action
     - **label**, The label
 
+    The endpoint will return a **204 No Content** response.
+
+    Potential HTTP error responses include:
+
+    - **400 Bad Request:**  Missing or invalid body parameters
+
     ::
 
         http POST http://localhost:5000/v1/event -v \
@@ -1335,7 +1341,7 @@ POST /events
 
     .. code-block:: http
 
-        POST /v1/fxa-oauth/params HTTP/1.1
+        POST /v1/event HTTP/1.1
         Accept: application/json
         Accept-Encoding: gzip, deflate
         Authorization: <stripped>
