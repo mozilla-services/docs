@@ -1214,8 +1214,8 @@ Leaving the room
 Update Status
 """""""""""""
 
-This endpoint is used to send some WebRTC metrics to be logged on
-server side.
+    This endpoint is used to send some WebRTC metrics to be logged on
+    server side.
 
     Request body parameters:
 
@@ -1264,8 +1264,8 @@ server side.
 Shared Domain Logs
 """"""""""""""""""
 
-This endpoint is used to log domains that where shared with the
-Loop-client tab sharing feature.
+    This endpoint is used to log domains that where shared with the
+    Loop-client tab sharing feature.
 
     Request body parameters:
 
@@ -1313,6 +1313,49 @@ Loop-client tab sharing feature.
         Date: Mon, 10 Nov 2014 14:48:24 GMT
         Server: nginx/1.6.1
         Server-Authorization: <stripped>
+
+
+
+POST /events
+~~~~~~~~~~~~
+
+    **Requires authentication**
+
+    Event logging to the Google Analytics panel.
+
+    - **event**, The event name
+    - **action**, The action
+    - **label**, The label
+
+    ::
+
+        http POST http://localhost:5000/v1/event -v \
+        event="Addon" action="start" label="Clicked Start Browsing" \
+        --auth-type=hawk --auth='ca13d91d1d4b67edf0b9523a2867b3d1b74eb63823732c441992f813f9da1f76:' --json
+
+    .. code-block:: http
+
+        POST /v1/fxa-oauth/params HTTP/1.1
+        Accept: application/json
+        Accept-Encoding: gzip, deflate
+        Authorization: <stripped>
+        Content-Type: application/json; charset=utf-8
+        Host: localhost:5000
+        User-Agent: HTTPie/0.8.0
+
+        {
+            "action": "start", 
+            "event": "Addon", 
+            "label": "Clicked Start Browsing."
+        }
+
+
+        HTTP/1.1 204 No Content
+        Connection: keep-alive
+        Date: Mon, 29 Feb 2016 14:39:41 GMT
+        Server: nginx/1.6.1
+        Server-Authorization: Hawk mac="jcDymnhIosT8NzEdd+JZ9mwv4ZXHKDyfK/1+04gm5bA="
+        Vary: Origin
 
 
 GET /rooms/:token
