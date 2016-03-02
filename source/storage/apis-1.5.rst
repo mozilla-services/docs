@@ -322,8 +322,8 @@ collection.
     - **success:** a (possibly empty) list of ids of BSOs that were
       successfully stored.
     - **failed:** a (possibly empty) object whose keys are the ids of BSOs
-      that were not stored successfully, and whose values are lists of strings
-      describing possible reasons for the failure.
+      that were not stored successfully, and whose values are strings
+      describing the reason for the failure.
 
     For example::
 
@@ -331,8 +331,8 @@ collection.
          "modified": 1233702554.25,
          "success": ["GXS58IDC_12", "GXS58IDC_13", "GXS58IDC_15",
                      "GXS58IDC_16", "GXS58IDC_18", "GXS58IDC_19"],
-         "failed": {"GXS58IDC_11": ["invalid ttl"],
-                    "GXS58IDC_14": ["invalid sortindex"]}
+         "failed": {"GXS58IDC_11": "invalid ttl"],
+                    "GXS58IDC_14": "invalid sortindex"}
         }
 
     Posted BSOs whose ids do not appear in either "success" or "failed"
