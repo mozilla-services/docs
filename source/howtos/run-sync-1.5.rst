@@ -269,7 +269,7 @@ Nginx + Gunicorn
 
 Tested with debian stable/squeeze
 
-1. First install gunicorn in the syncserver python environment
+1. First install gunicorn in the syncserver python environment::
 
     $ cd /usr/src/syncserver
     $ local/bin/easy_install gunicorn
