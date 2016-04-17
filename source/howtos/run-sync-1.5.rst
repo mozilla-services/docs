@@ -269,7 +269,7 @@ Nginx + Gunicorn
 
 Tested with debian stable/squeeze
 
-1. First install gunicorn in the syncserver python environment
+1. First install gunicorn in the syncserver python environment::
 
     $ cd /usr/src/syncserver
     $ local/bin/easy_install gunicorn
@@ -320,6 +320,21 @@ Tested with debian stable/squeeze
 
         large_client_header_buffers 4 8k;
 
+Nginx + uWSGI
+::::::::::::::::
+1. Install uWSGI and its Python 2 plugin
+2. Start it with the following options::
+
+     uwsgi --plugins python27 --manage-script-name \
+       --mount /<location>=/path/to/syncserver/syncserver.wsgi \
+       --socket /path/to/uwsgi.sock
+
+3. Use the following nginx configuration::
+
+    location /<location>/ {
+      include uwsgi_params;
+      uwsgi_pass unix:/path/to/uwsgi.sock;
+    }
 
 Things that still need to be Documented
 =======================================
