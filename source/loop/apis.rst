@@ -838,9 +838,13 @@ POST /rooms
 
     Request body parameters:
 
-    - **roomName**, The name of the room.
     - **roomOwner**, The room owner name.
     - **maxSize**, The maximum number of people the room can handle.
+
+    At least one of the following two parameters must be supplied:
+
+    - **context**, An encrypted room context string.
+    - **roomName**, The name of the room, this is now obsolete, but remains to support older clients.
 
     Optional parameter:
 
@@ -961,6 +965,7 @@ PATCH /rooms/:token
 
     Optional request body parameters:
 
+    - **context**, An encrypted room context string.
     - **roomName**, The name of the room.
     - **roomOwner**, The room owner name.
     - **maxSize**, The maximum number of people the room can handle.
@@ -1129,11 +1134,10 @@ Refreshing membership in a room
 
     - **action**, Should be "refresh" in that case.
 
-    On success, the endpoint will return a **204 No Content** response.
-
     Potential HTTP error responses include:
 
     - **400 Bad Request:**  Missing or invalid body parameters
+    - **410 Participation has expired:** The referesh did not occur within the specified time period.
 
     Example::
 
@@ -1372,6 +1376,7 @@ GET /rooms/:token
     Response body parameters:
 
     - **roomToken**, The token used to identify this room.
+    - **context**, An encrypted room context string.
     - **roomName**, The name of the room.
     - **roomUrl**, A URL that can be given to other users to allow them to join the room.
     - **roomOwner**, The user-friendly display name indicating the name of the room's owner.
@@ -1456,6 +1461,7 @@ GET /rooms
 
     - **roomToken**, The token used to identify this room.
     - **roomName**, The name of the room.
+    - **context**, An encrypted room context string.
     - **roomUrl**, A URL that can be given to other users to allow them to join the room.
     - **roomOwner**, The user-friendly display name indicating the name of the room's owner.
     - **maxSize**, The maximum number of users allowed in the room at
