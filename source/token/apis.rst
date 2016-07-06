@@ -119,7 +119,7 @@ Error Responses
 
 All errors are also returned, wherever possible, as json responses following the
 structure `described in Cornice
-<http://cornice.readthedocs.org/en/latest/validation.html#dealing-with-errors>`_.
+<https://cornice.readthedocs.io/en/latest/validation.html#dealing-with-errors>`_.
 
 In cases where generating such a response is not possible (e.g. when a request
 if so malformed as to be unparsable) then the resulting error response will
