@@ -191,7 +191,7 @@ In Bug 1097222 additional optional fields were added:
 * **os** *string*: an OS name, most likely one of "Darwin" (Mac OS X), "WINNT" (Windows), "Android", or "iOS".
 * **appPackage** *string*: an unambiguous identifier for the client application. For Android, this is the package (e.g., **org.mozilla.firefox_beta**). For desktop this is the value of **Services.appinfo.ID**.
 * **application** *string*: a human-readable application name, such as "Nightly" or "Firefox".
-* **formfactor** *string*: a value such as "phone", "largetablet", "smalltablet", "desktop", "laptop", "tv".
+* **formfactor** *string*: a value such as "phone", "tablet" (or the more specific "largetablet", "smalltablet"), "desktop", "laptop", "tv".
 * **device** *string*: a description of the hardware that this client uses. Currently only supported by Android; returns values like "HTC One".
 
 If these fields are missing, clients are expected to fall back to behaviors that do not depend on the missing data.
