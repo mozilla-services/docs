@@ -192,6 +192,31 @@ the user's data store as a whole.
     the total number of items in each collection.
 
 
+**GET** **https://<endpoint-url>/info/configuration**
+
+    Provides information about the configuration of this storage server
+    with respect to various protocol and size limits.  Returns an object
+    mapping configuration item names to their values as enforced by this
+    server.  The following configuration items may be present:
+
+    - **max_request_bytes**: the maximum size in bytes of the overall
+      HTTP request body that will be accepted by the server.
+
+    - **max_post_records**: the maximum number of records that can be
+      uploaded to a collection in a single POST request.
+
+    - **max_post_bytes**: the maximum combined size in bytes of the
+      record payloads that can be uploaded to a collection in a single
+      POST request.
+
+    - **max_total_records**: the maximum total number of records that can be
+      uploaded to a collection as part of a batched upload.
+
+    - **max_total_bytes**: the maximum total combined size in bytes of the
+      record payloads that can be uploaded to a collection as part of
+      a batched upload.
+
+
 **DELETE** **https://<endpoint-url>/storage**
 
     Deletes all records for the user.  This is URL is provided for backwards-
@@ -253,7 +278,7 @@ collection.
     the **offset** parameter to efficiently skip over the items that have
     already been read.  See :ref:`syncstorage_paging` for an example.
 
-    Two output formats are available for multiple record GET requests.
+    Two output formats are available for multiple-record GET requests.
     They are triggered by the presence of the appropriate format in the
     *Accept* request header and are prioritized in the order listed below:
 
@@ -315,6 +340,23 @@ collection.
     this means that fields not provided in the request body will not be
     overwritten on BSOs that already exist.
 
+    Two input formats are available for multiple-record POST requests,
+    selected by the *Content-Type* header of the request:
+
+    - **application/json**: the input is a JSON list of objects, one for
+      for each BSO in the request.
+
+    - **application/newlines**: each BSO is sent as a separate JSON object
+      followed by a newline.
+
+    For backwards-compatibility with existing clients, the server will also
+    treat **text/plain** input as JSON.
+
+    Note that the server may impose a limit on the total amount of data
+    included in the request, and/or may decline to process more than a certain
+    number of BSOs in a single request.  The default limit on the number
+    of BSOs per request is 100.
+
     Successful responses will contain a JSON object with details of success
     or failure for each BSO.  It will have the following keys:
 
@@ -338,26 +380,65 @@ collection.
     Posted BSOs whose ids do not appear in either "success" or "failed"
     should be treated as having failed for an unspecified reason.
 
-    Two input formats are available for multiple record POST requests,
-    selected by the *Content-Type* header of the request:
+    To allow upload of large numbers of items while ensuring that other
+    clients do not sync down inconsistent data, servers may support combining
+    several POST requests into a single "batch" so that all modified BSOs appear
+    to have been submitted at the same time.  Batching behaviour is controlled
+    by the following query parameters:
 
-    - **application/json**: the input is a JSON list of objects, one for
-      for each BSO in the request.
+    - **batch**: indicates that uploads should be batched together into a
+      single conceptual update.  To begin a new batch pass the string 'true'.
+      To add more items to an existing batch pass a previously-obtained batch
+      identifier.  This parameter is ignored by servers that do not support
+      batching.
 
-    - **application/newlines**: each BSO is sent as a separate JSON object
-      followed by a newline.
+    - **commit**: indicates that the batch should be committed, and all items
+      uploaded to that batch made visible to other clients.  If present, it
+      must be the string 'true' and the **batch** query parameter must also
+      be specified.
 
-    For backwards-compatibility with existing clients, the server will also
-    treat **text/plain** input as JSON.
+    When submitting items for inclusion in a multi-request batch upload,
+    successful responses will have a "202 Accepted" status code, and will
+    contain a JSON object giving the batch identifier rather than modification
+    time, alongside individual success or failure status for each item
+    that was sent.
 
-    Note that the server may impose a limit on the total amount of data
-    included in the request, and/or may decline to process more than a certain
-    number of BSOs in a single request.  The default limit on the number
-    of BSOs per request is 100.
+    For example::
+
+        {
+         "batch": "OPAQUEBATCHID",
+         "success": ["GXS58IDC_12", "GXS58IDC_13", "GXS58IDC_15",
+                     "GXS58IDC_16", "GXS58IDC_18", "GXS58IDC_19"],
+         "failed": {"GXS58IDC_11": "invalid ttl"],
+                    "GXS58IDC_14": "invalid sortindex"}
+        }
+
+    The returned value of "batch" can be passed in the "batch" query parameter
+    to add more items to the batch.  Items that appear in the "success" list
+    are guaranteed to become available to other clients if and when the batch
+    is successfully committed.
+
+    If the server does not support batching, it will ignore the **batch** parameter
+    and return a "200 OK" response without a batch identifier.
+
+    The response when committing a batch is identical to that generated by
+    a non-batched request.  Note that the semantics of a request with
+    **batch=true&commit=true** (i.e. starting a batch and immediately
+    committing it) are therefore identical to those of a non-batched request.
+
+    Note that the server may impose a limit on the total amount of payload data
+    included in a batch, and/or may decline to process more than a certain
+    number of BSOs as part of a single batch.  If the uploaded items exceed
+    this limit, the server will produce a **400 Bad Request** response with
+    response code **17**.  Where possible, clients should use the
+    *X-Weave-Total-Records** and *X-Weave-Total-Bytes* headers to signal
+    the expected total size of the uploads, so that oversize batches can be rejected
+    before the items are uploaded.
 
     Potential HTTP error responses include:
 
-    - **400 Bad Request:**  the user has exceeded their storage quota.
+    - **400 Bad Request, response code 14:**  the user has exceeded their storage quota.
+    - **400 Bad Request, response code 17:**  server size or item-count limit exceeded.
     - **413 Request Entity Too Large:**  the request contains more data than the
       server is willing to process in a single batch.
 
@@ -430,6 +511,47 @@ Request Headers
     If the value of this header is not a valid positive decimal value, or if the
     **X-If-Modified-Since** header is also present, then a **400 Bad Request**
     response will be returned.
+
+
+**X-Weave-Records**
+
+    This header may be sent with multi-record uploads, to indicate the
+    total number of records included in the request.  If the server
+    would not accept an upload containing that many records, then a
+    **400 Bad Request** response will be returned with response code **17**.
+
+
+**X-Weave-Bytes**
+
+    This header may be sent with multi-record uploads, to indicate the
+    combined size of payloads in the upload, in bytes.  If the server
+    would not accept an upload containing that many bytes, then a
+    **400 Bad Request** response will be returned with response code **17**.
+
+
+**X-Weave-Total-Records**
+
+    This header may be included with a POST request using the **batch** query
+    parameter, to indicate the total number of records in the batch.
+    If the server would not accept a batch containing that many records,
+    then a **400 Bad Request** response will be returned with response
+    code **17**.
+
+    If the value of this header is not a valid positive integer value, or if
+    the request is not operating on a batch, then a **400 Bad Request**
+    response will be returned with response code **1**.
+
+**X-Weave-Total-Bytes**
+
+    This header may be included with a POST request using the **batch** query
+    parameter, to indicate the total combined size of payloads in the batch,
+    in bytes.  If the server would not accept a batch containing that many
+    bytes, then a **400 Bad Request** response will be returned with response
+    code **17**.
+
+    If the value of this header is not a valid positive integer value, or if
+    the request is not operating on a batch, then a **400 Bad Request**
+    response will be returned with response code **1**.
 
 
 Response Headers
@@ -548,8 +670,16 @@ protocol.
     body cannot be parsed.
 
     If the response has a *Content-Type* of **application/json** then the body
-    will be an integer response code as documented in :ref:`respcodes`.
+    will be an integer response code as documented in :ref:`respcodes`.  The
+    respcodes with particular meaning in this protocol include:
 
+    - **6**: JSON parse failure, likely due to badly-formed POST data.
+    - **8**: invalid BSO, likely due to badly-formed POST data.
+    - **13**: invalid collection, likely invalid chars incollection name.
+    - **14**: user has exceeded their storage quota.
+    - **16**: client is known to be incompatible with the server.
+    - **17**: server limit exceeded, likely due to too many items or
+      too large a payload in a POST request.
 
 **401 Unauthorized**
 
@@ -795,6 +925,64 @@ collection, this technique should always be combined with the
         next_offset = r.headers.get("X-Weave-Next-Offset")
 
 
+.. _syncstorage_batch_upload:
+
+Example: uploading a large batch of items 
+-----------------------------------------
+
+The syncstorage server allows several upload requests to be combined into a
+single "batch" so that they all become visible to other clients as a single
+atomic unit.  This is achieved by using the **batch** and **commit** parameters
+on the upload request.
+
+Clients should begin by issuing a **POST /storage/<collection>?batch=true**
+request, which will accept items for upload and issue a new batch id in the
+response body.
+
+To add more items to the batch, make additional **POST** requests to the
+collection using the value of **batch** from the response body as the
+**batch** query parameter.
+
+When the final items have been uploaded, pass the **commit** query parameter
+to the **POST** request.  This will finalize the batch and make the uploaded
+items visible to other clients.  The last-modified time of the collection,
+as well as of all items included as part of the batch, will be incremented to
+the timestamp of this final **commit** request.
+
+To guard against other clients concurrently committing changes to the
+collection, this technique should always be combined with the
+**X-If-Unmodified-Since** header as shown below::
+
+    # Make an initial request to start a batch upload.
+    # It's possible to send some items here, but not required.
+    r = server.post("/collection?batch=true", [])
+    batch_id = r.json_body["batch"]
+
+    # Always use X-If-Unmodified-Since to detect conflicts.
+    last_modified = r.headers["X-Last-Modified"]
+    headers = {"X-If-Unmodified-Since": last_modified}
+
+    for items in split_items_into_smaller_batches():
+
+        # Send the items in several smaller batches.
+        r = server.post("/collection?batch=" + batch_id, items, headers)
+        if r.status == 412:
+            raise Exception("COLLECTION WAS MODIFIED WHILE UPLOADING ITEMS")
+
+        # The collection will not be modified yet.
+        assert r.headers['X-Last-Modified'] == last_modified
+
+    # Commit the batch once all items are uploaded.
+    # Again, it's possible to send some final items here, but not required.
+    r = server.post("/collection?commit=true&batch=" + batch_id, [], headers)
+    if r.status == 412:
+        raise Exception("COLLECTION WAS MODIFIED WHILE COMMITTING ITEMS")
+
+    # At this point all the uploaded items become visible,
+    # and the collection appears modified to other clients.
+    assert r.headers['X-Last-Modified'] > last_modified
+
+
 Changes from v1.1
 =================
 
@@ -875,5 +1063,13 @@ The following is a summary of protocol changes from
 |                                           | the server provide much stronger consistency      |
 |                                           | guarantees that will improve overall robustness   |
 |                                           | of the service.                                   |
++-------------------------------------------+---------------------------------------------------+
+| Batch uploads are supported that cross    | This is a backwards-compatible API extension that |
+| several POST requests.                    | allows clients to ensure consistency of their     |
+|                                           | uploaded items.                                   |
++-------------------------------------------+---------------------------------------------------+
+| Various server-specific size limits can   | This is a backwards-compatible API extension that |
+| be read from a new /info/configuration    | allows clients to ensure interoperability with    |
+| endpoint.                                 | configurable server behaviour.                    |
 +-------------------------------------------+---------------------------------------------------+
 
