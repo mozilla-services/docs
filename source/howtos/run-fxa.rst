@@ -68,6 +68,7 @@ URLs:
     the following settings:
 
     - identity.fxaccounts.remote.webchannel.uri
+    - webchannel.allowObject.urlWhitelist
 
   - optionally, use your oauth- and profile-server URLs to replace
     "{oauth,profile}.accounts.firefox.com" in
