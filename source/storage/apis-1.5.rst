@@ -67,7 +67,7 @@ Example::
       "id": "-F_Szdjg3GzY",
       "modified": 1388635807.41,
       "sortindex": 140,
-      "payload": "{ \"this is\": \"an example\" }
+      "payload": "{ \"this is\": \"an example\" }"
     }
 
 
