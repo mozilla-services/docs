@@ -47,9 +47,13 @@ Basic Storage Objects have the following fields:
 |               |           | 9 digits   | the collection.                                               |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | payload       | empty     | string,    | A string containing the data of the record. The structure of  |
-|               | string    | 256k       | this string is defined separately for each BSO type. This     |
-|               |           |            | spec makes no requirements for its format. In practice,       |
+|               | string    | at least   | this string is defined separately for each BSO type. This     |
+|               |           | 256KiB     | spec makes no requirements for its format. In practice,       |
 |               |           |            | JSONObjects are common.                                       |
+|               |           |            |                                                               |
+|               |           |            | Servers *must* support payloads up to 256KiB in size. They    |
+|               |           |            | may accept larger payloads, and advertise their maximum       |
+|               |           |            | payload size via dynamic configuration.                       |
 +---------------+-----------+------------+---------------------------------------------------------------+
 | ttl           | none      | integer,   | The number of seconds to keep this record. After that time    |
 |               |           | positive,  | this item will no longer be returned in response to any       |
@@ -215,6 +219,9 @@ the user's data store as a whole.
     - **max_total_bytes**: the maximum total combined size in bytes of the
       record payloads that can be uploaded to a collection as part of
       a batched upload.
+
+    - **max_record_payload_bytes**: the maximum size of an individual BSO
+      payload, in bytes.
 
 
 **DELETE** **https://<endpoint-url>/storage**
