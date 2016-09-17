@@ -22,6 +22,6 @@ It is currently being used at Mozilla in the Marketplace and Sync infrastructure
 Resources
 =========
 
-- Heka documentation: https://heka-docs.readthedocs.io
+- Heka documentation: https://hekad.readthedocs.io
 - Heka binaries: https://github.com/mozilla-services/heka/releases
 - Heka source: https://github.com/mozilla-services/heka
