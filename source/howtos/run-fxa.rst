@@ -38,21 +38,36 @@ own content-server:
 Now direct Firefox to use your servers rather than the default, Mozilla-hosted
 ones.  The procedure varies a little between desktop and Android Firefox.
 
-In desktop Firefox, enter "about:config" in the URL bar, search for items
-containing "fxaccounts", and edit them to use your self-hosted URLs:
+In desktop Firefox, enter "about:config" in the URL bar:
 
-  - use your auth-server URL to replace "api.accounts.firefox.com" in
-    the following settings:
+  - if your Firefox version is 52 or later, you can (optionally) configure a
+    custom FxA server by adding a single preference: Right click anywhere on the
+    "about:config" page and choose *New > String*, and enter
+    "identity.fxaccounts.autoconfig.uri" for the name, and your content-server
+    URL for the value.
 
-    - identity.fxaccounts.auth.uri
+    - Note that this must be set prior to loading the sign-up or sign-in page
+      in order to take effect, and its effects are reset on sign-out.
 
-  - use your content-server URL to replace "accounts.firefox.com" in
-    the following settings:
+    - Additionally, if this preference is not set, then the rest of these
+      instructions will still work, even if your Firefox version is greater or
+      equal to 52.
 
-    - identity.fxaccounts.remote.signin.uri
-    - identity.fxaccounts.remote.signup.uri
-    - identity.fxaccounts.remote.force_auth.uri
-    - identity.fxaccounts.settings.uri
+  - Otherwise, search for items containing "fxaccounts", and edit them to use
+    your self-hosted URLs:
+
+    - use your auth-server URL to replace "api.accounts.firefox.com" in
+      the following settings:
+
+      - identity.fxaccounts.auth.uri
+
+    - use your content-server URL to replace "accounts.firefox.com" in
+      the following settings:
+
+      - identity.fxaccounts.remote.signin.uri
+      - identity.fxaccounts.remote.signup.uri
+      - identity.fxaccounts.remote.force_auth.uri
+      - identity.fxaccounts.settings.uri
 
 Since Firefox 33, Firefox for Android has supported custom Firefox Account (and
 sync) servers.  For Firefox 44 and later, enter "about:config" in the URL bar,
