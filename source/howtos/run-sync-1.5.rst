@@ -130,6 +130,11 @@ to the URL of your server with a path of "token/1.0/sync/1.5":
 
   - identity.sync.tokenserver.uri:  http://sync.example.com/token/1.0/sync/1.5
 
+Alternatively, if you're running your own Firefox Accounts server, and running
+Firefox 52 or later, see the documentation on how to :ref:`howto_run_fxa` for
+how to configure your client for both Sync and Firefox Accounts with a single
+preference.
+
 Since Firefox 33, Firefox for Android has supported custom sync servers.  To
 configure Android Firefox 44 and later to talk to your new Sync server, just set
 the "identity.sync.tokenserver.uri" exactly as above **before signing in to
