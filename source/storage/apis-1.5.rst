@@ -425,6 +425,11 @@ collection.
     are guaranteed to become available to other clients if and when the batch
     is successfully committed.
 
+    Note that the value of "batch" may not be safe to include directly in a URL,
+    and that you need to be sure to encode it first (via JavaScript's
+    ``encodeURIComponent``, Python's ``urllib.quote``, or your language's
+    equivalent).
+
     If the server does not support batching, it will ignore the **batch** parameter
     and return a "200 OK" response without a batch identifier.
 
@@ -947,7 +952,7 @@ request, which will accept items for upload and issue a new batch id in the
 response body.
 
 To add more items to the batch, make additional **POST** requests to the
-collection using the value of **batch** from the response body as the
+collection using the encoded value of **batch** from the response body as the
 **batch** query parameter.
 
 When the final items have been uploaded, pass the **commit** query parameter
@@ -963,7 +968,8 @@ collection, this technique should always be combined with the
     # Make an initial request to start a batch upload.
     # It's possible to send some items here, but not required.
     r = server.post("/collection?batch=true", [])
-    batch_id = r.json_body["batch"]
+    # Note that the batch id is opaque and cannot be safely put in a URL directly
+    batch_id = urllib.quote(r.json_body["batch"])
 
     # Always use X-If-Unmodified-Since to detect conflicts.
     last_modified = r.headers["X-Last-Modified"]
