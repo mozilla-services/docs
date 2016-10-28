@@ -69,6 +69,10 @@ In desktop Firefox, enter "about:config" in the URL bar:
       - identity.fxaccounts.remote.force_auth.uri
       - identity.fxaccounts.settings.uri
 
+    - You'll also need to run your own sync server -- see below.
+
+    - You might have to restart Firefox for these changes to take effect.
+
 Since Firefox 33, Firefox for Android has supported custom Firefox Account (and
 sync) servers.  For Firefox 44 and later, enter "about:config" in the URL bar,
 search for items containing "fxaccounts", and edit them to use your self-hosted
