@@ -915,6 +915,10 @@ To fetch additional items, repeat the request using the value from
 process should be repeated; if it does not then all available items have been
 returned.
 
+When repeating requests and specifying an **offset** parameter, it is important to
+maintain any parameters which may change underlying data or its ordering.
+Other than the *offset**, one may only change the **limit** parameter.
+
 To guard against other clients making concurrent changes to the
 collection, this technique should always be combined with the
 **X-If-Unmodified-Since** header as shown below::
@@ -939,7 +943,7 @@ collection, this technique should always be combined with the
 
 .. _syncstorage_batch_upload:
 
-Example: uploading a large batch of items 
+Example: uploading a large batch of items
 -----------------------------------------
 
 The syncstorage server allows several upload requests to be combined into a
