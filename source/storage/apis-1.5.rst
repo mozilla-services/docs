@@ -917,7 +917,7 @@ returned.
 
 When repeating requests and specifying an **offset** parameter, it is important to
 maintain any parameters which may change underlying data or its ordering.
-Other than the *offset**, one may only change the **limit** parameter.
+Other than the **offset**, one may only change the **limit** parameter.
 
 To guard against other clients making concurrent changes to the
 collection, this technique should always be combined with the
