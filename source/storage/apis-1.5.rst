@@ -260,6 +260,9 @@ collection.
     - **newer**: a timestamp. Only objects whose last-modified time is
       strictly greater than this value will be returned.
 
+    - **older**: a timestamp. Only objects whose last-modified time is
+      strictly smaller than this value will be returned.
+
     - **full**: any value.  If provided then the response will be a list of
       full BSO objects rather than a list of ids.
 
@@ -1042,8 +1045,8 @@ The following is a summary of protocol changes from
 | end-of-life announcements.                |                                                   |
 +-------------------------------------------+---------------------------------------------------+
 | **GET /storage/collection** no longer     | These are not in active use in current versions   |
-| accepts 'older', 'index_above' or         | of Firefox, and impose additional requirements on |
-| 'index_below'                             | the server that may limit operational flexibility.|
+| accepts 'index_above' or 'index_below'    | of Firefox, and impose additional requirements on |
+|                                           | the server that may limit operational flexibility.|
 +-------------------------------------------+---------------------------------------------------+
 | **DELETE /storage/collection** no longer  | These are not in active use in current versions   |
 | accepts query parameters other than 'ids' | of Firefox, are not all implemented correctly in  |
