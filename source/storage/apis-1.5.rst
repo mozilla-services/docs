@@ -68,7 +68,7 @@ Basic Storage Objects have the following fields:
 Example::
 
     {
-      "id": "-F_Szdjg3GzY",
+      "id": "-F_Szdjg3GzX",
       "modified": 1388635807.41,
       "sortindex": 140,
       "payload": "{ \"this is\": \"an example\" }"
