@@ -148,6 +148,9 @@ Error status codes and their corresponding output are:
       has seen credentials with a more recent generation number.
     - **"invalid-client-state"**:  authentication failed because the server
       has seen an updated value of the *X-Client-State* header.
+    - **"new-users-disabled"**:  authentication failed because the user has
+      not been seen previously on this server, and new user accounts have
+      been disabled in the application config.
 
 - **405** : unsupported method
 - **406** : unacceptable - the client asked for an Accept we don't support
