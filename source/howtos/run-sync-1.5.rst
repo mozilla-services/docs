@@ -179,6 +179,22 @@ Then copy-paste the value into the config file like so::
     ...other settings...
     secret = db8a203aed5fe3e4594d4b75990acb76242efd35
 
+The "allowed_issuers" setting controls what domains can issue identity
+assertions for access to the service.  By default it will accept identity
+assertions from any domain.  If you are hosting your own instance of
+Firefox Accounts, you may want to restrict access to just your domain::
+
+    [browserid]
+    ...other settings...
+    allowed_issuers = sync.example.com
+
+If you are using the Mozilla-hosted account server, you may want to restrict
+access to just that domain like so::
+
+    [browserid]
+    ...other settings...
+    allowed_issuers = api.accounts.firefox.com
+
 The "allow_new_users" setting controls whether the server will accept
 requests from previously-unseen users.  It is allowed by default, but once
 you have configured Firefox and successfully synced with your user account,
