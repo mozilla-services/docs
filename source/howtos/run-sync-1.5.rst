@@ -284,6 +284,13 @@ We provide a **syncserver.wsgi** file for your convenience in the repository.
 Before running Apache, edit the file and check that it loads the the right
 .ini file with its full path.
 
+Some users have reported issues with outbound TLS connections when running
+under Apache.  If your server is giving 503 errors and the Apache error log
+mentions "SysCallError", you may be able to correct the problem by installing
+the pyopenssl library::
+
+    $ local/bin/pip install pyopenssl
+
 
 Nginx + Gunicorn
 ::::::::::::::::
@@ -293,7 +300,7 @@ Tested with debian stable/squeeze
 1. First install gunicorn in the syncserver python environment::
 
     $ cd /usr/src/syncserver
-    $ local/bin/easy_install gunicorn
+    $ local/bin/pip install gunicorn
 
 2. Then enable gunicorn in the **syncserver.ini** file::
 
