@@ -102,6 +102,7 @@ GET /
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive
@@ -127,11 +128,11 @@ GET /push-server-config
     websocket endpoint that should be used to reach simple push.
 
     The response should contain a **pushServerURI** parameter with this
-    information.
-
-    .. code-block:: http
+    information.::
 
         http localhost:5000/push-server-config
+
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive
@@ -156,11 +157,11 @@ GET /__healthcheck__
 ~~~~~~~~~~~~~~~~~~~~
 
    - Returns 200 in case of success
-   - Returns 503 with the backend error message in case backends are broken
-
-    .. code-block:: http
+   - Returns 503 with the backend error message in case backends are broken::
 
         http localhost:5000/__heartbeat__
+
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive
@@ -221,6 +222,8 @@ POST /registration
             "simplePushURL": "https://test"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 200 OK
         Access-Control-Expose-Headers: Hawk-Session-Token
         Connection: keep-alive
@@ -265,6 +268,7 @@ DELETE /registration
         Content: 0
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 204 No Content
         Connection: keep-alive
@@ -316,6 +320,7 @@ GET /call-url
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive
@@ -393,6 +398,8 @@ POST /call-url
             "subject": "MySubject"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 200 OK
         Connection: keep-alive
         Content-Length: 186
@@ -462,6 +469,8 @@ PUT /call-url/{token}
             "subject": "MySubject2"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 200 OK
         Connection: keep-alive
         Content-Length: 29
@@ -499,6 +508,8 @@ DELETE /call-url/{token}
         Content-Length: 0
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
+
+    .. code-block:: http
 
         HTTP/1.1 204 No Content
         Connection: keep-alive
@@ -545,6 +556,7 @@ GET /calls/{token}
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive
@@ -612,6 +624,8 @@ POST /calls/{token}
             "channel": "nightly",
             "subject": "MySubject"
         }
+
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive
@@ -702,6 +716,8 @@ POST /calls
             "subject": "MySubject"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 200 OK
         Connection: keep-alive
         Content-Length: 614
@@ -768,6 +784,8 @@ GET /calls?version=<version>
         Authorization: <stripped>
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
+
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive
@@ -886,6 +904,8 @@ POST /rooms
             "roomOwner": "Natim"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 201 Created
         Connection: keep-alive
         Content-Length: 109
@@ -940,6 +960,8 @@ PATCH /rooms
         {
             "deleteRoomTokens": ["pPVoaqiH89M"]
         }
+
+    .. code-block:: http
 
         HTTP/1.1 207 Multi-Status
         Connection: keep-alive
@@ -1004,6 +1026,8 @@ PATCH /rooms/:token
             "roomName": "My Room",
             "roomOwner": "Natim"
         }
+
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive
@@ -1107,6 +1131,8 @@ Joining the room
             "displayName": "Natim"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 200 OK
         Connection: keep-alive
         Content-Length: 461
@@ -1160,6 +1186,8 @@ Refreshing membership in a room
             "action": "refresh"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 200 OK
         Connection: keep-alive
         Content-Length: 461
@@ -1207,6 +1235,8 @@ Leaving the room
         {
             "action": "leave"
         }
+
+    .. code-block:: http
 
         HTTP/1.1 204 No Content
         Connection: keep-alive
@@ -1257,6 +1287,8 @@ Update Status
             "sendStreams": 1,
             "recvStreams": 1
         }
+
+    .. code-block:: http
 
         HTTP/1.1 204 No Content
         Connection: keep-alive
@@ -1312,6 +1344,8 @@ Shared Domain Logs
             }]
         }
 
+    .. code-block:: http
+
         HTTP/1.1 204 No Content
         Connection: keep-alive
         Date: Mon, 10 Nov 2014 14:48:24 GMT
@@ -1359,6 +1393,7 @@ POST /events
             "label": "Clicked Start Browsing."
         }
 
+    .. code-block:: http
 
         HTTP/1.1 204 No Content
         Connection: keep-alive
@@ -1419,6 +1454,7 @@ GET /rooms/:token
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive
@@ -1499,6 +1535,7 @@ GET /rooms
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive
@@ -1599,6 +1636,8 @@ DELETE /account
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
+
         HTTP/1.1 204 No Content
         Connection: keep-alive
         Date: Wed, 16 Jul 2014 13:03:39 GMT
@@ -1634,6 +1673,8 @@ DELETE /session
         Content-Length: 0
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
+
+    .. code-block:: http
 
         HTTP/1.1 204 No Content
         Connection: keep-alive
@@ -1685,6 +1726,8 @@ POST /fxa-oauth/params
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
+
         HTTP/1.1 200 OK
         Connection: keep-alive
         Server-Authorization: <stripped>
@@ -1722,6 +1765,8 @@ GET /fxa-oauth/token
         Content-Type: application/json; charset=utf-8
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
+
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Connection: keep-alive

@@ -1,4 +1,4 @@
-.. _howto_run_sync15:
+.. _howto_configure_tls:
 
 ==================================
 Configure your Sync server for TLS

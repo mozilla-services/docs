@@ -54,6 +54,7 @@ GET /
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Access-Control-Allow-Credentials: true
@@ -93,6 +94,7 @@ POST /register
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Access-Control-Allow-Credentials: true
@@ -143,6 +145,7 @@ POST /unregister
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 204 No Content
         Access-Control-Allow-Credentials: true
@@ -193,6 +196,8 @@ POST /discover
             "mcc": "214"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 200 OK
         Access-Control-Allow-Credentials: true
         Connection: keep-alive
@@ -232,6 +237,8 @@ POST /discover
             "mnc": "07",
             "msisdn": "3412578946"
         }
+
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Access-Control-Allow-Credentials: true
@@ -331,6 +338,8 @@ POST /sms/mt/verify
             "msisdn": "+33123456789"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 204 No Content
         Access-Control-Allow-Credentials: true
         Connection: keep-alive
@@ -389,6 +398,8 @@ POST /sms/verify_code
             "code": "15d3b227b0e58f216ee49b8da41c05c8"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 200 OK
         Access-Control-Allow-Credentials: true
         Connection: keep-alive
@@ -446,6 +457,8 @@ POST /certificate/sign
             "publicKey": "{\"algorithm\":\"DS\",\"y\":\"e6...40\",\"p\":\"d6...01\",\"q\":\"b1...3b\",\"g\":\"9a...ef\"}"
         }
 
+    .. code-block:: http
+
         HTTP/1.1 200 OK
         Access-Control-Allow-Credentials: true
         Connection: keep-alive
@@ -497,6 +510,7 @@ GET /.well-known/browserid
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Access-Control-Allow-Credentials: true
@@ -539,6 +553,7 @@ GET /api-specs
         Host: localhost:5000
         User-Agent: HTTPie/0.8.0
 
+    .. code-block:: http
 
         HTTP/1.1 200 OK
         Access-Control-Allow-Credentials: true
