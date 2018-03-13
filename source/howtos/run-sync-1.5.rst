@@ -168,7 +168,7 @@ authentication tokens.  It is blank by default, which means the server will
 randomly generate a new secret at startup.  For long-lived server installations
 this should be set to a persistent value, generated from a good source of
 randomness.  An easy way to generate such a value on posix-style systems
-is to do:
+is to do::
 
     $  head -c 20 /dev/urandom | sha1sum
     db8a203aed5fe3e4594d4b75990acb76242efd35  -
