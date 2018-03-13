@@ -60,15 +60,21 @@ For Firefox for Android version 44 or later:
   - Enter "about:config" in the URL bar,
   - Search for items containing "fxaccounts", and edit them to use your
     self-hosted URLs:
+
       - use your auth-server URL to replace "api.accounts.firefox.com" in
         the following settings:
+
         - identity.fxaccounts.auth.uri
+
       - use your content-server URL to replace "accounts.firefox.com" in
         the following settings:
+
         - identity.fxaccounts.remote.webchannel.uri
         - webchannel.allowObject.urlWhitelist
+
       - optionally, use your oauth- and profile-server URLs to replace
         "{oauth,profile}.accounts.firefox.com" in
+
         - identity.fxaccounts.remote.profile.uri
         - identity.fxaccounts.remote.oauth.uri
 
