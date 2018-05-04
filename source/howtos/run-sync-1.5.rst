@@ -179,21 +179,15 @@ Then copy-paste the value into the config file like so::
     ...other settings...
     secret = db8a203aed5fe3e4594d4b75990acb76242efd35
 
-The "allowed_issuers" setting controls what domains can issue identity
-assertions for access to the service.  By default it will accept identity
-assertions from any domain.  If you are hosting your own instance of
-Firefox Accounts, you may want to restrict access to just your domain::
+The "identity_provider" setting controls which server service can issue
+identity assertions for access to the service.  By default it will accept
+identity assertions from the Mozilla-hosted account server at
+https://accounts.firefox.com.  If you are hosting your own instance of
+Firefox Accounts, you should change this to your own domain:
 
-    [browserid]
+    [syncserver]
     ...other settings...
-    allowed_issuers = sync.example.com
-
-If you are using the Mozilla-hosted account server, you may want to restrict
-access to just that domain like so::
-
-    [browserid]
-    ...other settings...
-    allowed_issuers = api.accounts.firefox.com
+    identity_provider = https://accounts.example.com
 
 The "allow_new_users" setting controls whether the server will accept
 requests from previously-unseen users.  It is allowed by default, but once
@@ -367,8 +361,6 @@ Nginx + uWSGI
 Things that still need to be Documented
 =======================================
 
-* how to restrict new-user signups
-* how to interoperate with a self-hosted accounts server
 * periodic pruning of expired sync data
 
 
