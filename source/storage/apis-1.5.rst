@@ -598,22 +598,34 @@ Response Headers
 
     This header gives the last-modified time of the target resource
     as seen during processing of the request, and will be included in all
-    success responses (200, 201, 204).  When given in response to a write
-    request, this will be equal to the server's current time and to the new
-    last-modified time of any BSOs created or changed by the request.
+    success responses (200, 201, 204). It is similar to the standard HTTP
+    **Last-Modified** header, but the value is a decimal timestamp rather than
+    a HTTP-format date.
 
-    It is similar to the standard HTTP **Last-Modified** header, but the value
-    is a decimal timestamp rather than a HTTP-format date.
+    When sent in response to a write request, this will be equal to the server's
+    current time and to the new last-modified time of any BSOs created or changed
+    by the request.
 
 **X-Weave-Timestamp**
 
     This header will be sent back with all responses, indicating the current
-    timestamp on the server.  When given in response to a write request, this
-    will be equal to the new timestamp value of any BSOs created or changed
-    by that request.
+    timestamp on the server. It is similar to the standard HTTP **Date** header,
+    but the value is a number representing seconds since the epoch with two decimal
+    places of precision, rather than a HTTP-format date.
 
-    It is similar to the standard HTTP **Date** header, but the value is
-    a decimal timestamp rather than a HTTP-format date.
+    When sent in response to a write request, the value in this header will
+    be equal to the new last-modified time of any BSOs created or changed by that
+    request (that is, it will be equal to the value reported in **X-Last-Modified**).
+
+    When sent in response to a successful read request, the value in this header will
+    be larger than or equal to both the value reported in **X-Last-Modified**, and
+    the last-modified timestamp of any BSOs returned in the response.  In other words,
+    the server's reported time during a read will never be earlier than that recorded
+    for a previous write.
+
+    Clients **must not** use **X-Weave-Timestamp** for coordination or conflict
+    management; they should use the last-modified timestamps for this purpose as
+    described in :ref:`syncstorage_concurrency`.
 
 **X-Weave-Records**
 
