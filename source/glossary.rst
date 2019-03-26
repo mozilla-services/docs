@@ -68,3 +68,5 @@ Glossary
       number lower than the previously-seen maximum for that user, the
       Login Server can reject assertions generated using an old password.
 
+   Weave
+      The original code name for the Firefox Sync service and project.
