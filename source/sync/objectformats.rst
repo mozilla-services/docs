@@ -151,6 +151,7 @@ Same as engine version 1, except:
 * instead folder and livemark records have a children attribute which is an array of child GUIDs in order of their appearance in the folder:
 * **children** *array of strings*: ordered list of child GUIDs
 * the special folders 'menu' and 'toolbar' now have records that are synced, purely to maintain order within them according to their '''children''' array.
+* **dateAdded** *unix timestamp*: The best lower bound on the creation date for this record we have. May be missing, in the case of records uploaded by older clients when no newer client is available to fix it up.
 
 Version 3
 ---------
