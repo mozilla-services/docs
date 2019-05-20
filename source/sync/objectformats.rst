@@ -179,7 +179,7 @@ more frequently.
 
 * **name** *string*: name of the client connecting
 * **type** *string*: type of the client: "desktop" or "mobile"
-* **commands** *array*: commands to be executed upon next sync
+* **commands** *array*: commands to be executed upon next sync - see below for more
 
 In Protocol 1.5, client records additionally include:
 
@@ -197,6 +197,15 @@ In Bug 1097222 additional optional fields were added:
 If these fields are missing, clients are expected to fall back to behaviors that do not depend on the missing data.
 
 Clients should preserve existing fields if possible when sending commands to another client.
+
+commands
+^^^^^^^^
+
+commands is an array of JSON objects. Each element has the following attributes:
+
+* **command** **string**: The name of the command to execute. Currently supported commands include "resetAll", "resetEngine", "wipeAll", "wipeEngine", "logout", "displayURI", "repairRequest" and "repairResponse", although not all commands are supported by all implementations.
+* **args** **array of strings/objects**: Arguments for the command. These are specific to the command.
+* **flowIID** **optional, string**: A guid used for reporting telemetry. Both the sender and receiver of the command should report this ID in telemetry so the reliability of the sending and reception of the command can be tracked.
 
 
 Version 2 (never deployed)
