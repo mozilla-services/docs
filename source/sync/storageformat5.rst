@@ -143,30 +143,35 @@ The *Sync Key Bundle* is a *key bundle* derived from the *Sync Key* via
 SHA-256 HMAC-based HKDF (`RFC 5869 <http://tools.ietf.org/html/rfc5869>`_).
 
 Remember that a *key bundle* consists of a 256 bit symmetric *encryption key*
-and a *HMAC key*.
+and a *HMAC key*. We use HKDF to derive 64 bytes of key material from the
+Sync Key, then use the first 32 bytes for the encryption key and the
+second 32 bytes for the HMAC key.
 
 In pseudo-code::
 
   info = "identity.mozilla.com/picl/v1/oldsync"
+  prk = HKDF-Extract-SHA256(0x00 * 32, sync_key)
+  omk = HKDF-Expand-SHA256(prk, info, 64)
 
-  T(1) = HMAC-SHA256(sync_key, info + 0x01)
-  T(2) = HMAC-SHA256(sync_key, T(1) + info + 0x02)
-
-  encryption_key = T(1)
-  hmac = T(2)
+  encryption_key = okm[0:32]
+  hmac_key = okm[32:64]
 
 Example::
 
-  sync_key = \xc7\x1a\xa7\xcb\xd8\xb8\x2a\x8f\xf6\xed\xa5\x5c\x39\x47\x9f\xd2
+  sync_key = "\xc7\x1a\xa7\xcb\xd8\xb8\x2a\x8f\xf6\xed\xa5\x5c\x39\x47\x9f\xd2"
   info = "identity.mozilla.com/picl/v1/oldsync"
 
-  # Perform HKDF Expansion (1)
-  encryption_key = HKDF-Expand(sync_key, info + "\x01", 32)
-    -> 0x8d0765430ea0d9dbd53c536c6c5c4cb639c093075ef2bd77cd30cf485138b905
+  prk = HKDF-Extract-SHA256("\x00" * 32, sync_key)
+    -> 0x89925e544da1434db1e7c9a59224a7033940c14c9321fb2a14c8ee1c37ae8d80
 
-  # Second round of HKDF
-  hmac = HKDF-Expand(sync_key, encryption_key + info + "\x02", 32)
-    -> 0xbf9e48ac50a2fcc400ae4d30a58dc6a83a7720c32f58c60fd9d02db16e406216
+  okm = HKDF-Expand-SHA256(prk, info, 64)
+    -> 0x36ae05317f08eaa6f12c72633d6f9a1162cbbf9300a6728730db48643af73342a65574d6685dbf65a735912d272ee1ebe98c867428fb54616deae7bb7bc23dcc
+
+  encryption_key = okm[0:32]
+    -> 0x36ae05317f08eaa6f12c72633d6f9a1162cbbf9300a6728730db48643af73342
+
+  hmac_key = okm[32:64]
+    -> 0xa65574d6685dbf65a735912d272ee1ebe98c867428fb54616deae7bb7bc23dcc
 
 NB1: The Sync Key is stored in Firefox Accounts. It is referred to as 'kB' in
 https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#-fetching-sync-keys
