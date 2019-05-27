@@ -126,9 +126,9 @@ Once the server is launched, you need to tell Firefox about its location.
 
 To configure desktop Firefox to talk to your new Sync server, go to
 "about:config", search for "identity.sync.tokenserver.uri" and change its value
-to the URL of your server with a path of "token/1.0/sync/1.5":
+to be the public URL of your server with a path of "token/1.0/sync/1.5":
 
-  - identity.sync.tokenserver.uri:  http://sync.example.com/token/1.0/sync/1.5
+  - identity.sync.tokenserver.uri:  http://localhost:5000/token/1.0/sync/1.5
 
 Alternatively, if you're running your own Firefox Accounts server, and running
 Firefox 52 or later, see the documentation on how to :ref:`howto_run_fxa` for
