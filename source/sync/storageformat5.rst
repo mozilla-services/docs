@@ -41,25 +41,28 @@ bundle is combined with a per-record 16 byte IV and a user's data is converted
 into ciphertext. The ciphertext is *signed* with the key bundle's **HMAC key**.
 The *ciphertext*, *IV*, and *HMAC value* are then uploaded to the server.
 
-When Sync is initially configured, that client generates a random 128 bit
-sequence called the **Sync Key**. This private key is used to derive a special
-*key bundle* via HKDF. This is called the **Sync key bundle**. The *Sync key
-bundle* is used to encrypt and decrypt a special record on the server which
-holds more *key bundles*. *Key bundles* inside this record are what's used
-to encrypt and decrypt all other records on the server.
+When Sync is initially configured by signing in with a Firefox Account, the
+client obtains a 256-bit encryption key called the **Class-B Master Key**. This
+key is used to derive a special *key bundle* via HKDF, called the **Sync Key
+Bundle**. The *Sync Key Bundle* is used to encrypt and decrypt a special record
+on the server which holds more *key bundles*. *Key bundles* inside this record
+are what's used to encrypt and decrypt all other records on the server.
+
+
 
 Terminology
 -----------
 
-Sync Key
-    128 bit random value which effectively serves as the master key to Sync.
+Class-B Master Key
+    256-bit encryption key obtained from Firefox Accounts, which effectively serves
+    as the master key to Sync.
 
 Key Bundle
     A pair of 256 bit keys. One key is used for **symmetric encryption**. The
     other is used for **HMAC hashing**.
 
 Sync Key Bundle
-    A **Key Bundle** derived from the **Sync Key** via **HKDF**.
+    A **Key Bundle** derived from the **Class-B Master Key** via **HKDF**.
 
 HKDF
     Cryptographic technique to create values derived from another.
@@ -93,64 +96,34 @@ HMAC Hashing
     tampered with. A **HMAC Key** is applied over a **Ciphertext** to produce
     a **HMAC Value.**
 
-The Sync Key
-------------
+Class-B Master Key
+------------------
 
-The *Sync Key* is the master private key for all of Sync. A single *Sync Key*
-is shared between all clients that wish to collaborate with each other using
-the server. It is important to state that the *Sync Key* should never be
-transmitted to an untrusted party or stored where others could access it. This
-includes inside the storage server.
+All encryption keys used in Sync are ultimately tied back to the user's
+*Class-B Master Key*, which is managed by Firefox Accounts and obtained
+through the `FxA signin protocol <https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol>`_
+(which refers to this value as "kB").
+All clients that wish to collaborate via Sync share the same value for this key.
+It is important to state that the *Class-B Master Key* or keys derived from it
+should never be transmitted to an untrusted party or stored where others could
+access it. This includes inside the storage server.
 
-The *Sync Key* is a randomly generated 128 bit sequence. Generation of this
-value is left to the client. It is assumed that the chosen random sequence is
-cryptographically random.
-
-For presentation purposes, the *Sync Key* should be represented as 26
-characters from the *friendly* base32 alphabet with dashes after the 1st,
-6th, 11th, 16th, and 21st characters. Our *friendly* base32 alphabet uses
-lower case characters and substitutes **8** for **l** and **9** for **o**.
-This prevents ambiguity between **1** and **l** and **0** and **o**. In
-addition, we strip off padding that may be at the end of the string.
-
-In pseudo-code::
-
-  sync_key = randomBytes(16)
-  sync_key_ui = encodeBase32(sync_key).lowerCase().substr(0, 26).replace('l', '8').replace('o', '9')
-  sync_key_dashes = sync_key_ui.replaceRegEx(/{.{1,5})/g, "-$1")
-
-Example::
-
-  # Generate 16 random bytes
-  \xc7\x1a\xa7\xcb\xd8\xb8\x2a\x8f\xf6\xed\xa5\x5c\x39\x47\x9f\xd2
-
-  # Base32 encode
-  Y4NKPS6YXAVI75XNUVODSR472I======
-
-  # Lower case and strip
-  y4nkps6yxavi75xnuvodsr472i
-
-  # Perform friendly string substitution (note 'o' to '9')
-  y4nkps6yxavi75xnuv9dsr472i
-
-  # Add dashes for user presentation
-  y-4nkps-6yxav-i75xn-uv9ds-r472i
 
 Sync Key Bundle
 ---------------
 
-The *Sync Key Bundle* is a *key bundle* derived from the *Sync Key* via
-SHA-256 HMAC-based HKDF (`RFC 5869 <http://tools.ietf.org/html/rfc5869>`_).
+The *Sync Key Bundle* is a *key bundle* derived from the *Class-B Master Key*
+via SHA-256 HMAC-based HKDF (`RFC 5869 <http://tools.ietf.org/html/rfc5869>`_).
 
 Remember that a *key bundle* consists of a 256 bit symmetric *encryption key*
 and a *HMAC key*. We use HKDF to derive 64 bytes of key material from the
-Sync Key, then use the first 32 bytes for the encryption key and the
+Class-B Master Key, then use the first 32 bytes for the encryption key and the
 second 32 bytes for the HMAC key.
 
 In pseudo-code::
 
   info = "identity.mozilla.com/picl/v1/oldsync"
-  prk = HKDF-Extract-SHA256(0x00 * 32, sync_key)
+  prk = HKDF-Extract-SHA256(0x00 * 32, master_key)
   omk = HKDF-Expand-SHA256(prk, info, 64)
 
   encryption_key = okm[0:32]
@@ -158,10 +131,10 @@ In pseudo-code::
 
 Example::
 
-  sync_key = "\xc7\x1a\xa7\xcb\xd8\xb8\x2a\x8f\xf6\xed\xa5\x5c\x39\x47\x9f\xd2"
+  master_key = "\xc7\x1a\xa7\xcb\xd8\xb8\x2a\x8f\xf6\xed\xa5\x5c\x39\x47\x9f\xd2"
   info = "identity.mozilla.com/picl/v1/oldsync"
 
-  prk = HKDF-Extract-SHA256("\x00" * 32, sync_key)
+  prk = HKDF-Extract-SHA256("\x00" * 32, master_key)
     -> 0x89925e544da1434db1e7c9a59224a7033940c14c9321fb2a14c8ee1c37ae8d80
 
   okm = HKDF-Expand-SHA256(prk, info, 64)
@@ -173,13 +146,6 @@ Example::
   hmac_key = okm[32:64]
     -> 0xa65574d6685dbf65a735912d272ee1ebe98c867428fb54616deae7bb7bc23dcc
 
-NB1: The Sync Key is stored in Firefox Accounts. It is referred to as 'kB' in
-https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#-fetching-sync-keys
-(kA is not used).
-
-NB2: In earlier versions, "Sync-AES_256_CBC-HMAC256" + username was used as the
-hkdf info string instead of "identity.mozilla.com/picl/v1/oldsync", for instance
-"Sync-AES_256_CBC-HMAC256johndoe@example.com".
 
 Record Encryption
 -----------------
@@ -258,22 +224,6 @@ In pseudo-code::
 Example::
 
     TODO
-
-New Account Bootstrap
----------------------
-
-When a new Sync account is initially configured or when an existing Sync
-account is reset, we perform an initial bootstrap of the cryptographic
-components.
-
-1. The *Sync Key* is generated.
-2. The *Sync key bundle* is derived from the *Sync Key*.
-3. New *key bundles* are created.
-4. The new *key bundles* are assembled into a *bulk key bundle*/record and
-   uploaded to the server after being encrypted by the *Sync key bundle*.
-
-At this point, the client is bootstrapped from a cryptography perspective.
-
 
 .. _sync_storageformat5_metaglobal:
 
@@ -359,7 +309,7 @@ Encrypting and decrypting
 -------------------------
 
 The ```crypto/keys``` WBO is encrypted and verified just like any other WBO,
-except the Sync Key bundle is used instead of a bulk key bundle.
+except the Sync Key Bundle is used instead of a bulk key bundle.
 
 Format
 ------
