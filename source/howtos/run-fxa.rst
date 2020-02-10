@@ -56,7 +56,11 @@ For Firefox for iOS version 9.0 or later:
   - Enter your content-server URL
   - Toggle "Use Custom Account Service" to on.
 
-For Firefox for Android version 44 or later:
+For Firefox Preview for Android ("Fenix"):
+  - There is not yet support for using a non-Mozilla-hosted account server.
+  - The work is being tracked in a github issue at https://github.com/mozilla-mobile/fenix/issues/3762.
+
+For Firefox for Android ("Fennec") version 44 or later:
   - Enter "about:config" in the URL bar,
   - Search for items containing "fxaccounts", and edit them to use your
     self-hosted URLs:
