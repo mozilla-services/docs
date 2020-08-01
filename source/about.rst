@@ -50,8 +50,6 @@ Directory Structure
 The source is located in the :file:`source` directory and contains:
 
 - **howtos**: a directory with How Tos
-- **server-devguide**: server development guide, guidelines, how to release a
-  server app etc.
 - one directory per Server application (**reg**, **sreg**, etc.)
 
 Update process
