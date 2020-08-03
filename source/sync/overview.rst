@@ -100,3 +100,12 @@ for different features. For example, some clients may be read-only.
 
 A specific client often targets specific versions of the storage service and
 :ref:`Sync storage formats <sync_storageformats>`.
+
+
+Storage Limits
+============
+
+Each Firefox Account is limited to 2GB of data per *collection*. This affects all Sync Clients associated with that account.
+
+When a Sync Client sends a sync request to a *collection* with greater than 2GB of data, the Sync Server will respond with a specific error code indicating a
+:ref:`User over quota error <respcodes>`.
