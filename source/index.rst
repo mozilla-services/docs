@@ -58,15 +58,6 @@ jump to the detailed documentation for each service:
    msisdn-gateway/index
 
 
-Server-side development guide
-=============================
-
-.. toctree::
-   :maxdepth: 1
-
-   server-devguide/index
-
-
 Client Development
 ==================
 

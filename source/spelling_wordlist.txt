@@ -131,7 +131,6 @@ reCaptcha
 redis
 reqs
 roundtrips
-rpms
 Sagrada
 scp
 snode
