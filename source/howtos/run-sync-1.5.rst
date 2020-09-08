@@ -161,6 +161,13 @@ Firefox 42 and later, the new preference is recommended as the old preference
 name will be reset when the user signs out from Sync causing potential
 confusion.)
 
+Since Firefox 18, Firefox for iOS has support for custom sync servers. The settings
+can be made in the Advanced Sync Settings in the Firefox account section, which are
+visible if you are not signed in with a Firefox account and have enabled the debug mode
+(tap 5 times on the version number). In order to use the custom sync server with Firefox 28,
+the token server's url must not contain the path "/1.0/sync/1.5". It is also important to 
+configure a custom FxA content server (you may use the default https://accounts.firefox.com).
+
 Further Configuration
 =====================
 
