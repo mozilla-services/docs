@@ -135,12 +135,14 @@ Firefox 52 or later, see the documentation on how to :ref:`howto_run_fxa` for
 how to configure your client for both Sync and Firefox Accounts with a single
 preference.
 
-Firefox Preview for Android ("Fenix") does not yet support using a
-non-Mozilla-hosted sync server. The work is being tracked in a github
-issue at https://github.com/mozilla-mobile/fenix/issues/3762. 
+Firefox for Android ("Daylight", versions 79 and later) does support using a 
+non-Mozilla-hosted Sync server. **Before logging in**, go to App Menu > Settings 
+> About Firefox and click the logo 5 times. You should see a "debug menu enabled" 
+notification. Go back to the main menu and you will see two options for a custom 
+account server and a custom Sync server. Set the Sync server to the URL given 
+above and then log in.
 
-Since Firefox 33, Firefox for Android ("Fennec") has supported custom sync servers.
-To configure Android Firefox 44 and later to talk to your new Sync server, just set
+To configure Android Firefox 44 up to 78 to talk to your new Sync server, just set
 the "identity.sync.tokenserver.uri" exactly as above **before signing in to
 Firefox Accounts and Sync on your Android device**.
 
