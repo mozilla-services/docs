@@ -140,7 +140,7 @@ non-Mozilla-hosted Sync server. **Before logging in**, go to App Menu > Settings
 > About Firefox and click the logo 5 times. You should see a "debug menu enabled" 
 notification. Go back to the main menu and you will see two options for a custom 
 account server and a custom Sync server. Set the Sync server to the URL given 
-above and then log in.
+above (in the format of "http://localhost:5000/token/1.0") and then log in.
 
 To configure Android Firefox 44 up to 78 to talk to your new Sync server, just set
 the "identity.sync.tokenserver.uri" exactly as above **before signing in to
