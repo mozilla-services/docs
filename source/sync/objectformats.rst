@@ -421,7 +421,7 @@ Tabs describe the opened tabs on a given client to provide functionality like ge
 * **title** *string*: title of the current page
 * **urlHistory** *array of strings*: page urls in the tab's history
 * **icon** *string*: favicon uri of the tab
-* **lastUsed** *string* or *integer*: string representation of Unix epoch (in seconds) at which the tab was last accessed. Or the integer 0. Your code should accept either. This is ghastly; we apologize.
+* **lastUsed** *integer*: Time in seconds since Unix epoch at which the tab was last accessed. The preferred format for this field is an integer, but older clients are known to write floats or stringified floats, so clients should be prepared to receive values in those formats as well.
 
 Version 2
 ---------
