@@ -101,7 +101,7 @@ Class-B Master Key
 
 All encryption keys used in Sync are ultimately tied back to the user's
 *Class-B Master Key*, which is managed by Firefox Accounts and obtained
-through the `FxA signin protocol <https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol>`_
+through the `FxA signin protocol <https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-onepw-protocol>`_
 (which refers to this value as "kB").
 All clients that wish to collaborate via Sync share the same value for this key.
 It is important to state that the *Class-B Master Key* or keys derived from it
