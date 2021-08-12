@@ -1,8 +1,8 @@
 .. _server_storage_api_10:
 
-================
-Storage API v1.0
-================
+===========================
+Storage API v1.0 (Obsolete)
+===========================
 
 This document describes the Sync Server Storage API, version 1.0. It has been
 replaced by :ref:`server_storage_api_11`.

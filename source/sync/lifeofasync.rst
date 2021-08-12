@@ -271,10 +271,10 @@ to send commands between clients. Some commands tell a client to do important
 things, like clear data. Because of this, commands need to be processed before
 other collections.
 
-OLD CONTENT
-===========
+INCOMPLETE CONTENT
+==================
 
-Don't read below this. It is old and needs to be formalized.
+The notes below are old and need to be cleaned up into something useable.
 
 Perform sync
 ------------

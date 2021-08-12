@@ -17,6 +17,4 @@ deeper.
    lifeofasync
    storageformats
    storageformat5
-   storageformat6
    objectformats
-   mozilla
