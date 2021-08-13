@@ -25,15 +25,10 @@ A self-hosted Firefox Accounts server requires two components: an auth-server
 that manages the accounts database, and a content-server that hosts a web-based
 user interface.
 
-Clone the fxa-auth-server repository and follow the README to deploy your
-own auth-server:
+Clone the fxa repository and follow the README to deploy your own auth-server
+and content-server instances:
 
-- https://github.com/mozilla/fxa-auth-server/
-
-Clone the fxa-content-server repository and follow the README to deploy your
-own content-server:
-
-- https://github.com/mozilla/fxa-content-server/
+- https://github.com/mozilla/fxa/
 
 Now direct Firefox to use your servers rather than the default, Mozilla-hosted
 ones.  The procedure varies a little between desktop and mobile Firefox, and

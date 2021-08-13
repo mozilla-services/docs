@@ -1,8 +1,11 @@
 .. _server_storage_api_11:
 
-================
-Storage API v1.1
-================
+===========================
+Storage API v1.1 (Obsolete)
+===========================
+
+This document describes the Sync Server Storage API, version 1.1. It has been
+replaced by :ref:`server_syncstorage_api_15`.
 
 The Storage server provides web services that can be used to store and
 retrieve **Weave Basic Objects** or **WBOs** organized into **collections**.

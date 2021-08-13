@@ -10,7 +10,7 @@ of your own client software to access the Firefox Sync services (a “Third Part
 Client”), you acknowledge that you will need to install and use a local version
 of the Firefox Sync server for multiple account testing and that any use of
 Mozilla’s hosted Firefox Sync services is subject to Mozilla’s Firefox Sync
-Terms of Service at http://docs.services.mozilla.com/tos
+Terms of Service at https://www.mozilla.org/en-US/about/legal/terms/services/
 
 Further, you agree (a) to maintain and link to (including on websites from which
 your Third Party Client may be downloaded) a separate, conspicuous, and

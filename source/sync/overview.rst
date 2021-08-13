@@ -103,7 +103,7 @@ A specific client often targets specific versions of the storage service and
 
 
 Storage Limits
-============
+==============
 
 Each Firefox Account is limited to 2GB of data per *collection*. This affects all Sync Clients associated with that account.
 

@@ -6,7 +6,7 @@ Glossary
    :sorted:
 
    Service
-      A service Mozilla provides, like **Sync** or **Easy Setup**.
+      A service Mozilla provides, like **Sync**.
 
    Login Server
       Used to authenticate user, returns tokens that can be used
@@ -28,9 +28,6 @@ Glossary
    Cluster
       Group of webheads and storage devices that make up a set of Service
       Nodes.
-
-   Colo
-      Physical datacenter, may contain multiple clusters
 
    HKDF
       HMAC-based Key Derivation Function, a method for deriving multiple

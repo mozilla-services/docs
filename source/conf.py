@@ -58,4 +58,3 @@ man_pages = [
      [u'Tarek Ziade'], 1)
 ]
 
-html_static_path = ['binaries']

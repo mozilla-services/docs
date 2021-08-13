@@ -56,27 +56,6 @@ A :ref:`full overview<sync_storageformat5>` is available for reference.
 
 Historical notes are `available <https://wiki.mozilla.org/index.php?title=Services/Sync/SimplifiedCrypto&oldid=276735>`_.
 
-Version 6 (???)
----------------
-
-**PROPOSAL**
-
-In terms of cryptography, version 6 is a natural evolution of version 5. It
-makes minor changes to low-level cryptography details.
-
-One driving force behind version 6 was the need to support storage of the
-*encrypted* Sync Key on the storage server. This was required in order to
-support BrowserID integration.
-
-Another driving force was the transition to version 2.0 of the
-:ref:`Storage Service<server_storage>`.
-
-Strictly speaking, neither of these require a new global storage version.
-However, they presented an enticing opportunity to fix minor issues with
-version 5.
-
-Version 6 is :ref:`fully documented<sync_storageformat6>`.
-
 Collection/Object Format Versions
 =================================
 

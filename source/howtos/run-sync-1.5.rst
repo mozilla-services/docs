@@ -4,23 +4,17 @@
 Run your own Sync-1.5 Server
 ============================
 
-The Firefox Sync Server is deployed on our systems using RPM packaging,
-and we don't provide any other packaging or publish official RPMs yet.
+Mozilla does not provide any pre-packaged release of the Firefox Sync server.
 
 The easiest way to install a Sync Server is to checkout our repository
 and run a build in-place. Once this is done, Sync can be run behind
-any Web Server that supports the :term:`WSGI` protocol.
+any Web Server that supports the `WSGI` protocol.
 
 Important Notes
 ===============
 
-These instructions are for the sync-1.5 server protocol used by the
-the `new sync service <https://wiki.mozilla.org/User_Services/Sync>`_  in
-Firefox 29 and later.  For a server compatible with earlier versions of
-Firefox, see :ref:`howto_run_sync11`.
-
-The new sync service uses `Firefox Accounts <https://wiki.mozilla.org/Identity/FirefoxAccounts>`_ for user authentication, which is a separate service and is
-not covered by this guide.
+The sync service uses `Firefox Accounts <https://wiki.mozilla.org/Identity/FirefoxAccounts>`_
+for user authentication, which is a separate service and is not covered by this guide.
 
 .. note:: By default, a server set up using this guide will defer authentication
    to the Mozilla-hosted accounts server at https://accounts.firefox.com.
@@ -382,7 +376,6 @@ Asking for help
 
 Don't hesitate to jump online and ask us for help:
 
-- on IRC (irc.mozilla.org) in the #sync channel
-- in our Mailing List: https://mail.mozilla.org/listinfo/sync-dev
+- on Element (https://chat.mozilla.org) in the `#sync channel <https://chat.mozilla.org/#/room/#sync:mozilla.org>`_
 
 .. _How to connect Firefox for Android to self-hosted Firefox Account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/
