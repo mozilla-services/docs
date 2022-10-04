@@ -74,9 +74,6 @@ Example::
       "payload": "{ \"this is\": \"an example\" }"
     }
 
-.. _bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1657536
-.. _issue: https://github.com/mozilla/application-services/issues/3508
-
 Collections
 -----------
 
