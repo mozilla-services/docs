@@ -63,15 +63,6 @@ Basic Storage Objects have the following fields:
 |               |           |            | This field may be set on write, but is not returned by the    |
 |               |           |            | server.                                                       |
 +---------------+-----------+------------+---------------------------------------------------------------+
-| deleted       | none      | boolean    | Whether this is a "tombstone" (ie, a record that marks the    |
-|               |           |            | fact an item once existed but no longer does). Only exists    |
-|               |           |            | when the value is `true`. There will also be the same flag in |
-|               |           |            | the encrypted payload for the record. This was added in this  |
-|               |           |            | bug_ for desktop and this issue_ for rust so old              |
-|               |           |            | tombstone records will not have this set. The flag was created|
-|               |           |            | so the server can implement hueristics for tombstones without |
-|               |           |            | needing to deduce based on the payload size.                  |
-+---------------+-----------+------------+---------------------------------------------------------------+
 
 
 Example::
@@ -82,9 +73,6 @@ Example::
       "sortindex": 140,
       "payload": "{ \"this is\": \"an example\" }"
     }
-
-.. _bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1657536
-.. _issue: https://github.com/mozilla/application-services/issues/3508
 
 Collections
 -----------
