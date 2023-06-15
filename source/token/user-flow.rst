@@ -2,7 +2,7 @@
 User Flow
 =========
 
-Here's the proposed two-step flow (with BrowserID/FxA assertions):
+Here's the proposed two-step flow (with BrowserID/Mozilla account assertions):
 
 1. the client trades a BrowserID assertion for an :term:`Auth token` and
    corresponding secret

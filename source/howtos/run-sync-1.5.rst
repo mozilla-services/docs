@@ -13,13 +13,13 @@ any Web Server that supports the `WSGI` protocol.
 Important Notes
 ===============
 
-The sync service uses `Firefox Accounts <https://wiki.mozilla.org/Identity/FirefoxAccounts>`_
+The sync service uses `Mozilla accounts <https://wiki.mozilla.org/Identity/FirefoxAccounts>`_
 for user authentication, which is a separate service and is not covered by this guide.
 
 .. note:: By default, a server set up using this guide will defer authentication
-   to the Mozilla-hosted accounts server at https://accounts.firefox.com.
+   to the Mozilla-hosted accounts server at `https://accounts.firefox.com`.
 
-You can safely use the Mozilla-hosted Firefox Accounts server in combination
+You can safely use the Mozilla-hosted Mozilla accounts server in combination
 with a self-hosted sync storage server.  The authentication and encryption
 protocols are designed so that the account server does not know the user's
 plaintext password, and therefore cannot access their stored sync data.
@@ -124,21 +124,21 @@ to be the public URL of your server with a path of "token/1.0/sync/1.5":
 
   - identity.sync.tokenserver.uri:  http://localhost:5000/token/1.0/sync/1.5
 
-Alternatively, if you're running your own Firefox Accounts server, and running
+Alternatively, if you're running your own Mozilla accounts server, and running
 Firefox 52 or later, see the documentation on how to :ref:`howto_run_fxa` for
-how to configure your client for both Sync and Firefox Accounts with a single
+how to configure your client for both Sync and Mozilla accounts with a single
 preference.
 
 Firefox for Android ("Daylight", versions 79 and later) does support using a 
 non-Mozilla-hosted Sync server. **Before logging in**, go to App Menu > Settings 
 > About Firefox and click the logo 5 times. You should see a "debug menu enabled" 
-notification. Go back to the main menu and you will see two options for a custom 
+notification. Go back to the main menu and you will see two options for a custom
 account server and a custom Sync server. Set the Sync server to the URL given 
 above and then log in.
 
 To configure Android Firefox 44 up to 78 to talk to your new Sync server, just set
 the "identity.sync.tokenserver.uri" exactly as above **before signing in to
-Firefox Accounts and Sync on your Android device**.
+Mozilla accounts and Sync on your Android device**.
 
 **Important**: *after* creating the Android account, changes to
 "identity.sync.tokenserver.uri" will be *ignored*.  (If you need to change the
@@ -149,7 +149,7 @@ be able to verify your URL there.
 
 Prior to Firefox 44, a custom add-on was needed to configure Firefox for
 Android.  For Firefox 43 and earlier, see the blog post `How to connect Firefox
-for Android to self-hosted Firefox Account and Firefox Sync servers`_.
+for Android to self-hosted Mozilla account and Firefox Sync servers`_.
 
 (Prior to Firefox 42, the TokenServer preference name for Firefox Desktop was
 "services.sync.tokenServerURI". While the old preference name will work in
@@ -158,11 +158,11 @@ name will be reset when the user signs out from Sync causing potential
 confusion.)
 
 Since Firefox 18, Firefox for iOS has support for custom sync servers. The settings
-can be made in the Advanced Sync Settings in the Firefox account section, which are
-visible if you are not signed in with a Firefox account and have enabled the debug mode
+can be made in the Advanced Sync Settings in the Mozilla account section, which are
+visible if you are not signed in with a Mozilla account and have enabled the debug mode
 (tap 5 times on the version number). In order to use the custom sync server with Firefox 28,
-the token server's url must not contain the path "/1.0/sync/1.5". It is also important to 
-configure a custom FxA content server (you may use the default https://accounts.firefox.com).
+the token server's url must not contain the path "/1.0/sync/1.5". It is also important to
+configure a custom account content server (you may use the default `https://accounts.firefox.com`).
 
 Further Configuration
 =====================
@@ -189,8 +189,8 @@ Then copy-paste the value into the config file like so::
 The "identity_provider" setting controls which server service can issue
 identity assertions for access to the service.  By default it will accept
 identity assertions from the Mozilla-hosted account server at
-https://accounts.firefox.com.  If you are hosting your own instance of
-Firefox Accounts, you should change this to your own domain:
+`https://accounts.firefox.com`.  If you are hosting your own instance of
+Mozilla accounts, you should change this to your own domain:
 
     [syncserver]
     ...other settings...
@@ -378,4 +378,4 @@ Don't hesitate to jump online and ask us for help:
 
 - on Element (https://chat.mozilla.org) in the `#sync channel <https://chat.mozilla.org/#/room/#sync:mozilla.org>`_
 
-.. _How to connect Firefox for Android to self-hosted Firefox Account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/
+.. _How to connect Firefox for Android to self-hosted Mozilla Account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/

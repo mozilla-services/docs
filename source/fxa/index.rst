@@ -1,10 +1,10 @@
 .. _server_fxa:
 
 =======================
-Firefox Accounts Server
+Mozilla Accounts Server
 =======================
 
-The Firefox Accounts server provides a centralized database of all user
+The Mozilla accounts server provides a centralized database of all user
 accounts for accessing Mozilla-hosted services.
 
 By default, Firefox will use Mozilla's hosted accounts server at `<https://accounts.firefox.com>`_.  This configuration will work well for most use-cases,
