@@ -96,9 +96,6 @@ review the Mozilla Trademark Policy and Mozilla Branding Guidelines:
   - https://www.mozilla.org/en-US/foundation/trademarks/policy/
   - http://www.mozilla.org/en-US/styleguide/identity/mozilla/branding/
 
-You can ask for help:
-
-- on IRC (irc.mozilla.org) in the #fxa channel
-- in our Mailing List: https://mail.mozilla.org/listinfo/dev-fxacct
+You can ask for help on Matrix (chat.mozilla.org) in the #fxa room (https://chat.mozilla.org/#/room/#fxa:mozilla.org)
 
 .. _How to connect Firefox for Android to self-hosted Firefox Account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/
