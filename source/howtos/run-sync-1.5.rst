@@ -149,7 +149,7 @@ be able to verify your URL there.
 
 Prior to Firefox 44, a custom add-on was needed to configure Firefox for
 Android.  For Firefox 43 and earlier, see the blog post `How to connect Firefox
-for Android to self-hosted Mozilla account and Firefox Sync servers`_.
+for Android to self-hosted Mozilla Account and Firefox Sync servers`_.
 
 (Prior to Firefox 42, the TokenServer preference name for Firefox Desktop was
 "services.sync.tokenServerURI". While the old preference name will work in

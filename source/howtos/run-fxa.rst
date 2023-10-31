@@ -72,7 +72,7 @@ For Firefox for Android ("Fennec") version 44 or later:
         - webchannel.allowObject.urlWhitelist
 
       - optionally, use your oauth- and profile-server URLs to replace
-        `{oauth,profile}.accounts.firefox.com`` in
+        `{oauth,profile}.accounts.firefox.com` in
 
         - identity.fxaccounts.remote.profile.uri
         - identity.fxaccounts.remote.oauth.uri
@@ -98,4 +98,4 @@ review the Mozilla Trademark Policy and Mozilla Branding Guidelines:
 
 You can ask for help on Matrix (chat.mozilla.org) in the #fxa room (https://chat.mozilla.org/#/room/#fxa:mozilla.org)
 
-.. _How to connect Firefox for Android to self-hosted Mozilla account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/
+.. _How to connect Firefox for Android to self-hosted Mozilla Account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/
