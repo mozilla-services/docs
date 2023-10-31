@@ -98,4 +98,4 @@ review the Mozilla Trademark Policy and Mozilla Branding Guidelines:
 
 You can ask for help on Matrix (chat.mozilla.org) in the #fxa room (https://chat.mozilla.org/#/room/#fxa:mozilla.org)
 
-.. _How to connect Firefox for Android to self-hosted Mozilla Account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/
+.. _How to connect Firefox for Android to self-hosted Mozilla account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/
