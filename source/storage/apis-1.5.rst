@@ -1023,7 +1023,7 @@ The following is a summary of protocol changes from
 +-------------------------------------------+---------------------------------------------------+
 | What Changed                              | Why                                               |
 +===========================================+===================================================+
-| Authentication is now performed using     | This supports authentication via Firefox Accounts |
+| Authentication is now performed using     | This supports authentication via Mozilla accounts |
 | a BrowserID-based tokenserver flow and    | and allows us to iterate the details of that      |
 | HAWK Access Authentication.               | flow without changing the sync protocol.          |
 +-------------------------------------------+---------------------------------------------------+

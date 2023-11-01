@@ -41,7 +41,7 @@ bundle is combined with a per-record 16 byte IV and a user's data is converted
 into ciphertext. The ciphertext is *signed* with the key bundle's **HMAC key**.
 The *ciphertext*, *IV*, and *HMAC value* are then uploaded to the server.
 
-When Sync is initially configured by signing in with a Firefox Account, the
+When Sync is initially configured by signing in with a Mozilla account, the
 client obtains a 256-bit encryption key called the **Class-B Master Key**. This
 key is used to derive a special *key bundle* via HKDF, called the **Sync Key
 Bundle**. The *Sync Key Bundle* is used to encrypt and decrypt a special record
@@ -54,7 +54,7 @@ Terminology
 -----------
 
 Class-B Master Key
-    256-bit encryption key obtained from Firefox Accounts, which effectively serves
+    256-bit encryption key obtained from Mozilla accounts, which effectively serves
     as the master key to Sync.
 
 Key Bundle
@@ -100,8 +100,8 @@ Class-B Master Key
 ------------------
 
 All encryption keys used in Sync are ultimately tied back to the user's
-*Class-B Master Key*, which is managed by Firefox Accounts and obtained
-through the `FxA signin protocol <https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-onepw-protocol>`_
+*Class-B Master Key*, which is managed by Mozilla accounts and obtained
+through the `Accounts/Sync signin protocol <https://mozilla.github.io/ecosystem-platform/explanation/onepw-protocol>`_
 (which refers to this value as "kB").
 All clients that wish to collaborate via Sync share the same value for this key.
 It is important to state that the *Class-B Master Key* or keys derived from it

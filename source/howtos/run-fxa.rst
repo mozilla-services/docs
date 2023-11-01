@@ -1,10 +1,10 @@
 .. _howto_run_fxa:
 
 ====================================
-Run your own Firefox Accounts Server
+Run your own Mozilla accounts server
 ====================================
 
-The Firefox Accounts server is deployed on our systems using RPM packaging,
+The Mozilla accounts server is deployed on our systems using RPM packaging,
 and we don't provide any other packaging or publish official builds yet.
 
 .. note:: This guide is preliminary and vastly incomplete. If you have any
@@ -15,13 +15,13 @@ and we don't provide any other packaging or publish official builds yet.
    `this Docker-based self-hosting guide <https://github.com/michielbdejong/fxa-self-hosting>`_
    (use at your own risk).
 
-The Firefox Accounts server is hosted in **git** and requires **nodejs**.
+The Mozilla accounts server is hosted in **git** and requires **nodejs**.
 Make sure your system has these, or install them:
 
 - git: http://git-scm.com/downloads
 - nodejs: http://nodejs.org/download
 
-A self-hosted Firefox Accounts server requires two components: an auth-server
+A self-hosted Mozilla accounts server requires two components: an auth-server
 that manages the accounts database, and a content-server that hosts a web-based
 user interface.
 
@@ -60,19 +60,19 @@ For Firefox for Android ("Fennec") version 44 or later:
   - Search for items containing "fxaccounts", and edit them to use your
     self-hosted URLs:
 
-      - use your auth-server URL to replace "api.accounts.firefox.com" in
+      - use your auth-server URL to replace `api.accounts.firefox.com` in
         the following settings:
 
         - identity.fxaccounts.auth.uri
 
-      - use your content-server URL to replace "accounts.firefox.com" in
+      - use your content-server URL to replace `accounts.firefox.com` in
         the following settings:
 
         - identity.fxaccounts.remote.webchannel.uri
         - webchannel.allowObject.urlWhitelist
 
       - optionally, use your oauth- and profile-server URLs to replace
-        "{oauth,profile}.accounts.firefox.com" in
+        `{oauth,profile}.accounts.firefox.com` in
 
         - identity.fxaccounts.remote.profile.uri
         - identity.fxaccounts.remote.oauth.uri
@@ -80,7 +80,7 @@ For Firefox for Android ("Fennec") version 44 or later:
 **Important**: *after* creating the Android account, changes to
 "identity.fxaccounts" prefs will be *ignored*.  (If you need to change the
 prefs, delete the Android account using the *Settings > Sync > Disconnect...*
-menu item, update the pref(s), and sign in again.)  Non-default Firefox Account
+menu item, update the pref(s), and sign in again.)  Non-default Mozilla account
 URLs are displayed in the *Settings > Sync* panel in Firefox for Android, so you
 should be able to verify your URL there.
 
@@ -98,4 +98,4 @@ review the Mozilla Trademark Policy and Mozilla Branding Guidelines:
 
 You can ask for help on Matrix (chat.mozilla.org) in the #fxa room (https://chat.mozilla.org/#/room/#fxa:mozilla.org)
 
-.. _How to connect Firefox for Android to self-hosted Firefox Account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/
+.. _How to connect Firefox for Android to self-hosted Mozilla account and Firefox Sync servers: http://www.ncalexander.net/blog/2014/07/05/how-to-connect-firefox-for-android-to-self-hosted-services/

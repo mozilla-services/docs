@@ -105,7 +105,7 @@ A specific client often targets specific versions of the storage service and
 Storage Limits
 ==============
 
-Each Firefox Account is limited to 2GB of data per *collection*. This affects all Sync Clients associated with that account.
+Each Mozilla account is limited to 2GB of data per *collection*. This affects all Sync Clients associated with that account.
 
 When a Sync Client sends a sync request to a *collection* with greater than 2GB of data, the Sync Server will respond with a specific error code indicating a
 :ref:`User over quota error <respcodes>`.
