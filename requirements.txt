@@ -1,4 +1,4 @@
-sphinxcontrib-seqdiag==0.6.0
+sphinxcontrib-seqdiag
 mozilla-sphinx-theme
 # Disabled because they don't seem to build properly on RTD
 # sphinxcontrib-spelling==2.1
