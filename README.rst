@@ -24,9 +24,10 @@ Do not specify ``sphinx``: ``configuration:`` option as this may over-ride the d
 e.g. ensure that the following lines are commented.
 
 .. code-block:: yaml
+
   # Build documentation in the "docs/" directory with Sphinx
   # sphinx:
-  #  configuration: conf.py
+  #   configuration: conf.py
 
 
 The project is automatically monitored by Read the Docs, so any change pushed to the ``master`` branch should invoke `a build <https://readthedocs.org/projects/mozilla-services/builds/>`_. Monitor the builds to see any errors and correct as appropriate.
