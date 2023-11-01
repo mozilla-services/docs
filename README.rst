@@ -14,3 +14,11 @@ following::
 
 This should produce a "build/html" directory containing the generated HTML
 documentation.
+
+Publishing to Read The Docs
+----
+
+Ensure that the `.readthedocs.yaml` file is up-to-date with the `current configuration <https://docs.readthedocs.io/en/stable/config-file/v2.html>`.
+Do not specify ``sphinx``: ``configuration:`` option as this may over-ride the default Read the Docs `conf.py` file.
+
+The project is automatically monitored by Read the Docs, so any change pushed to the `master` branch should invoke `a build <https://readthedocs.org/projects/mozilla-services/builds/>`. Monitor the builds to see any errors and correct as appropriate.
