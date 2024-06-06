@@ -2,6 +2,10 @@
 User Flow
 =========
 
+**Please Note**: BrowserID has been removed from Mozilla Accounts, and
+therefore has also been removed from later versions of Tokenserver. Discussion
+of BrowserID presented here is for historic purposes only.
+
 Here's the proposed two-step flow (with BrowserID/Mozilla account assertions):
 
 1. the client trades a BrowserID assertion for an :term:`Auth token` and

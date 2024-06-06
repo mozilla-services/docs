@@ -12,7 +12,8 @@ Token Server API v1.0
 
     Asks for new token given some credentials in the Authorization header.
 
-    By default, the authentication scheme is BrowserID but other schemes can
+    By default, the authentication scheme is Mozilla Accounts OAuth 2.0
+    but other schemes can
     potentially be used if supported by the login server.
 
     - **app_name** is the name of the application to access, like **sync**.
@@ -22,11 +23,11 @@ Token Server API v1.0
     The first /1.0/ in the URL defines the version of the authentication
     token itself.
 
-    Example for BrowserID::
+    Example for Mozilla Account OAuth 2.0::
 
         GET /1.0/sync/1.5
         Host: token.services.mozilla.com
-        Authorization: BrowserID <assertion>
+        Authorization: bearer <assertion>
 
     This API returns several values in a json mapping:
 
@@ -110,7 +111,7 @@ Response Headers
 
     This header will be included with all "200" and "401" responses, giving
     the current POSIX timestamp as seen by the server, in seconds.  It may
-    be useful for client to adjust their local clock when generating BrowserID
+    be useful for client to adjust their local clock when generating authorization
     assertions.
 
 
@@ -141,7 +142,7 @@ Error status codes and their corresponding output are:
   strings:
 
     - **"invalid-credentials"**: authentication failed due to invalid
-      credentials e.g. a bad signature on the BrowserID assertion.
+      credentials e.g. a bad signature on the Authorization assertion.
     - **"invalid-timestamp"**: authentication failed because the included
       timestamp differed too greatly from the server's current time.
     - **"invalid-generation"**:  authentication failed because the server

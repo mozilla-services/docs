@@ -58,7 +58,7 @@ Glossary
       This is the only secret shared with the client and is different for each
       auth token.
 
-   Generation Number
+   Generation Number (obsolete)
       An integer that may be included in a BrowserID identity certificate.
       The issuing server increases this value whenever the user changes
       their password.  By rejecting BrowserID assertions with a generation
