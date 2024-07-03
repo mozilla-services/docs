@@ -7,6 +7,10 @@ Token Server
 Goal of the Service
 ===================
 
+**Please Note**: BrowserID has been removed from Mozilla Accounts, and
+therefore has also been removed from later versions of Tokenserver. Discussion
+of BrowserID presented here is for historic purposes only.
+
 So here's the challenge we face. Current login for sync looks like this:
 
 1. provide username and password
@@ -20,9 +24,10 @@ node-assignment is lightweight, since the client and server both cache the
 result, and has support for multiple applications with the /node/<app> API
 protocol.
 
-However, this breaks horribly when we don't have centralized login. And adding
-support for browserid to the SyncStorage protocol means that we're now there.
-We're going to get valid requests from users who don't have an account in LDAP.
+However, this breaks horribly when we don't have centralized login. Adding
+support for FxA Authentication to the SyncStorage protocol means that we're now
+there.
+We're going to get valid requests from users who don't have an account in FxA.
 We won't even know, when they make a first request, if the node-assignment
 server has ever heard of them.
 
