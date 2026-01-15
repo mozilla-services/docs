@@ -43,7 +43,7 @@ for f in os.listdir(CURDIR):
     name, ext = os.path.splitext(f)
     if ext != '.rst':
         continue
-    sidebars.append((name, 'indexsidebar.html'))
+    sidebars.append((name, ['indexsidebar.html']))
 
 html_sidebars = dict(sidebars)
 htmlhelp_basename = 'Mozilla Servicesdoc'
