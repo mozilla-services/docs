@@ -1,5 +1,12 @@
 .. _server_storage:
 
+==============================
+DEPRECATION NOTE
+==============================
+This repo has been archived and the documentation is no longer maintained.
+Sync and Tokenserver docs and code are in the `syncstorage-rs` GitHub repo.
+You can find the repo for this service `here <https://github.com/mozilla-services/syncstorage-rs>`_ and the maintained documentation `here <https://mozilla-services.github.io/syncstorage-rs/>`_.
+
 ===============
 Storage Service
 ===============
